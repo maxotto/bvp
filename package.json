@@ -1,36 +1,38 @@
 {
-  "name": "bird_view_presentations",
+  "name": "burd-view-presenrations",
   "version": "0.0.1",
-  "description": "bird_view_presentations based on three.js",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "description": "burd view presenrations app",
+  "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "test": "jest --config jestconfig.json",
-    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
-    "lint": "tslint -p tsconfig.json",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm test && npm run lint",
-    "preversion": "npm run lint",
-    "version": "npm run format && git add -A src",
-    "postversion": "git push && git push --tags"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --inline --open",
+    "build": "rimraf dist && webpack -p",
+    "deploy": "node deploy.js"
   },
-  "files": [
-    "lib/**/*"
-  ],
-  "keywords": [
-    "bird_view_presentations",
-    "threejs"
-  ],
-  "author": "Andrey Mikhaylichenko",
-  "license": "ISC",
+  "keywords": [],
+  "author": "Andrey Mikhailichenko",
+  "license": "MIT",
   "devDependencies": {
-    "@types/jest": "^24.0.18",
-    "jest": "^24.9.0",
-    "prettier": "^1.18.2",
-    "ts-jest": "^24.0.2",
-    "tslint": "^5.19.0",
-    "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.6.2"
+    "awesome-typescript-loader": "latest",
+    "browser-sync": "latest",
+    "browser-sync-webpack-plugin": "latest",
+    "copy-webpack-plugin": "latest",
+    "css-loader": "latest",
+    "extract-text-webpack-plugin": "latest",
+    "html-webpack-plugin": "latest",
+    "json-loader": "latest",
+    "progress-bar-webpack-plugin": "latest",
+    "style-loader": "latest",
+    "typescript": "latest",
+    "webpack": "latest",
+    "webpack-cli": "latest",
+    "webpack-dev-server": "latest",
+    "write-file-webpack-plugin": "latest"
+  },
+  "dependencies": {
+    "@tweenjs/tween.js": "latest",
+    "@types/three": "latest",
+    "controlkit": "latest",
+    "three": "latest"
   }
 }
