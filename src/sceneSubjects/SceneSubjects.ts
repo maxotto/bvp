@@ -4,14 +4,17 @@ import * as THREE from 'three';
 export class SceneSubjects {
     private scene;
     private world;
-    private radius = 2;
+    private radius = 20;
     private mesh;
 
     constructor(scene, world) {
         this.scene = scene;
         this.world = world;
-        this.mesh = new THREE.Mesh(new THREE.IcosahedronBufferGeometry(this.radius, 2), new THREE.MeshStandardMaterial({ flatShading: true }));
-        this.mesh.position.set(0, 0, -20);
+        this.mesh = new THREE.Mesh(
+            new THREE.IcosahedronBufferGeometry(this.radius, 2),
+            new THREE.MeshStandardMaterial({ flatShading: true })
+        );
+        this.mesh.position.set(0, 0, 120);
         this.scene.add(this.mesh);
         this.createGround();
         world.slides.forEach((slide, index) => {
@@ -67,8 +70,14 @@ export class SceneSubjects {
     }
 
     update(time) {
-        const scale = Math.sin(time) + 2;
-
-        this.mesh.scale.set(scale, scale, scale);
+        const scale = Math.sin(time / 3.4) + 2;
+        const z = Math.cos(time * 3) * 100 + 200;
+        const y = Math.sin(time) * 100;
+        const x = Math.cos(time) * 100;
+        // this.mesh.scale.set(scale, scale, scale);
+        this.mesh.position.z = z;
+        this.mesh.position.y = y;
+        this.mesh.position.x = x;
+        // console.log(this.mesh.position.z);
     }
 }

@@ -2,12 +2,11 @@ import "./style.css";
 import { SceneManager } from "./SceneManager";
 import { WorldLoader } from './tools/WorldLoader';
 
-let canvas;
+const canvas = <HTMLCanvasElement>document.getElementById("canvas");
 let sceneManager;
 
 const l = new WorldLoader('presentation1/');
 l.load().then((world) => {
-    canvas = <HTMLCanvasElement>document.getElementById("canvas");
     sceneManager = new SceneManager(canvas, world);
     bindEventListeners();
     render();
