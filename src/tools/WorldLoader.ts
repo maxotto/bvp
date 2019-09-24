@@ -37,7 +37,7 @@ export class WorldLoader {
             }
         };
         return promisifyLoader(new XmlLoader(manager), onProgress)
-            .load(this._scenarioFolder + 'scenario.xml')
+            .load('assets/'+this._scenarioFolder + 'scenario.xml')
             .then((scenarioData: ScenarioData) => {
                 this._width = +scenarioData.width;
                 this._height = +scenarioData.height;
@@ -46,7 +46,7 @@ export class WorldLoader {
                 this._mainSlideDuration = +scenarioData.mainDuration;
                 this._cameraFov = +scenarioData.cameraFov;
                 return promisifyLoader(new THREE.TextureLoader(manager), onProgress)
-                    .load(this._scenarioFolder + scenarioData.mainBackgroundPic)
+                    .load('assets/'+this._scenarioFolder + scenarioData.mainBackgroundPic)
                     .then((_texturePainting: THREE.Texture) => {
                         var materialPainting = new THREE.MeshBasicMaterial(<THREE.MeshBasicMaterialParameters>{
                             color: 0xffffff,
@@ -73,7 +73,7 @@ export class WorldLoader {
                         let p;
                         if (scenarioData.svg) {
                             p = forEachPromise(scenarioData.svg, (svg, context) => {
-                                var svgUrl = context._scenarioFolder + svg['url'];
+                                var svgUrl = 'assets/'+context._scenarioFolder + svg['url'];
                                 return promisifyLoader(new SVGLoader(manager), onProgress)
                                     .load(svgUrl)
                                     .then((svgData) => {
@@ -88,7 +88,7 @@ export class WorldLoader {
                     }).then((a) => {
                         return forEachPromise(scenarioData.slides, (slide, context) => {
                             return promisifyLoader(new THREE.TextureLoader(manager), onProgress)
-                                .load(this._scenarioFolder + slide.picture)
+                                .load('assets/'+this._scenarioFolder + slide.picture)
                                 .then((_texturePainting: THREE.Texture) => {
                                     var materialPainting = new THREE.MeshBasicMaterial(<THREE.MeshBasicMaterialParameters>{
                                         color: 0xffffff,
@@ -133,7 +133,7 @@ export class WorldLoader {
                                     let p;
                                     if (slide.svg) {
                                         p = forEachPromise(slide.svg, (svg, context) => {
-                                            var svgUrl = context._scenarioFolder + svg['url'];
+                                            var svgUrl = 'assets/'+context._scenarioFolder + svg['url'];
                                             return promisifyLoader(new SVGLoader(manager), onProgress)
                                                 .load(svgUrl)
                                                 .then((svgData) => {
