@@ -10,17 +10,10 @@
     >
     <svg
         url="tiger.svg"
-        x="50"
+        x="900"
         y="100"
-        z='150'
+        z='50'
         scale="0.8"
-        />
-    <svg
-        url="threejs.svg"
-        x="0"
-        y="0"
-        z='40'
-        scale="1"
         />
     <slides>
         <slide

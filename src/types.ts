@@ -11,6 +11,8 @@ export type ScenarioData = {
 }
 
 export type Slide = {
+    width: number,
+    height: number,
     background: THREE.Mesh,
     position: THREE.Vector3,
     transitionDuration: number,

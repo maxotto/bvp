@@ -1,7 +1,9 @@
 import * as THREE from 'three';
+import TWEEN from '@tweenjs/tween.js';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GeneralLights } from './sceneSubjects/GeneralLights';
 import { SceneSubjects } from './sceneSubjects/SceneSubjects';
+import { SlidesController } from "./SlidesController";
 
 export class SceneManager {
 
@@ -15,9 +17,10 @@ export class SceneManager {
     public orbitControl;
     public sceneSubjects;
     private world;
+    private slidesController;
 
     constructor(canvas: HTMLCanvasElement, world: any) {
-        console.log(world);
+        // console.log(world);
         this.canvas = canvas;
         this.world = world;
         this.screenDimensions = {
@@ -33,8 +36,12 @@ export class SceneManager {
         this.orbitControl.screenSpacePanning = true;
         this.orbitControl.target = new THREE.Vector3(0, 0, -20);
         this.orbitControl.update();
+        this.slidesController = new SlidesController(this.camera, this.world, this.orbitControl);
     }
 
+    onDocumentKeyDown(event) {
+        this.slidesController.handleButton(event);
+    }
 
     buildScene() {
         const scene = new THREE.Scene();
@@ -74,6 +81,9 @@ export class SceneManager {
     }
 
     update() {
+        if(this.slidesController.getBusy()){
+            TWEEN.update();
+        }
         const elapsedTime = this.clock.getElapsedTime();
 
         for (let i = 0; i < this.sceneSubjects.length; i++)

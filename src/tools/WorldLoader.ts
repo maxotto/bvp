@@ -57,6 +57,8 @@ export class WorldLoader {
                         var geometry = new THREE.PlaneBufferGeometry(this._width, this._height);
                         var mesh = new THREE.Mesh(geometry, materialPainting);
                         const newSlide = <Slide>{
+                            width: this._width,
+                            height: this._height,
                             background: mesh,
                             position: new THREE.Vector3(0, 0, 0),
                             transitionDuration: +scenarioData.mainDuration,
@@ -105,6 +107,8 @@ export class WorldLoader {
                                         y: topLeft.y - slide.height / 2 / scale,
                                     }
                                     const newSlide = <Slide>{
+                                        width: slide.width / scale,
+                                        height: slide.height / scale,
                                         background: mesh,
                                         position: new THREE.Vector3(
                                             topLeft.x,
@@ -115,7 +119,8 @@ export class WorldLoader {
                                         cameraPosition: new THREE.Vector3(
                                             center.x,
                                             center.y,
-                                            slide.height / scale / 2 / Math.tan(this._cameraFov / 2 * Math.PI / 180)),
+                                            slide.height / scale / 2 / Math.tan(this._cameraFov / 2 * Math.PI / 180) + (+slide.hotspot.z)
+                                        ),
                                         cameraLookAt: new THREE.Vector3(
                                             center.x,
                                             center.y,

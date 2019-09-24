@@ -23,7 +23,6 @@ export class SceneSubjects {
             }
             this.scene.add(slide.background);
             slide.objects.forEach(object => {
-                console.log({ object });
                 this.scene.add(object);
             });
         });

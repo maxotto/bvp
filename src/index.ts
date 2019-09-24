@@ -2,6 +2,7 @@ import "./style.css";
 import { SceneManager } from "./SceneManager";
 import { WorldLoader } from './tools/WorldLoader';
 
+
 const canvas = <HTMLCanvasElement>document.getElementById("canvas");
 let sceneManager;
 
@@ -15,7 +16,12 @@ l.load().then((world) => {
 
 function bindEventListeners() {
     window.onresize = resizeCanvas;
+    document.addEventListener("keydown", onDocumentKeyDown, false);
     resizeCanvas();
+}
+
+function onDocumentKeyDown(event){
+    sceneManager.onDocumentKeyDown(event);
 }
 
 function resizeCanvas() {
