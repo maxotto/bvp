@@ -15,6 +15,13 @@
         z='50'
         scale="0.8"
         />
+    <svg
+        url="drawing1.svg"
+        x="00"
+        y=""
+        z='50'
+        scale="0.8"
+        />
     <slides>
         <slide
             width="1920"

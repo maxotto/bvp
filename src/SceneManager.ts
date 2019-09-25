@@ -34,7 +34,7 @@ export class SceneManager {
         this.sceneSubjects = this.createSceneSubjects(this.scene, this.world);
         this.orbitControl = new OrbitControls(this.camera, this.renderer.domElement);
         this.orbitControl.screenSpacePanning = true;
-        this.orbitControl.target = new THREE.Vector3(0, 0, -20);
+        this.orbitControl.target = new THREE.Vector3(0, 0, 0);
         this.orbitControl.update();
         this.slidesController = new SlidesController(this.camera, this.world, this.orbitControl);
     }
@@ -66,7 +66,7 @@ export class SceneManager {
         const aspectRatio = width / height;
         const fieldOfView = fov;
         const nearPlane = 1;
-        const farPlane = 100000;
+        const farPlane = 8000;
         const camera = new THREE.PerspectiveCamera(fieldOfView, aspectRatio, nearPlane, farPlane);
         camera.position.z = this.world.height / 2 / Math.tan(this.world.cameraFov / 2 * Math.PI / 180);
         return camera;
