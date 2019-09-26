@@ -21,3 +21,42 @@ export type Slide = {
     cameraLookAt: THREE.Vector3,
     objects: any[]
 }
+
+export enum WorldMode {
+    'show',
+    'editor'
+}
+
+export type World = {
+    width: number,
+    height: number,
+    slides: Slide[],
+    steps: [],
+    cameraFov: number,
+    mainSlideDuration: number,
+    mainBackgroundColor: number,
+    mode: WorldMode
+}
+
+export enum UserAction {
+    'navigate',
+    'mode'
+}
+
+export enum MouseEvents {
+    'mousedown',
+    'mouseup',
+    'click',
+    'dblclick',
+    'mousemove',
+    'mouseover',
+    'mousewheel',
+    'mouseout',
+    'contextmenu'
+}
+
+export enum KeyboardEvents {
+    'keydown',
+    'keypress',
+    'keyup'
+}

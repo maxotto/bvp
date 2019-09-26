@@ -3,7 +3,7 @@ import { XmlLoader } from "./XmlLoader";
 import { promisifyLoader, forEachPromise } from './helpers';
 import * as THREE from "three";
 
-import { ScenarioData, Slide } from "../types";
+import { ScenarioData, Slide, World } from "../types";
 
 export class WorldLoader {
     private _scenarioFolder: string;
@@ -160,7 +160,7 @@ export class WorldLoader {
                         return Promise.resolve()
                     });
             }).then(() => {
-                return Promise.resolve({
+                return Promise.resolve(<World>{
                     width: this._width,
                     height: this._height,
                     slides: this._outSlides,

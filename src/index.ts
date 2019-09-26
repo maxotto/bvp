@@ -1,6 +1,7 @@
 import "./style.css";
 import { SceneManager } from "./SceneManager";
 import { WorldLoader } from './tools/WorldLoader';
+import { World, MouseEvents, KeyboardEvents } from "./types";
 
 
 const canvas = <HTMLCanvasElement>document.getElementById("canvas");
@@ -8,7 +9,7 @@ let sceneManager;
 
 const l = new WorldLoader('presentation1/');
 l.load().then((world) => {
-    sceneManager = new SceneManager(canvas, world);
+    sceneManager = new SceneManager(canvas, <World>world);
     bindEventListeners();
     render();
 });
@@ -16,12 +17,25 @@ l.load().then((world) => {
 
 function bindEventListeners() {
     window.onresize = resizeCanvas;
-    document.addEventListener("keydown", onDocumentKeyDown, false);
+    for (let event in MouseEvents) {
+        if (isNaN(Number(event))) {
+            document.addEventListener(event, onMouseEvent, false);
+        }
+    }
+    for (let event in KeyboardEvents) {
+        if (isNaN(Number(event))) {
+            document.addEventListener(event, onKeyboardEvent, false);
+        }
+    }
     resizeCanvas();
 }
 
-function onDocumentKeyDown(event){
-    sceneManager.onDocumentKeyDown(event);
+function onMouseEvent(event) {
+    sceneManager.onMouseEvent(event);
+}
+
+function onKeyboardEvent(event) {
+    sceneManager.onKeyboardEvent(event);
 }
 
 function resizeCanvas() {

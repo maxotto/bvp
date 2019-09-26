@@ -4,22 +4,25 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GeneralLights } from './sceneSubjects/GeneralLights';
 import { SceneSubjects } from './sceneSubjects/SceneSubjects';
 import { SlidesController } from "./SlidesController";
+import { MyDataControls } from "./tools/datGui";
+
+import { WorldMode, World } from "./types";
 
 export class SceneManager {
 
     private clock = new THREE.Clock();
     private canvas;
     private screenDimensions;
-
+    private myControls;
     private scene;
     private renderer;
     public camera;
     public orbitControl;
     public sceneSubjects;
-    private world;
+    private world: World;
     private slidesController;
 
-    constructor(canvas: HTMLCanvasElement, world: any) {
+    constructor(canvas: HTMLCanvasElement, world: World) {
         // console.log(world);
         this.canvas = canvas;
         this.world = world;
@@ -37,10 +40,32 @@ export class SceneManager {
         this.orbitControl.target = new THREE.Vector3(0, 0, 0);
         this.orbitControl.update();
         this.slidesController = new SlidesController(this.camera, this.world, this.orbitControl);
+        this.slidesController.onSwitchToEditorMode.subscribe((a) => {
+            this.changeMode(WorldMode.editor);
+        });
+        this.slidesController.onSwitchToShowMode.subscribe((a) => {
+            this.changeMode(WorldMode.show);
+        });
+        this.myControls = new MyDataControls();
+        this.changeMode(WorldMode.show);
     }
 
-    onDocumentKeyDown(event) {
-        this.slidesController.handleButton(event);
+    changeMode(newMode: WorldMode) {
+        this.world.mode = newMode;
+        this.orbitControl.enabled = (WorldMode[newMode] != 'show');
+        if ((WorldMode[newMode] != 'show')) {
+            this.myControls.show();
+        } else {
+            this.myControls.hide();
+        }
+    }
+
+    onKeyboardEvent(event) {
+        this.slidesController.onKeyboardEvent(event);
+    }
+
+    onMouseEvent(event) {
+        this.slidesController.onMouseEvent(event);
     }
 
     buildScene() {
@@ -81,7 +106,7 @@ export class SceneManager {
     }
 
     update() {
-        if(this.slidesController.getBusy()){
+        if (this.slidesController.getBusy()) {
             TWEEN.update();
         }
         const elapsedTime = this.clock.getElapsedTime();

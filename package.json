@@ -33,6 +33,8 @@
     "@tweenjs/tween.js": "latest",
     "@types/three": "latest",
     "controlkit": "latest",
+    "dat.gui": "^0.7.6",
+    "strongly-typed-events": "^1.6.3",
     "three": "latest"
   }
 }
