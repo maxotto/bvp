@@ -4,7 +4,7 @@ export class GeneralLights {
     private light;
     constructor(scene) {
         this.light = new THREE.PointLight("#2222ff", 1);
-        this.light.position.set(50, 50, 250);
+        this.light.position.set(150, 50, 250);
         scene.add(this.light);
     }
 

@@ -14,7 +14,7 @@ export class SceneSubjects {
             new THREE.IcosahedronBufferGeometry(this.radius, 2),
             new THREE.MeshStandardMaterial({ flatShading: true })
         );
-        this.mesh.position.set(0, 0, 120);
+        this.mesh.position.set(-300, 50, 120);
         this.scene.add(this.mesh);
         this.createGround();
         world.slides.forEach((slide, index) => {
@@ -70,9 +70,9 @@ export class SceneSubjects {
 
     update(time) {
         const scale = Math.sin(time / 3.4) + 2;
-        const z = Math.cos(time * 3) * 100 + 200;
-        const y = Math.sin(time) * 100;
-        const x = Math.cos(time) * 100;
+        const z = Math.sin(time/2) * 250 + 0;
+        const y = Math.sin(time/2) * 250+0;
+        const x = Math.cos(time/2) * 670+230;
         // this.mesh.scale.set(scale, scale, scale);
         this.mesh.position.z = z;
         this.mesh.position.y = y;

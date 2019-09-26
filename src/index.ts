@@ -7,7 +7,7 @@ import { World, MouseEvents, KeyboardEvents } from "./types";
 const canvas = <HTMLCanvasElement>document.getElementById("canvas");
 let sceneManager;
 
-const l = new WorldLoader('presentation1/');
+const l = new WorldLoader('NTerebilenko/');
 l.load().then((world) => {
     sceneManager = new SceneManager(canvas, <World>world);
     bindEventListeners();

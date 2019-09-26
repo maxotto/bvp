@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<world
+    width="1920"
+    height="1080"
+    mainBackgroundPic="ball-63527.jpg"
+    mainBackgroundColor="0x0000w00"
+    showControlPanel="true"
+    mainDuration="1500"
+    cameraFov="45"
+    >
+    <slides>
+        <slide
+            width="1920"
+            height="1080"
+            picture="1.jpg"
+            >
+            <hotspot size="240" x="885" y="544" z="50"/>
+            <animation duration="1500"/>
+        </slide>
+        <slide
+            width="1920"
+            height="1080"
+            picture="2.jpg"
+            >
+            <hotspot size="200" x="400" y="630" z="16"/>
+            <animation duration="1500"/>
+        </slide>
+        <slide
+            width="1920"
+            height="1080"
+            picture="3.jpg"
+            >
+            <hotspot size="200" x="983" y="765" z="15"/>
+            <animation duration="1500"/>
+        </slide>
+        <slide
+            width="1920"
+            height="1080"
+            picture="4.jpg"
+            >
+            <hotspot size="100" x="600" y="350" z="200"/>
+            <animation duration="1500"/>
+        </slide>
+        <slide
+            width="1920"
+            height="1080"
+            picture="5.jpg"
+            >
+            <hotspot size="140" x="700" y="200" z="150"/>
+            <animation duration="1500"/>
+        </slide>
+        <slide
+            width="1920"
+            height="1080"
+            picture="6.jpg"
+            >
+            <hotspot size="100" x="1100" y="400" z="70"/>
+            <animation duration="1500"/>
+        </slide>
+    </slides>
+    <show>
+        <step slide="0"/>
+        <step slide="1"/>
+        <step slide="2"/>
+        <step slide="3"/>
+        <step slide="4"/>
+        <step slide="0"/>
+        <step slide="5"/>
+        <step slide="6"/>
+        <step slide="0"/>
+    </show>
+</world>
