@@ -6,14 +6,20 @@ import { World, MouseEvents, KeyboardEvents } from "./types";
 
 const canvas = <HTMLCanvasElement>document.getElementById("canvas");
 let sceneManager;
-
+var startButton = document.getElementById('startButton');
+startButton.addEventListener('click', init);
 const l = new WorldLoader('NTerebilenko/');
 l.load().then((world) => {
     sceneManager = new SceneManager(canvas, <World>world);
     bindEventListeners();
     render();
 });
-
+function init() {
+    var overlay = document.getElementById('overlay');
+    overlay.remove();
+    var audioElement = <HTMLVideoElement>document.getElementById('music');
+    audioElement.play();
+}
 
 function bindEventListeners() {
     window.onresize = resizeCanvas;
@@ -42,8 +48,8 @@ function resizeCanvas() {
     canvas.style.width = '100%';
     canvas.style.height = '100%';
 
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
     sceneManager.onWindowResize();
 }
