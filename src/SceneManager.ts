@@ -53,6 +53,7 @@ export class SceneManager {
     changeMode(newMode: WorldMode) {
         this.world.mode = newMode;
         this.orbitControl.enabled = (WorldMode[newMode] != 'show');
+        console.log('this.world.mode = ', this.world.mode);
         if ((WorldMode[newMode] != 'show')) {
             this.myControls.show();
         } else {
@@ -71,7 +72,7 @@ export class SceneManager {
     buildScene() {
         const scene = new THREE.Scene();
         scene.background = new THREE.Color("#000");
-
+        scene.fog = new THREE.Fog(0x000000, 50, 4000);
         return scene;
     }
 
@@ -106,6 +107,7 @@ export class SceneManager {
     }
 
     update() {
+        // console.log(this.world.mode);
         if (this.slidesController.getBusy()) {
             TWEEN.update();
         }
@@ -120,13 +122,10 @@ export class SceneManager {
 
     onWindowResize() {
         const { width, height } = this.canvas;
-
         this.screenDimensions.width = width;
         this.screenDimensions.height = height;
-
         this.camera.aspect = width / height;
         this.camera.updateProjectionMatrix();
-
         this.renderer.setSize(width, height);
     }
 }
