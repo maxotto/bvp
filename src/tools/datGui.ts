@@ -1,7 +1,7 @@
 import * as dat from 'dat.gui';
 
 export class MyDataControls {
-    private gui = new dat.GUI();
+    private gui = new dat.GUI({ hideable: false });
     constructor() {
         var FizzyText = function () {
             this.message = 'dat.gui';

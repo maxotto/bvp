@@ -18,13 +18,15 @@ export class SceneSubjects {
         this.scene.add(this.mesh);
         this.createGround();
         world.slides.forEach((slide, index) => {
+            var slideGroup = new THREE.Group();
             if (index === 0) {
                 this.createFrame();
             }
-            this.scene.add(slide.background);
+            slideGroup.add(slide.background)
             slide.objects.forEach(object => {
-                this.scene.add(object);
+                slideGroup.add(object);
             });
+            this.scene.add(slideGroup);
         });
     }
 
@@ -70,9 +72,9 @@ export class SceneSubjects {
 
     update(time) {
         const scale = Math.sin(time / 3.4) + 2;
-        const z = Math.sin(time/2) * 250 + 0;
-        const y = Math.sin(time/2) * 250+0;
-        const x = Math.cos(time/2) * 670+230;
+        const z = Math.sin(time / 2) * 250 + 0;
+        const y = Math.sin(time / 2) * 250 + 0;
+        const x = Math.cos(time / 2) * 540 + 380;
         // this.mesh.scale.set(scale, scale, scale);
         this.mesh.position.z = z;
         this.mesh.position.y = y;

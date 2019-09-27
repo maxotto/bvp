@@ -69,12 +69,12 @@ export class SlidesController {
                     action = UserAction.mode;
                     break;
             }
-
-            if (action === UserAction.navigate && finish >= 0 && finish <= this.world.steps.length - 1) {
-                this.step = finish;
-                this.showNextSlideByStep(start, finish);
-            }
-            if (action === UserAction.mode) {
+            if (action === UserAction.navigate) {
+                if (finish >= 0 && finish <= this.world.steps.length - 1) {
+                    this.step = finish;
+                    this.showNextSlideByStep(start, finish);
+                }
+            } else if (action === UserAction.mode) {
                 if (this.world.mode === WorldMode.show) {
                     this.world.mode = WorldMode.editor;
                     this._signals.get("editor").dispatch();

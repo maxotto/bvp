@@ -14,7 +14,7 @@
             height="1080"
             picture="1.jpg"
             >
-            <hotspot size="240" x="885" y="544" z="50"/>
+            <hotspot size="240" x="885" y="544" z="150"/>
             <animation duration="1500"/>
         </slide>
         <slide
@@ -22,7 +22,7 @@
             height="1080"
             picture="2.jpg"
             >
-            <hotspot size="200" x="400" y="630" z="16"/>
+            <hotspot size="200" x="470" y="630" z="16"/>
             <animation duration="1500"/>
         </slide>
         <slide
