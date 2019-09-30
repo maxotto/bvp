@@ -1,3 +1,6 @@
+import { Mesh } from "three"
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
+
 export type ScenarioData = {
     width: number,
     height: number,
@@ -28,6 +31,10 @@ export enum WorldMode {
 }
 
 export type World = {
+    scene: THREE.Scene,
+    renderer: THREE.Renderer,
+    camera: THREE.PerspectiveCamera,
+    orbitControl: OrbitControls,
     width: number,
     height: number,
     slides: Slide[],
@@ -35,7 +42,8 @@ export type World = {
     cameraFov: number,
     mainSlideDuration: number,
     mainBackgroundColor: number,
-    mode: WorldMode
+    mode: WorldMode,
+    draggables: Mesh[]
 }
 
 export enum UserAction {

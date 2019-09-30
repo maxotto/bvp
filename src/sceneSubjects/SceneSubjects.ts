@@ -1,13 +1,15 @@
 import * as THREE from 'three';
+import { World } from '../types';
+import { getGroupGeometry } from '../tools/helpers';
 
 
 export class SceneSubjects {
     private scene;
-    private world;
+    private world: World;
     private radius = 20;
     private mesh;
 
-    constructor(scene, world) {
+    constructor(scene, world: World) {
         this.scene = scene;
         this.world = world;
         this.mesh = new THREE.Mesh(
@@ -21,11 +23,19 @@ export class SceneSubjects {
             var slideGroup = new THREE.Group();
             if (index === 0) {
                 this.createFrame();
+            } else {
+                world.draggables.push(slide.background)
             }
-            slideGroup.add(slide.background)
+            slideGroup.add(slide.background);
             slide.objects.forEach(object => {
                 slideGroup.add(object);
+                world.draggables.push(object);
             });
+            slideGroup.name = 'slideGroup_'+index;
+            const _groupGeometry = getGroupGeometry(slideGroup);
+            _groupGeometry.parentSlide = index;
+            _groupGeometry.delta.z = 0;
+            slideGroup.userData = _groupGeometry;
             this.scene.add(slideGroup);
         });
     }

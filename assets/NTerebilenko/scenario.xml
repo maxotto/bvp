@@ -16,6 +16,13 @@
             >
             <hotspot size="240" x="885" y="544" z="150"/>
             <animation duration="1500"/>
+            <svg
+                url="tiger.svg"
+                x="20"
+                y="20"
+                z='8'
+                scale="0.8"
+                />
         </slide>
         <slide
             width="1920"

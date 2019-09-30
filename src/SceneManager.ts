@@ -11,35 +11,31 @@ import { WorldMode, World } from "./types";
 export class SceneManager {
 
     private clock = new THREE.Clock();
-    private canvas;
     private screenDimensions;
     private myControls;
-    private scene;
-    private renderer;
-    public camera;
-    public orbitControl;
+    // private scene;
+    // private renderer;
+    // public camera;
+    // public orbitControl;
     public sceneSubjects;
-    private world: World;
     private slidesController;
 
-    constructor(canvas: HTMLCanvasElement, world: World) {
+    constructor(private canvas: HTMLCanvasElement, private world: World) {
         // console.log(world);
-        this.canvas = canvas;
-        this.world = world;
         this.screenDimensions = {
             width: this.canvas.width,
             height: this.canvas.height,
             fov: this.world.cameraFov
         }
-        this.scene = this.buildScene();
-        this.renderer = this.buildRender(this.screenDimensions);
-        this.camera = this.buildCamera(this.screenDimensions);
-        this.sceneSubjects = this.createSceneSubjects(this.scene, this.world);
-        this.orbitControl = new OrbitControls(this.camera, this.renderer.domElement);
-        this.orbitControl.screenSpacePanning = true;
-        this.orbitControl.target = new THREE.Vector3(0, 0, 0);
-        this.orbitControl.update();
-        this.slidesController = new SlidesController(this.camera, this.world, this.orbitControl);
+        this.world.scene = this.buildScene();
+        this.world.renderer = this.buildRender(this.screenDimensions);
+        this.world.camera = this.buildCamera(this.screenDimensions);
+        this.sceneSubjects = this.createSceneSubjects(this.world.scene, this.world);
+        this.world.orbitControl = new OrbitControls(this.world.camera, this.world.renderer.domElement);
+        this.world.orbitControl.screenSpacePanning = true;
+        this.world.orbitControl.target = new THREE.Vector3(0, 0, 0);
+        this.world.orbitControl.update();
+        this.slidesController = new SlidesController(this.world);
         this.slidesController.onSwitchToEditorMode.subscribe((a) => {
             this.changeMode(WorldMode.editor);
         });
@@ -52,7 +48,7 @@ export class SceneManager {
 
     changeMode(newMode: WorldMode) {
         this.world.mode = newMode;
-        this.orbitControl.enabled = (WorldMode[newMode] != 'show');
+        this.world.orbitControl.enabled = (WorldMode[newMode] != 'show');
         console.log('this.world.mode = ', this.world.mode);
         if ((WorldMode[newMode] != 'show')) {
             this.myControls.show();
@@ -116,16 +112,16 @@ export class SceneManager {
         for (let i = 0; i < this.sceneSubjects.length; i++)
             this.sceneSubjects[i].update(elapsedTime);
 
-        this.orbitControl.update();
-        this.renderer.render(this.scene, this.camera);
+        this.world.orbitControl.update();
+        this.world.renderer.render(this.world.scene, this.world.camera);
     }
 
     onWindowResize() {
         const { width, height } = this.canvas;
         this.screenDimensions.width = width;
         this.screenDimensions.height = height;
-        this.camera.aspect = width / height;
-        this.camera.updateProjectionMatrix();
-        this.renderer.setSize(width, height);
+        this.world.camera.aspect = width / height;
+        this.world.camera.updateProjectionMatrix();
+        this.world.renderer.setSize(width, height);
     }
 }

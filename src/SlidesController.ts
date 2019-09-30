@@ -7,19 +7,13 @@ import { SlideEditor } from './SlideEditor';
 
 export class SlidesController {
     private _signals = new SignalList();
-    private world;
-    private camera;
     private busy = false;
     private step = 0;
-    private orbitControl;
     private slideEditor;
-    constructor(camera, world, orbitControl) {
-        this.camera = camera;
-        this.world = world;
-        this.orbitControl = orbitControl;
+    constructor(private world) {
         this.onSwitchToShowMode.subscribe(() => (this.world.mode = WorldMode.show));
         this.onSwitchToEditorMode.subscribe(() => (this.world.mode = WorldMode.editor));
-        this.slideEditor = new SlideEditor(this.world);
+        this.slideEditor = new SlideEditor(this);
     }
 
     public get onSwitchToShowMode(): ISignal {
@@ -89,12 +83,12 @@ export class SlidesController {
 
     restoreCurrentSlideView() {
         let slideIndex = +this.world.steps[this.step]['slide'];
-        this.camera.position.set(
+        this.world.camera.position.set(
             this.world.slides[slideIndex].cameraPosition.x,
             this.world.slides[slideIndex].cameraPosition.y,
             this.world.slides[slideIndex].cameraPosition.z
         );
-        this.orbitControl.target = new THREE.Vector3(
+        this.world.orbitControl.target = new THREE.Vector3(
             this.world.slides[slideIndex].cameraLookAt.x,
             this.world.slides[slideIndex].cameraLookAt.y,
             this.world.slides[slideIndex].cameraLookAt.z
@@ -133,16 +127,16 @@ export class SlidesController {
                 .easing(TWEEN.Easing.Quadratic.InOut) // change here
                 .onUpdate(() => {
                     const pointNum = Math.ceil(from.index);
-                    this.camera.position.set(points[pointNum].x, points[pointNum].y, points[pointNum].z);
-                    this.orbitControl.target = new THREE.Vector3(
+                    this.world.camera.position.set(points[pointNum].x, points[pointNum].y, points[pointNum].z);
+                    this.world.orbitControl.target = new THREE.Vector3(
                         points[pointNum].x,
                         points[pointNum].y,
                         0
                     );
                 })
                 .onComplete(() => {
-                    this.camera.position.set(finishPoint.x, finishPoint.y, finishPoint.z);
-                    this.orbitControl.target = new THREE.Vector3(
+                    this.world.camera.position.set(finishPoint.x, finishPoint.y, finishPoint.z);
+                    this.world.orbitControl.target = new THREE.Vector3(
                         this.world.slides[finishSlideIndex].cameraLookAt.x,
                         this.world.slides[finishSlideIndex].cameraLookAt.y,
                         this.world.slides[finishSlideIndex].cameraLookAt.z

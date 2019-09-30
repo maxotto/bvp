@@ -10,6 +10,7 @@ var startButton = document.getElementById('startButton');
 startButton.addEventListener('click', init);
 const l = new WorldLoader('NTerebilenko/');
 l.load().then((world) => {
+    init();
     sceneManager = new SceneManager(canvas, <World>world);
     bindEventListeners();
     render();
