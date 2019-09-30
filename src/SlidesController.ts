@@ -32,6 +32,10 @@ export class SlidesController {
         this.slideEditor.onMouseEvent(event);
     }
 
+    onTouchEvent(event) {
+        this.slideEditor.onTouchEvent(event);
+    }
+
     onKeyboardEvent(event) {
         this.slideEditor.onKeyboardEvent(event);
         var action: UserAction, start, finish;

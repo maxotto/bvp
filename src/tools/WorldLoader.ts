@@ -3,7 +3,7 @@ import { XmlLoader } from "./XmlLoader";
 import { promisifyLoader, forEachPromise, getGroupGeometry, getCameraState } from './helpers';
 import * as THREE from "three";
 
-import { ScenarioData, Slide, World } from "../types";
+import { ScenarioData, Slide, World, SVG, HotSpot } from "../types";
 
 export class WorldLoader {
     private _scenarioFolder: string;
@@ -13,6 +13,7 @@ export class WorldLoader {
     private _steps: [];
     private _mainSlideDuration: number;
     private _mainBackgroundColor: number;
+    private _mainBackgroundPic: string;
     private _cameraFov = 45;
     private _currentObjectName;
 
@@ -44,6 +45,7 @@ export class WorldLoader {
                 this._height = +scenarioData.height;
                 this._steps = scenarioData.steps;
                 this._mainBackgroundColor = scenarioData.mainBackgroundColor;
+                this._mainBackgroundPic = scenarioData.mainBackgroundPic;
                 this._mainSlideDuration = +scenarioData.mainDuration;
                 this._cameraFov = +scenarioData.cameraFov;
                 this._currentObjectName = scenarioData.mainBackgroundPic
@@ -64,7 +66,11 @@ export class WorldLoader {
                             width: this._width,
                             height: this._height,
                             background: mesh,
+                            objects: [],
+                            hotspot: null,
+                            picture: this._currentObjectName,
                             position: new THREE.Vector3(0, 0, 0),
+                            svg: <any>scenarioData.svg,
                             transitionDuration: +scenarioData.mainDuration,
                             scale: 1,
                             cameraPosition: cameraState.cameraPosition,
@@ -120,10 +126,14 @@ export class WorldLoader {
                                         width: slide.width / scale,
                                         height: slide.height / scale,
                                         background: mesh,
+                                        picture: this._currentObjectName,
+                                        hotspot: slide.hotspot,
+                                        objects: [],
                                         position: new THREE.Vector3(
                                             topLeft.x,
                                             topLeft.y,
                                             +(slide.hotspot.z)),
+                                        svg: <any>slide.svg,
                                         transitionDuration: +slide.animation.duration,
                                         scale: scale,
                                         cameraPosition: cameraState.cameraPosition,

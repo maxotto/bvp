@@ -13,9 +13,27 @@ export type ScenarioData = {
     svg: [],
 }
 
+export type HotSpot = {
+    x: number,
+    y: number,
+    z: number,
+    size: number
+}
+
+export type SVG = {
+    url: string,
+    x: number,
+    y: number,
+    z: number,
+    scale: number,
+}
+
 export type Slide = {
     width: number,
     height: number,
+    picture: string,
+    hotspot: HotSpot,
+    svg: SVG[],
     background: THREE.Mesh,
     position: THREE.Vector3,
     transitionDuration: number,
@@ -42,6 +60,7 @@ export type World = {
     cameraFov: number,
     mainSlideDuration: number,
     mainBackgroundColor: number,
+    mainBackgroundPic: string,
     mode: WorldMode,
     draggables: Mesh[]
 }
@@ -67,4 +86,12 @@ export enum KeyboardEvents {
     'keydown',
     'keypress',
     'keyup'
+}
+
+export enum TouchEvents {
+    'touchstart',
+    'touchmove',
+    'touchend',
+    'touchenter',
+    'touchleave'
 }

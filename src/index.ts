@@ -1,7 +1,7 @@
 import "./style.css";
 import { SceneManager } from "./SceneManager";
 import { WorldLoader } from './tools/WorldLoader';
-import { World, MouseEvents, KeyboardEvents } from "./types";
+import { World, MouseEvents, KeyboardEvents, TouchEvents } from "./types";
 
 
 const canvas = <HTMLCanvasElement>document.getElementById("canvas");
@@ -34,6 +34,12 @@ function bindEventListeners() {
             document.addEventListener(event, onKeyboardEvent, false);
         }
     }
+
+    for (let event in TouchEvents) {
+        if (isNaN(Number(event))) {
+            document.addEventListener(event, onTouchEvent, false);
+        }
+    }
     resizeCanvas();
 }
 
@@ -43,6 +49,10 @@ function onMouseEvent(event) {
 
 function onKeyboardEvent(event) {
     sceneManager.onKeyboardEvent(event);
+}
+
+function onTouchEvent(event) {
+    sceneManager.onTouchEvent(event);
 }
 
 function resizeCanvas() {

@@ -42,7 +42,7 @@ export class SceneManager {
         this.slidesController.onSwitchToShowMode.subscribe((a) => {
             this.changeMode(WorldMode.show);
         });
-        this.myControls = new MyDataControls();
+        this.myControls = new MyDataControls(this.world);
         this.changeMode(WorldMode.show);
     }
 
@@ -63,6 +63,10 @@ export class SceneManager {
 
     onMouseEvent(event) {
         this.slidesController.onMouseEvent(event);
+    }
+
+    onTouchEvent(event) {
+        this.slidesController.onTouchEvent(event);
     }
 
     buildScene() {

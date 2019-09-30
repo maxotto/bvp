@@ -1,67 +1,30 @@
 <?xml version="1.0"?>
-<world
-    width="1920"
-    height="1080"
-    mainBackgroundPic="ball-63527.jpg"
-    mainBackgroundColor="0x0000w00"
-    showControlPanel="true"
-    mainDuration="1500"
-    cameraFov="45"
-    >
+<world cameraFov="45" height="1080" mainBackgroundColor="0x000000" mainBackgroundPic="ball-63527.jpg" mainDuration="1500" showControlPanel="true" width="1920">
     <slides>
-        <slide
-            width="1920"
-            height="1080"
-            picture="1.jpg"
-            >
-            <hotspot size="240" x="885" y="544" z="150"/>
+        <slide height="1080" picture="1.jpg" width="1920">
+            <hotspot x="1018.2977187667057" y="154.56156674040903" z="150" size="240"/>
             <animation duration="1500"/>
-            <svg
-                url="tiger.svg"
-                x="20"
-                y="20"
-                z='8'
-                scale="0.8"
-                />
+            <svg scale="0.8" url="tiger.svg" x="20" y="20" z="8"/>
+            <svg scale="0.18" url="drawing.svg" x="120" y="120" z="18"/>
         </slide>
-        <slide
-            width="1920"
-            height="1080"
-            picture="2.jpg"
-            >
-            <hotspot size="200" x="470" y="630" z="16"/>
+        <slide height="1080" picture="2.jpg" width="1920">
+            <hotspot x="470" y="630" z="16" size="200"/>
             <animation duration="1500"/>
         </slide>
-        <slide
-            width="1920"
-            height="1080"
-            picture="3.jpg"
-            >
-            <hotspot size="200" x="983" y="765" z="15"/>
+        <slide height="1080" picture="3.jpg" width="1920">
+            <hotspot x="983" y="765" z="15" size="200"/>
             <animation duration="1500"/>
         </slide>
-        <slide
-            width="1920"
-            height="1080"
-            picture="4.jpg"
-            >
-            <hotspot size="100" x="600" y="350" z="200"/>
+        <slide height="1080" picture="4.jpg" width="1920">
+            <hotspot x="600" y="350" z="200" size="100"/>
             <animation duration="1500"/>
         </slide>
-        <slide
-            width="1920"
-            height="1080"
-            picture="5.jpg"
-            >
-            <hotspot size="140" x="700" y="200" z="150"/>
+        <slide height="1080" picture="5.jpg" width="1920">
+            <hotspot x="700" y="200" z="150" size="140"/>
             <animation duration="1500"/>
         </slide>
-        <slide
-            width="1920"
-            height="1080"
-            picture="6.jpg"
-            >
-            <hotspot size="100" x="1100" y="400" z="70"/>
+        <slide height="1080" picture="6.jpg" width="1920">
+            <hotspot x="1100" y="400" z="70" size="100"/>
             <animation duration="1500"/>
         </slide>
     </slides>

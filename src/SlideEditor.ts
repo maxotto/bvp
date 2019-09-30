@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { World, WorldMode } from "./types";
+import { World, WorldMode, Slide } from "./types";
 import { DragControls } from './tools/MyDragControls';
 import { getCameraState } from "./tools/helpers";
 
@@ -29,25 +29,31 @@ export class SlideEditor {
         this.dragControls.deactivate();
 
         this.dragControls.addEventListener('dragstart', () => {
-            this.parent.orbitControls.enabled = false;
+            this.parent.world.orbitControl.enabled = false;
         });
 
         this.dragControls.addEventListener('dragend', (event) => {
-            this.parent.orbitControls.enabled = true;
+            this.parent.world.orbitControl.enabled = true;
             console.log(event.object);
-            const newX = Math.round((this.parent.world.width / 2 + event.object.position.x) * 10) / 10;
-            const newY = Math.round((this.parent.world.height / 2 - event.object.position.y) * 10) / 10;
-            const newZ = Math.round((event.object.position.z) * 10) / 10;
             // по результату перемещения надо откорректировать позицию камеры для правильного показа переехавшего слайда.
             const userData = event.object.userData;
             const slideIndex = userData.parentSlide;
-            const slide = this.parent.world.slides[slideIndex];
-            console.log({ slide });
+            const slide = <Slide>this.parent.world.slides[slideIndex];
             const center = new THREE.Vector3(
                 slide.position.x + event.object.position.x + userData.size.x / 2,
                 slide.position.y + event.object.position.y - userData.size.y / 2,
                 slide.position.z + event.object.position.z + userData.size.z / 2,
             );
+            const topLeft = new THREE.Vector3(
+                slide.position.x + event.object.position.x,
+                slide.position.y + event.object.position.y,
+                slide.position.z + event.object.position.z,
+            );
+            slide.hotspot.x = this.parent.world.width / 2 + topLeft.x;
+            slide.hotspot.y = this.parent.world.height / 2 - topLeft.y;
+            slide.hotspot.z = topLeft.z;
+            console.log(topLeft);
+            console.log({ slide });
             // showSphere(this.world.scene, center, 8, '0x55dd77');
             const cameraState = getCameraState(
                 center,
@@ -64,6 +70,37 @@ export class SlideEditor {
         const func = 'on' + type;
         (this)[func](event);
     }
+
+    onTouchEvent(event) {
+        const type = event.type;
+        const func = 'on' + type;
+        (this)[func](event);
+    }
+
+    ontouchstart(event) {
+        //console.log(event.type);
+    }
+
+    ontouchmove(event) {
+        //console.log(event.type);
+    }
+
+    ontouchend(event) {
+        //console.log(event.type);
+    }
+
+    ontouchenter(event) {
+        //console.log(event.type);
+    }
+
+    ontouchleave(event) {
+        //console.log(event.type);
+    }
+
+    ontouchcancel(event) {
+        //console.log(event.type);
+    }
+
     onmousemove(event) {
         //console.log(event.type);
     }
