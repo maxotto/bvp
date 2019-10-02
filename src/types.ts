@@ -10,7 +10,7 @@ export type ScenarioData = {
     mainBackgroundColor: number,
     mainDuration: number,
     cameraFov: number,
-    svg: [],
+    objects: [],
 }
 
 export type HotSpot = {
@@ -33,7 +33,6 @@ export type Slide = {
     height: number,
     picture: string,
     hotspot: HotSpot,
-    svg: SVG[],
     background: THREE.Mesh,
     position: THREE.Vector3,
     transitionDuration: number,
@@ -56,6 +55,7 @@ export type World = {
     width: number,
     height: number,
     slides: Slide[],
+    objects: [],
     steps: [],
     cameraFov: number,
     mainSlideDuration: number,

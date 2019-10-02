@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "@tweenjs/tween.js": "latest",
-    "@types/three": "latest",
     "controlkit": "latest",
     "dat.gui": "^0.7.6",
     "file-saver": "^2.0.2",

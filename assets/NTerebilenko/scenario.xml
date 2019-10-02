@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
 <world cameraFov="45" height="1080" mainBackgroundColor="0x000000" mainBackgroundPic="ball-63527.jpg" mainDuration="1500" showControlPanel="true" width="1920">
+    <svg scale="0.8" url="tiger.svg" x="20" y="20" z="8"/>
+    <svg scale="0.18" url="drawing.svg" x="120" y="120" z="18"/>
     <slides>
         <slide height="1080" picture="1.jpg" width="1920">
-            <hotspot x="1018.2977187667057" y="154.56156674040903" z="150" size="240"/>
+            <hotspot x="788.0086886452152" y="302.3441631328846" z="188.7575312894881" size="240"/>
             <animation duration="1500"/>
-            <svg scale="0.8" url="tiger.svg" x="20" y="20" z="8"/>
-            <svg scale="0.18" url="drawing.svg" x="120" y="120" z="18"/>
         </slide>
         <slide height="1080" picture="2.jpg" width="1920">
             <hotspot x="470" y="630" z="16" size="200"/>
             <animation duration="1500"/>
         </slide>
         <slide height="1080" picture="3.jpg" width="1920">
-            <hotspot x="983" y="765" z="15" size="200"/>
+            <hotspot x="823.9671532011124" y="662.5071353048501" z="280.89941269310225" size="200"/>
             <animation duration="1500"/>
         </slide>
         <slide height="1080" picture="4.jpg" width="1920">
@@ -24,7 +24,7 @@
             <animation duration="1500"/>
         </slide>
         <slide height="1080" picture="6.jpg" width="1920">
-            <hotspot x="1100" y="400" z="70" size="100"/>
+            <hotspot x="1090.4842338404562" y="443.41390200863896" z="200.98687474423187" size="100"/>
             <animation duration="1500"/>
         </slide>
     </slides>

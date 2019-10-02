@@ -36,32 +36,35 @@ export class SlideEditor {
             this.parent.world.orbitControl.enabled = true;
             console.log(event.object);
             // по результату перемещения надо откорректировать позицию камеры для правильного показа переехавшего слайда.
-            const userData = event.object.userData;
-            const slideIndex = userData.parentSlide;
-            const slide = <Slide>this.parent.world.slides[slideIndex];
-            const center = new THREE.Vector3(
-                slide.position.x + event.object.position.x + userData.size.x / 2,
-                slide.position.y + event.object.position.y - userData.size.y / 2,
-                slide.position.z + event.object.position.z + userData.size.z / 2,
-            );
-            const topLeft = new THREE.Vector3(
-                slide.position.x + event.object.position.x,
-                slide.position.y + event.object.position.y,
-                slide.position.z + event.object.position.z,
-            );
-            slide.hotspot.x = this.parent.world.width / 2 + topLeft.x;
-            slide.hotspot.y = this.parent.world.height / 2 - topLeft.y;
-            slide.hotspot.z = topLeft.z;
-            console.log(topLeft);
-            console.log({ slide });
-            // showSphere(this.world.scene, center, 8, '0x55dd77');
-            const cameraState = getCameraState(
-                center,
-                userData.size.y,
-                slide.position.z + event.object.position.z,
-                this.parent.world.cameraFov);
-            slide.cameraPosition = cameraState.cameraPosition;
-            slide.cameraLookAt = cameraState.cameraPosition;
+            // но надо проверить, что это слайд
+            if(event.object.name.indexOf('slideGroup_')==0){
+                const userData = event.object.userData;
+                const slideIndex = userData.parentSlide;
+                const slide = <Slide>this.parent.world.slides[slideIndex];
+                const center = new THREE.Vector3(
+                    slide.position.x + event.object.position.x + userData.size.x / 2,
+                    slide.position.y + event.object.position.y - userData.size.y / 2,
+                    slide.position.z + event.object.position.z + userData.size.z / 2,
+                );
+                const topLeft = new THREE.Vector3(
+                    slide.position.x + event.object.position.x,
+                    slide.position.y + event.object.position.y,
+                    slide.position.z + event.object.position.z,
+                );
+                slide.hotspot.x = this.parent.world.width / 2 + topLeft.x;
+                slide.hotspot.y = this.parent.world.height / 2 - topLeft.y;
+                slide.hotspot.z = topLeft.z;
+                console.log(topLeft);
+                console.log({ slide });
+                // showSphere(this.world.scene, center, 8, '0x55dd77');
+                const cameraState = getCameraState(
+                    center,
+                    userData.size.y,
+                    slide.position.z + event.object.position.z,
+                    this.parent.world.cameraFov);
+                slide.cameraPosition = cameraState.cameraPosition;
+                slide.cameraLookAt = cameraState.cameraPosition;
+            }
         });
     }
 

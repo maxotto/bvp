@@ -66,11 +66,10 @@ export class WorldLoader {
                             width: this._width,
                             height: this._height,
                             background: mesh,
-                            objects: [],
                             hotspot: null,
                             picture: this._currentObjectName,
                             position: new THREE.Vector3(0, 0, 0),
-                            svg: <any>scenarioData.svg,
+                            objects: <any>scenarioData.objects,
                             transitionDuration: +scenarioData.mainDuration,
                             scale: 1,
                             cameraPosition: cameraState.cameraPosition,
@@ -81,16 +80,18 @@ export class WorldLoader {
                         mesh.position.z = newSlide.position.z;
                         newSlide.objects = [];
                         let p;
-                        if (scenarioData.svg) {
-                            p = forEachPromise(scenarioData.svg, (svg, context) => {
-                                this._currentObjectName = svg['url'];
-                                var svgUrl = 'assets/'+context._scenarioFolder + this._currentObjectName;
-                                return promisifyLoader(new SVGLoader(manager), onProgress)
-                                    .load(svgUrl)
-                                    .then((svgData) => {
-                                        const mesh = loadSVG(svgData, -this._width / 2 + (+svg['x']), this._height / 2 + (-svg['y']), +svg['z'], +svg['scale']);
-                                        newSlide.objects.push(mesh);
-                                    });
+                        if (scenarioData.objects) {
+                            p = forEachPromise(scenarioData.objects, (object, context) => {
+                                if(object.type =='svg'){
+                                    this._currentObjectName = object['url'];
+                                    var svgUrl = 'assets/'+context._scenarioFolder + this._currentObjectName;
+                                    return promisifyLoader(new SVGLoader(manager), onProgress)
+                                        .load(svgUrl)
+                                        .then((svgData) => {
+                                            const mesh = loadSVG(svgData, -this._width / 2 + (+object['x']), this._height / 2 + (-object['y']), +object['z'], +object['scale']);
+                                            newSlide.objects.push(mesh);
+                                        });
+                                }
                             }, this);
                         } else {
                             p = Promise.resolve(true);

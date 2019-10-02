@@ -32,7 +32,9 @@ export function getWorldFromXml(xmlText) {
                 break;
             case "svg":
 
-                let newSvg = {};
+                let newSvg = {
+                    type: 'svg'
+                };
                 //               console.log(node.parentNode.nodeName)
                 for (var prop in node.attributes) {
                     if (node.attributes.hasOwnProperty(prop)) {
@@ -42,16 +44,16 @@ export function getWorldFromXml(xmlText) {
                     }
                 }
                 if (node.parentNode.nodeName == 'world') {
-                    if (!world.hasOwnProperty("svg")) {
-                        world["svg"] = [];
+                    if (!world.hasOwnProperty("objects")) {
+                        world["objects"] = [];
                     }
-                    world['svg'].push(newSvg);
+                    world['objects'].push(newSvg);
                 } else if (node.parentNode.nodeName == 'slide') {
                     const lastSlideIndex = world["slides"].length - 1;
-                    if (!world["slides"][lastSlideIndex].hasOwnProperty("svg")) {
-                        world["slides"][lastSlideIndex]['svg'] = [];
+                    if (!world["slides"][lastSlideIndex].hasOwnProperty("objects")) {
+                        world["slides"][lastSlideIndex]['objects'] = [];
                     }
-                    world["slides"][lastSlideIndex]['svg'].push(newSvg);
+                    world["slides"][lastSlideIndex]['objects'].push(newSvg);
                 }
                 break;
             case "slide":
@@ -139,6 +141,11 @@ export function putWorldToXml(world: World) {
                         name: "show",
                         elements: []
                     },
+                    {
+                        type: "element",
+                        name: "objects",
+                        elements: []
+                    },
                 ]
             }
         ]
@@ -158,21 +165,23 @@ export function putWorldToXml(world: World) {
     world.slides.forEach((slide, index) => {
         if (index > 0) {
             const svgList = [];
-            if (slide.svg) {
-                slide.svg.forEach((svg) => {
-                    svgList.push(
-                        {
-                            type: "element",
-                            name: "svg",
-                            attributes: <SVG>{
-                                scale: svg.scale,
-                                url: svg.url,
-                                x: svg.x,
-                                y: svg.y,
-                                z: svg.z,
-                            },
-                        }
-                    )
+            if (slide.objects) {
+                slide.objects.forEach((object) => {
+                    if(object.type == 'svg'){
+                        svgList.push(
+                            {
+                                type: "element",
+                                name: object.type,
+                                attributes: <SVG>{
+                                    scale: object.scale,
+                                    url: object.url,
+                                    x: object.x,
+                                    y: object.y,
+                                    z: object.z,
+                                },
+                            }
+                        )
+                    }
                 });
             }
             obj.elements[0].elements[slidesIndex].elements.push({
