@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <world cameraFov="45" height="1080" mainBackgroundColor="0xff0000" mainBackgroundPic="ball-63527.jpg" mainDuration="1500" showControlPanel="true" width="1920">
-    <svg scale="1" url="drawing.svg" x="960" y="540" z="180"/>
+    <svg scale="1" url="tiger.svg" x="0" y="0" z="8"/>
+    <svg scale="1" url="drawing.svg" x="0" y="0" z="8"/>
     <slides>
         <slide height="1080" picture="1.jpg" width="1920">
             <hotspot x="788.0086886452152" y="302.3441631328846" z="188.7575312894881" size="240"/>
@@ -8,11 +9,11 @@
 
         </slide>
         <slide height="1080" picture="2.jpg" width="1920">
-            <hotspot x="960" y="540" z="160" size="150"/>
+            <hotspot x="470" y="630" z="16" size="200"/>
             <animation duration="1500"/>
         </slide>
         <slide height="1080" picture="3.jpg" width="1920">
-            <hotspot x="0" y="0" z="280.89941269310225" size="200"/>
+            <hotspot x="823.9671532011124" y="662.5071353048501" z="280.89941269310225" size="200"/>
             <animation duration="1500"/>
         </slide>
         <slide height="1080" picture="4.jpg" width="1920">

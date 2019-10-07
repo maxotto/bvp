@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { World } from '../types';
 import { getGroupGeometry } from '../tools/helpers';
-import { EditableGroup } from '../core/EditableGroup';
+import { EditableGroup, EditableGroupState } from '../core/EditableGroup';
 
 
 export class SceneSubjects {
@@ -13,38 +13,39 @@ export class SceneSubjects {
     constructor(scene, world: World) {
         this.scene = scene;
         this.world = world;
+        
         this.mesh = new THREE.Mesh(
             new THREE.IcosahedronBufferGeometry(this.radius, 2),
             new THREE.MeshStandardMaterial({ flatShading: true })
         );
         this.mesh.position.set(-300, 50, 120);
         this.scene.add(this.mesh);
+
         this.createGround();
+
         world.slides.forEach((slide, index) => {
             var slideGroup = new EditableGroup();
-            slideGroup.position.x = slide.position.x+slide.width/2;
-            slideGroup.position.y = slide.position.y - slide.height/2;
-            slideGroup.position.z = slide.position.z;
             if (index === 0) {
                 this.createFrame();
+                slideGroup.setState(EditableGroupState.show);
             } else {
                 world.draggables.push(slideGroup)
             }
-
-            slideGroup.addChild(slide.background);
+            slideGroup.add(slide.background);
             slide.objects.forEach(object => {
-                slideGroup.addChild(object);
+                slideGroup.add(object);
                 world.draggables.push(object);
             });
+            slideGroup.position.x = slide.position.x+slide.width/2;
+            slideGroup.position.y = slide.position.y - slide.height/2;
+            slideGroup.position.z = slide.position.z;
             slideGroup.name = 'slideGroup_' + index;
             const _groupGeometry = getGroupGeometry(slideGroup);
             _groupGeometry.parentSlide = index;
             _groupGeometry.delta.z = 0;
             slideGroup.userData = _groupGeometry;
             this.scene.add(slideGroup);
-
         });
-        // console.log(this.scene);
     }
 
     createFrame() {
@@ -59,8 +60,8 @@ export class SceneSubjects {
         );
         meshFrame.position.z = -50.0;
         this.scene.add(meshFrame);
-
     }
+
     createGround() {
         var imageCanvas = document.createElement("canvas");
         var context = imageCanvas.getContext("2d");

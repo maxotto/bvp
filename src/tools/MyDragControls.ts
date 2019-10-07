@@ -16,6 +16,7 @@ import {
 } from "three";
 
 import * as THREE from "three";
+import { EditableGroupState } from '../core/EditableGroup';
 var DragControls = function (_objects, _camera, _domElement) {
 
 	if (_objects instanceof Camera) {
@@ -34,9 +35,10 @@ var DragControls = function (_objects, _camera, _domElement) {
 	var _worldPosition = new Vector3();
 	var _inverseMatrix = new Matrix4();
 
-	var _selected = null, _hovered = null, selectBox = null;
+	var _selected = null, _hovered = null;
+	let touched = [];
 	var _start;
-	var _slide;
+	var isDragging = false;
 
 	//
 
@@ -75,6 +77,8 @@ var DragControls = function (_objects, _camera, _domElement) {
 	}
 
 	function onDocumentMouseMove(event) {
+		console.log('Mouse move');
+
 		event.preventDefault();
 
 		var rect = _domElement.getBoundingClientRect();
@@ -131,34 +135,31 @@ var DragControls = function (_objects, _camera, _domElement) {
 	}
 
 	function onDocumentMouseDown(event) {
-
+		console.log('Mouse down');
 		event.preventDefault();
 
 		_raycaster.setFromCamera(_mouse, _camera);
 
 		var intersects = _raycaster.intersectObjects(_objects, true);
-		_selected = null
 		if (intersects.length > 0) {
-
+		
 			intersects[0].object.traverseAncestors ( (e: any) => {
 				if(!_selected && e.isEditableGroup){
 					_selected = e;
+					if(touched.indexOf(_selected)<0) touched.push(_selected);
 				}
 			});
-			
-			if(_selected){
 
+			if(_selected){
+				touched.forEach(element => {
+					element.setState(EditableGroupState.show);
+				});
 				_start = {
 					x: _selected.position.x,
 					y: _selected.position.y,
 					z: _selected.position.z
 				};
-				const box = new Box3().setFromObject(_selected);
-				var wireframe = new THREE.WireframeGeometry(new THREE.BoxGeometry(
-					box.max.x - box.min.x,
-					box.max.y - box.min.y,
-					box.max.z - box.min.z + 10,
-				));
+				_selected.setState(EditableGroupState.editor);
 				if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
 	
 					_inverseMatrix.getInverse(_selected.parent.matrixWorld);
@@ -174,13 +175,13 @@ var DragControls = function (_objects, _camera, _domElement) {
 	}
 
 	function onDocumentMouseCancel(event) {
-
+		console.log('Mouse up');
 		event.preventDefault();
 
 		if (_selected) {
 			scope.dispatchEvent({ type: 'dragend', object: _selected, start: _start });
 			// console.log(_selected.position);
-
+			//_selected.setState(EditableGroupState.show);	
 			_selected = null;
 
 		}

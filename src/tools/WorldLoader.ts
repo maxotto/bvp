@@ -238,7 +238,7 @@ export class WorldLoader {
             eg.position.y = y;
             eg.position.z = z;
             eg.renderOrder = z; // to prevent strange overlap
-            eg.addChild(group);
+            eg.add(group);
             return eg;
         }
     }
