@@ -137,57 +137,40 @@ var DragControls = function (_objects, _camera, _domElement) {
 		_raycaster.setFromCamera(_mouse, _camera);
 
 		var intersects = _raycaster.intersectObjects(_objects, true);
-
+		_selected = null
 		if (intersects.length > 0) {
 
-			intersects[0].object.traverseAncestors ( (e) => {
-				if(!_selected && e['_selectFrame']){
+			intersects[0].object.traverseAncestors ( (e: any) => {
+				if(!_selected && e.isEditableGroup){
 					_selected = e;
 				}
 			});
-			_start = {
-				x: _selected.position.x,
-				y: _selected.position.y,
-				z: _selected.position.z
-			};
-			const box = new Box3().setFromObject(_selected);
-			var wireframe = new THREE.WireframeGeometry(new THREE.BoxGeometry(
-				box.max.x - box.min.x,
-				box.max.y - box.min.y,
-				box.max.z - box.min.z + 10,
-			));
-/*
-			selectBox = new THREE.LineSegments(wireframe);
-			console.log(_selected.userData);
-			// selectBox.position.set(_selected.position.x, _selected.position.y, _selected.position.z);
-			selectBox.position.set(
-				_selected.position.x - _selected.userData.delta.x,
-				_selected.position.y - _selected.userData.delta.y,
-				_selected.position.z - _selected.userData.delta.z
-			);
-			selectBox.material.depthTest = false;
-			selectBox.material.opacity = 0.25;
-			selectBox.material.transparent = false;
+			
+			if(_selected){
 
-			const scene = _selected.parent;
-			console.log({ selectBox });
-			//scene.add(selectBox);
-			*/
-			if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
-
-				_inverseMatrix.getInverse(_selected.parent.matrixWorld);
-				_offset.copy(_intersection).sub(_worldPosition.setFromMatrixPosition(_selected.matrixWorld));
-
+				_start = {
+					x: _selected.position.x,
+					y: _selected.position.y,
+					z: _selected.position.z
+				};
+				const box = new Box3().setFromObject(_selected);
+				var wireframe = new THREE.WireframeGeometry(new THREE.BoxGeometry(
+					box.max.x - box.min.x,
+					box.max.y - box.min.y,
+					box.max.z - box.min.z + 10,
+				));
+				if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
+	
+					_inverseMatrix.getInverse(_selected.parent.matrixWorld);
+					_offset.copy(_intersection).sub(_worldPosition.setFromMatrixPosition(_selected.matrixWorld));
+	
+				}
+	
+				_domElement.style.cursor = 'move';
+	
+				scope.dispatchEvent({ type: 'dragstart', object: _selected });
 			}
-
-			_domElement.style.cursor = 'move';
-
-			scope.dispatchEvent({ type: 'dragstart', object: _selected });
-		} else {
-			_selected = null;
-		}
-
-
+		} 
 	}
 
 	function onDocumentMouseCancel(event) {
