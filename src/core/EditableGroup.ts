@@ -10,11 +10,12 @@ export class EditableGroup extends Group {
 
     private _selectFrame: LineSegments;
     private _state = EditableGroupState.editor;
+    public isEditableGroup = true;
 
     constructor() {
         super();
-        // this.type = 'EditableGroup';
     }
+
 
     public addChild(...object: Object3D[]) {
         super.add(...object);
