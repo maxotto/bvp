@@ -11,9 +11,11 @@ import {
 	Plane,
 	Raycaster,
 	Vector2,
-	Vector3
+	Vector3,
+	Box3
 } from "three";
 
+import * as THREE from "three";
 var DragControls = function (_objects, _camera, _domElement) {
 
 	if (_objects instanceof Camera) {
@@ -32,7 +34,7 @@ var DragControls = function (_objects, _camera, _domElement) {
 	var _worldPosition = new Vector3();
 	var _inverseMatrix = new Matrix4();
 
-	var _selected = null, _hovered = null;
+	var _selected = null, _hovered = null, selectBox = null;
 	var _start;
 	var _slide;
 
@@ -138,12 +140,39 @@ var DragControls = function (_objects, _camera, _domElement) {
 
 		if (intersects.length > 0) {
 
-			_selected = intersects[0].object.parent;
+			intersects[0].object.traverseAncestors ( (e) => {
+				if(!_selected && e['_selectFrame']){
+					_selected = e;
+				}
+			});
 			_start = {
 				x: _selected.position.x,
 				y: _selected.position.y,
 				z: _selected.position.z
 			};
+			const box = new Box3().setFromObject(_selected);
+			var wireframe = new THREE.WireframeGeometry(new THREE.BoxGeometry(
+				box.max.x - box.min.x,
+				box.max.y - box.min.y,
+				box.max.z - box.min.z + 10,
+			));
+/*
+			selectBox = new THREE.LineSegments(wireframe);
+			console.log(_selected.userData);
+			// selectBox.position.set(_selected.position.x, _selected.position.y, _selected.position.z);
+			selectBox.position.set(
+				_selected.position.x - _selected.userData.delta.x,
+				_selected.position.y - _selected.userData.delta.y,
+				_selected.position.z - _selected.userData.delta.z
+			);
+			selectBox.material.depthTest = false;
+			selectBox.material.opacity = 0.25;
+			selectBox.material.transparent = false;
+
+			const scene = _selected.parent;
+			console.log({ selectBox });
+			//scene.add(selectBox);
+			*/
 			if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
 
 				_inverseMatrix.getInverse(_selected.parent.matrixWorld);
@@ -154,6 +183,8 @@ var DragControls = function (_objects, _camera, _domElement) {
 			_domElement.style.cursor = 'move';
 
 			scope.dispatchEvent({ type: 'dragstart', object: _selected });
+		} else {
+			_selected = null;
 		}
 
 

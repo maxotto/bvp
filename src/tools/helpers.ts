@@ -53,9 +53,9 @@ export function getGroupGeometry(mesh: THREE.Group) {
   boundingBox.getSize(size)
   var topLeftCorner = new THREE.Vector3(center.x - size.x / 2, center.y + size.y / 2, center.z - size.z / 2);
   var delta = new THREE.Vector3(
-    mesh.position.x - (center.x - size.x / 2),
-    mesh.position.y - (center.y + size.y / 2),
-    mesh.position.z - (center.y + size.z / 2),
+    mesh.position.x - (center.x),
+    mesh.position.y - (center.y),
+    mesh.position.z - (center.y),
   );
   return {
     size: {

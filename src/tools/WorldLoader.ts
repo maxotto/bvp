@@ -4,6 +4,8 @@ import { promisifyLoader, forEachPromise, getGroupGeometry, getCameraState } fro
 import * as THREE from "three";
 
 import { ScenarioData, Slide, World, SVG, HotSpot } from "../types";
+import { EditableGroup } from '../core/EditableGroup';
+import { showSphere } from '../SlideEditor';
 
 export class WorldLoader {
     private _scenarioFolder: string;
@@ -39,7 +41,7 @@ export class WorldLoader {
             }
         };
         return promisifyLoader(new XmlLoader(manager), onProgress)
-            .load('assets/'+this._scenarioFolder + 'scenario.xml')
+            .load('assets/' + this._scenarioFolder + 'scenario.xml')
             .then((scenarioData: ScenarioData) => {
                 this._width = +scenarioData.width;
                 this._height = +scenarioData.height;
@@ -50,7 +52,7 @@ export class WorldLoader {
                 this._cameraFov = +scenarioData.cameraFov;
                 this._currentObjectName = scenarioData.mainBackgroundPic
                 return promisifyLoader(new THREE.TextureLoader(manager), onProgress)
-                    .load('assets/'+this._scenarioFolder + this._currentObjectName)
+                    .load('assets/' + this._scenarioFolder + this._currentObjectName)
                     .then((_texturePainting: THREE.Texture) => {
                         var materialPainting = new THREE.MeshBasicMaterial(<THREE.MeshBasicMaterialParameters>{
                             color: 0xffffff,
@@ -61,34 +63,43 @@ export class WorldLoader {
                         var geometry = new THREE.PlaneBufferGeometry(this._width, this._height);
                         var mesh = new THREE.Mesh(geometry, materialPainting);
                         mesh.name = 'slide0Bg';
-                        const cameraState = getCameraState(new THREE.Vector3(0,0,0), scenarioData.height, 0, this._cameraFov);
+                        const cameraState = getCameraState(new THREE.Vector3(0, 0, 0), scenarioData.height, 0, this._cameraFov);
                         const newSlide = <Slide>{
                             width: this._width,
                             height: this._height,
                             background: mesh,
                             hotspot: null,
                             picture: this._currentObjectName,
-                            position: new THREE.Vector3(0, 0, 0),
+                            position: new THREE.Vector3(
+                                -this._width / 2,
+                                this._height / 2,
+                                0
+                            ),
                             objects: <any>scenarioData.objects,
                             transitionDuration: +scenarioData.mainDuration,
                             scale: 1,
                             cameraPosition: cameraState.cameraPosition,
                             cameraLookAt: cameraState.cameraLookAt
                         }
-                        mesh.position.x = newSlide.position.x;
-                        mesh.position.y = newSlide.position.y;
-                        mesh.position.z = newSlide.position.z;
+                        // mesh.position.x = 0;
+                        // mesh.position.y = 0;
+                        // mesh.position.z = 0;
                         newSlide.objects = [];
                         let p;
                         if (scenarioData.objects) {
                             p = forEachPromise(scenarioData.objects, (object, context) => {
-                                if(object.type =='svg'){
+                                if (object.type == 'svg') {
                                     this._currentObjectName = object['url'];
-                                    var svgUrl = 'assets/'+context._scenarioFolder + this._currentObjectName;
+                                    var svgUrl = 'assets/' + context._scenarioFolder + this._currentObjectName;
                                     return promisifyLoader(new SVGLoader(manager), onProgress)
                                         .load(svgUrl)
                                         .then((svgData) => {
-                                            const mesh = loadSVG(svgData, -this._width / 2 + (+object['x']), this._height / 2 + (-object['y']), +object['z'], +object['scale']);
+                                            const mesh = loadSVG(
+                                                svgData,
+                                                -this._width / 2 + (+object['x']),
+                                                this._height / 2 + (-object['y']),
+                                                +object['z'], +object['scale']
+                                            );
                                             newSlide.objects.push(mesh);
                                         });
                                 }
@@ -102,7 +113,7 @@ export class WorldLoader {
                             ++slideNumber;
                             this._currentObjectName = slide.picture
                             return promisifyLoader(new THREE.TextureLoader(manager), onProgress)
-                                .load('assets/'+this._scenarioFolder + this._currentObjectName)
+                                .load('assets/' + this._scenarioFolder + this._currentObjectName)
                                 .then((_texturePainting: THREE.Texture) => {
                                     var materialPainting = new THREE.MeshBasicMaterial(<THREE.MeshBasicMaterialParameters>{
                                         color: 0xffffff,
@@ -112,7 +123,7 @@ export class WorldLoader {
                                     var scale = slide.width / slide.hotspot.size;
                                     var geometry = new THREE.PlaneBufferGeometry(slide.hotspot.size, slide.height / scale);
                                     var mesh = new THREE.Mesh(geometry, materialPainting);
-                                    mesh.name = 'slide'+slideNumber+'bg';
+                                    mesh.name = 'slide' + slideNumber + 'bg';
                                     var topLeft = {
                                         x: -context._width / 2 + (+slide.hotspot.x),
                                         y: context._height / 2 - (+slide.hotspot.y),
@@ -134,30 +145,30 @@ export class WorldLoader {
                                             topLeft.x,
                                             topLeft.y,
                                             +(slide.hotspot.z)),
-                                        svg: <any>slide.svg,
+                                        // svg: <any>slide.svg,
                                         transitionDuration: +slide.animation.duration,
                                         scale: scale,
                                         cameraPosition: cameraState.cameraPosition,
                                         cameraLookAt: cameraState.cameraLookAt
                                     }
                                     newSlide.objects = [];
-                                    mesh.position.x = center.x;
-                                    mesh.position.y = center.y;
-                                    mesh.position.z = newSlide.position.z;
+                                    //mesh.position.x = center.x;
+                                    //mesh.position.y = center.y;
+                                    //mesh.position.z = newSlide.position.z;
                                     let p;
-                                    if (slide.svg) {
-                                        p = forEachPromise(slide.svg, (svg, context) => {
+                                    if (slide.objects) {
+                                        p = forEachPromise(slide.objects, (svg, context) => {
                                             this._currentObjectName = svg['url'];
-                                            var svgUrl = 'assets/'+context._scenarioFolder + this._currentObjectName;
+                                            var svgUrl = 'assets/' + context._scenarioFolder + this._currentObjectName;
                                             return promisifyLoader(new SVGLoader(manager), onProgress)
                                                 .load(svgUrl)
                                                 .then((svgData) => {
                                                     const z = +(slide.hotspot.z) + (+svg['z']);
                                                     const mesh = loadSVG(
                                                         svgData,
-                                                        topLeft.x + (+svg['x']),
-                                                        topLeft.y + (-svg['y']),
-                                                        z,
+                                                        (+svg['x']),
+                                                        (-svg['y']),
+                                                        (+svg['z']),
                                                         (+svg['scale']) / scale,
                                                         slideNumber
                                                     );
@@ -191,7 +202,6 @@ export class WorldLoader {
         function loadSVG(data, x, y, z, scale, parentSlide = 0) {
             var paths = data.paths;
             var group = new THREE.Group();
-            group.name = 'group_s'+parentSlide+'_o_'+scope._currentObjectName;
             for (var i = 0; i < paths.length; i++) {
                 var path = paths[i];
                 var fillColor = path.userData.style.fill;
@@ -212,20 +222,24 @@ export class WorldLoader {
                     group.add(mesh);
                 }
             }
-            new THREE.Box3().setFromObject(group).getCenter(group.position);
+            // new THREE.Box3().setFromObject(group).getCenter(group.position);
             group.scale.multiplyScalar(scale);
-            group.position.x = x;
-            group.position.y = y;
-            group.position.z = z;
             group.renderOrder = z; // to prevent strange overlap
-            // group.scale.y *= - 1;
-            //get group geometry
-            const _groupGeometry = getGroupGeometry(group);
+            let _groupGeometry = getGroupGeometry(group);
+            group.position.x -= _groupGeometry.size.x / 2;
+            group.position.y += _groupGeometry.size.y / 2;
+            group.position.z += _groupGeometry.size.z / 2;
             _groupGeometry.parentSlide = parentSlide;
             _groupGeometry.delta.z = 0;
-            group.userData = _groupGeometry;
-            group.position.add(_groupGeometry.delta);
-            return group;
+            let eg = new EditableGroup();
+            eg.name = 'group_s' + parentSlide + '_o_' + scope._currentObjectName;
+            eg.userData = _groupGeometry;
+            eg.position.x = x;
+            eg.position.y = y;
+            eg.position.z = z;
+            eg.renderOrder = z; // to prevent strange overlap
+            eg.addChild(group);
+            return eg;
         }
     }
 }

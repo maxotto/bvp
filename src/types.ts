@@ -62,7 +62,7 @@ export type World = {
     mainBackgroundColor: number,
     mainBackgroundPic: string,
     mode: WorldMode,
-    draggables: Mesh[]
+    draggables: any[]
 }
 
 export enum UserAction {
