@@ -61,10 +61,8 @@ export class SlideEditor {
                     userData.size.y,
                     event.object.position.z,
                     this.parent.world.cameraFov);
-                //TODO Сделать позиционирование самеры через this.parent.world.orbitControl
                 slide.cameraPosition = cameraState.cameraPosition;
-                slide.cameraLookAt = cameraState.cameraPosition;
-                this.parent.world.orbitControl.update();
+                slide.cameraLookAt = cameraState.cameraLookAt;
             }
 
         }
