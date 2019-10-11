@@ -77,7 +77,6 @@ var DragControls = function (_objects, _camera, _domElement) {
 	}
 
 	function onDocumentMouseMove(event) {
-		console.log('Mouse move');
 
 		event.preventDefault();
 
@@ -135,22 +134,21 @@ var DragControls = function (_objects, _camera, _domElement) {
 	}
 
 	function onDocumentMouseDown(event) {
-		console.log('Mouse down');
 		event.preventDefault();
 
 		_raycaster.setFromCamera(_mouse, _camera);
 
 		var intersects = _raycaster.intersectObjects(_objects, true);
 		if (intersects.length > 0) {
-		
-			intersects[0].object.traverseAncestors ( (e: any) => {
-				if(!_selected && e.isEditableGroup){
+
+			intersects[0].object.traverseAncestors((e: any) => {
+				if (!_selected && e.isEditableGroup) {
 					_selected = e;
-					if(touched.indexOf(_selected)<0) touched.push(_selected);
+					if (touched.indexOf(_selected) < 0) touched.push(_selected);
 				}
 			});
 
-			if(_selected){
+			if (_selected) {
 				touched.forEach(element => {
 					element.setState(EditableGroupState.show);
 				});
@@ -161,29 +159,25 @@ var DragControls = function (_objects, _camera, _domElement) {
 				};
 				_selected.setState(EditableGroupState.editor);
 				if (_raycaster.ray.intersectPlane(_plane, _intersection)) {
-	
+
 					_inverseMatrix.getInverse(_selected.parent.matrixWorld);
 					_offset.copy(_intersection).sub(_worldPosition.setFromMatrixPosition(_selected.matrixWorld));
-	
+
 				}
-	
+
 				_domElement.style.cursor = 'move';
-	
+
 				scope.dispatchEvent({ type: 'dragstart', object: _selected });
 			}
-		} 
+		}
 	}
 
 	function onDocumentMouseCancel(event) {
-		console.log('Mouse up');
 		event.preventDefault();
 
 		if (_selected) {
 			scope.dispatchEvent({ type: 'dragend', object: _selected, start: _start });
-			// console.log(_selected.position);
-			//_selected.setState(EditableGroupState.show);	
 			_selected = null;
-
 		}
 
 		_domElement.style.cursor = _hovered ? 'pointer' : 'auto';

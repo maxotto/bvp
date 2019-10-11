@@ -30,21 +30,21 @@ export class EditableGroup extends Group {
 
     private _updateFrame() {
 
-        if (this._selectFrame) this.remove(this._selectFrame);
+        if (this._selectFrame) super.remove(this._selectFrame);
         if (this._state == EditableGroupState.editor) {
             const box = new Box3().setFromObject(this);
-            
+
             var wireframe = new WireframeGeometry(new BoxGeometry(
                 box.max.x - box.min.x,
                 box.max.y - box.min.y,
                 box.max.z - box.min.z,
             ));
-            
+
             this._selectFrame = new LineSegments(wireframe);
             this._selectFrame.position.x = 0;
             this._selectFrame.position.y = 0;
             this._selectFrame.position.z = (box.max.z - box.min.z) / 2;
-    
+
             super.add(this._selectFrame);
         }
     }
