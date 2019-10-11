@@ -1,35 +1,66 @@
 import "./style.css";
 import { SceneManager } from "./SceneManager";
 import { WorldLoader } from './tools/WorldLoader';
+import { World, MouseEvents, KeyboardEvents, TouchEvents } from "./types";
 
 
 const canvas = <HTMLCanvasElement>document.getElementById("canvas");
 let sceneManager;
-
-const l = new WorldLoader('presentation1/');
+var startButton = document.getElementById('startButton');
+startButton.addEventListener('click', init);
+const l = new WorldLoader('NTerebilenko/');
 l.load().then((world) => {
-    sceneManager = new SceneManager(canvas, world);
+    init();
+    sceneManager = new SceneManager(canvas, <World>world);
     bindEventListeners();
     render();
 });
-
+function init() {
+    var overlay = document.getElementById('overlay');
+    overlay.remove();
+    var audioElement = <HTMLVideoElement>document.getElementById('music');
+    audioElement.play();
+}
 
 function bindEventListeners() {
     window.onresize = resizeCanvas;
-    document.addEventListener("keydown", onDocumentKeyDown, false);
+    for (let event in MouseEvents) {
+        if (isNaN(Number(event))) {
+            document.addEventListener(event, onMouseEvent, false);
+        }
+    }
+    for (let event in KeyboardEvents) {
+        if (isNaN(Number(event))) {
+            document.addEventListener(event, onKeyboardEvent, false);
+        }
+    }
+
+    for (let event in TouchEvents) {
+        if (isNaN(Number(event))) {
+            document.addEventListener(event, onTouchEvent, false);
+        }
+    }
     resizeCanvas();
 }
 
-function onDocumentKeyDown(event){
-    sceneManager.onDocumentKeyDown(event);
+function onMouseEvent(event) {
+    sceneManager.onMouseEvent(event);
+}
+
+function onKeyboardEvent(event) {
+    sceneManager.onKeyboardEvent(event);
+}
+
+function onTouchEvent(event) {
+    sceneManager.onTouchEvent(event);
 }
 
 function resizeCanvas() {
     canvas.style.width = '100%';
     canvas.style.height = '100%';
 
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
     sceneManager.onWindowResize();
 }

@@ -6,6 +6,15 @@
   </head>
 
   <body>
+    <audio loop id="music" preload="auto" style="display: none">
+      <source src="assets/NTerebilenko/sound.mp3" type="audio/mpeg" />
+    </audio>
+    <div id="overlay">
+      <div>
+        <button id="startButton">Start</button>
+        <p>Audio playback requires user interaction.</p>
+      </div>
+    </div>
     <div class="main" id="main">
       <canvas id="canvas"></canvas>
     </div>
