@@ -1,4 +1,18 @@
-import { Group, Box3, WireframeGeometry, BoxGeometry, LineSegments, Object3D, Mesh, SphereGeometry, DoubleSide, MeshPhongMaterial, Vector3, Color } from "three";
+import {
+    Group,
+    Box3,
+    WireframeGeometry,
+    BoxGeometry,
+    LineSegments,
+    Object3D,
+    Mesh,
+    SphereGeometry,
+    DoubleSide,
+    MeshPhongMaterial,
+    Vector3,
+    Color,
+    MeshStandardMaterial
+} from "three";
 import { getGroupGeometry } from "../tools/helpers";
 
 export enum EditableGroupState {
@@ -80,14 +94,14 @@ export class EditableGroup extends Group {
     }
 
     private _createSphere(position, size, color, texture?){
-        var g = new SphereGeometry(size, 32, 32);
-        var maretialConf = { color: color }
+        const g = new SphereGeometry(size, 32, 32);
+        const maretialConf = { color: color }
         if (texture) {
             maretialConf['map'] = texture;
             maretialConf['side'] = DoubleSide;
         }
-        var material = new MeshPhongMaterial(maretialConf);
-        var sphere = new Mesh(g, material);
+        const material = new MeshStandardMaterial(maretialConf);
+        const sphere = new Mesh(g, material);
         sphere.position.x = position.x;
         sphere.position.y = position.y;
         sphere.position.z = position.z;

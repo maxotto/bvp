@@ -33,10 +33,7 @@ export class SlideEditor {
 
         this.dragControls.addEventListener('dragend', (event) => {
             this.parent.world.orbitControl.enabled = true;
-
-            // по результату перемещения надо откорректировать позицию камеры для правильного показа переехавшего слайда.
-            // но надо проверить, что это слайд
-            // showSphere(this.parent.world.scene, event.object.position, 8, '0x55dd77');
+            // showSphere(this.parent.world.scene, event.object.position, 3, '0x55dd77');
             if (event.object.name.indexOf('slideGroup_') == 0) {
                 const userData = event.object.userData;
                 const slideIndex = userData.parentSlide;
@@ -54,8 +51,6 @@ export class SlideEditor {
                 slide.hotspot.x = this.parent.world.width / 2 + topLeft.x;
                 slide.hotspot.y = this.parent.world.height / 2 - topLeft.y;
                 slide.hotspot.z = topLeft.z;
-                // console.log(topLeft);
-                // console.log({ slide });
                 const cameraState = getCameraState(
                     center,
                     userData.size.y,
