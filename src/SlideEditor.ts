@@ -1,12 +1,13 @@
 import * as THREE from "three";
 import { World, WorldMode, Slide } from "./types";
-import { DragControls } from './tools/MyDragControls';
+// import { DragControls } from './tools/MyDragControls';
+import { DragControls } from './core/DragControls'
 import { getCameraState } from "./tools/helpers";
 
 export class SlideEditor {
     private dragControls;
     constructor(private parent) {
-        this.initDragControls();
+        //this.initDragControls();
         this.parent.onSwitchToEditorMode.subscribe((a) => {
             console.log(WorldMode.editor);
             this.dragControls.activate();
@@ -15,54 +16,10 @@ export class SlideEditor {
             this.dragControls.deactivate();
             console.log(WorldMode.show);
         });
+        this.dragControls = new DragControls(this.parent.world);
     }
 
-    initDragControls() {
-        this.dragControls = new DragControls(
-            this.parent.world.draggables,
-            this.parent.world.camera,
-            this.parent.world.renderer.domElement
-        );
 
-        this.dragControls.setSlide(0);
-        this.dragControls.deactivate();
-
-        this.dragControls.addEventListener('dragstart', () => {
-            this.parent.world.orbitControl.enabled = false;
-        });
-
-        this.dragControls.addEventListener('dragend', (event) => {
-            this.parent.world.orbitControl.enabled = true;
-            // showSphere(this.parent.world.scene, event.object.position, 3, '0x55dd77');
-            if (event.object.name.indexOf('slideGroup_') == 0) {
-                const userData = event.object.userData;
-                const slideIndex = userData.parentSlide;
-                const slide = <Slide>this.parent.world.slides[slideIndex];
-                const center = new THREE.Vector3(
-                    event.object.position.x,
-                    event.object.position.y,
-                    event.object.position.z,
-                );
-                const topLeft = new THREE.Vector3(
-                    slide.position.x + event.object.position.x,
-                    slide.position.y + event.object.position.y,
-                    slide.position.z + event.object.position.z,
-                );
-                slide.hotspot.x = this.parent.world.width / 2 + topLeft.x;
-                slide.hotspot.y = this.parent.world.height / 2 - topLeft.y;
-                slide.hotspot.z = topLeft.z;
-                const cameraState = getCameraState(
-                    center,
-                    userData.size.y,
-                    event.object.position.z,
-                    this.parent.world.cameraFov);
-                slide.cameraPosition = cameraState.cameraPosition;
-                slide.cameraLookAt = cameraState.cameraLookAt;
-            }
-
-        }
-        );
-    }
 
     onMouseEvent(event) {
         const type = event.type;

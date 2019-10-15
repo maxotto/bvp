@@ -45,8 +45,10 @@ export class EditableGroup extends Group {
     }
 
     public setState(_state: EditableGroupState) {
-        this._state = _state;
-        this._updateFrame();
+        if (this._state != _state) {
+            this._state = _state;
+            this._updateFrame();
+        }
     }
 
     private _updateFrame() {
