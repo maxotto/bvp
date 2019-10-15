@@ -29,6 +29,7 @@ export class EditableGroup extends Group {
         bl: Mesh,
         br: Mesh,
     }
+    private _centerSphere: Mesh;
     private _state = EditableGroupState.show;
     public isEditableGroup = true;
 
@@ -56,6 +57,7 @@ export class EditableGroup extends Group {
             super.remove(this._resizers.tr);
             super.remove(this._resizers.bl);
             super.remove(this._resizers.br);
+            super.remove(this._centerSphere);
         }
         if (this._state == EditableGroupState.editor) {
             const box = new Box3().setFromObject(this);
@@ -72,6 +74,9 @@ export class EditableGroup extends Group {
             this._selectFrame.position.z = (box.max.z - box.min.z) / 2;
 
             super.add(this._selectFrame);
+            this._centerSphere = this._createSphere(new Vector3(0, 0, 0), 10, '0x55dd77', { type: 'centralPoint', point: 'center' });
+            super.add(this._centerSphere);
+
             this._createResizers(box);
         }
     }
@@ -82,10 +87,10 @@ export class EditableGroup extends Group {
         const h = box.max.y - box.min.y;
         const diameter = 10;
         this._resizers = {
-            tl: this._createSphere(new Vector3(-w/2, h/2, z), diameter, '0x55dd77'),
-            tr: this._createSphere(new Vector3(w/2, h/2, z), diameter, '0x55dd77'),
-            bl: this._createSphere(new Vector3(-w/2, -h/2, z), diameter, '0x55dd77'),
-            br: this._createSphere(new Vector3(w/2, -h/2, z), diameter, '0x55dd77'),
+            tl: this._createSphere(new Vector3(-w / 2, h / 2, z), diameter, '0x55dd77', { type: 'resizer', point: 'tl' }),
+            tr: this._createSphere(new Vector3(w / 2, h / 2, z), diameter, '0x55dd77', { type: 'resizer', point: 'tr' }),
+            bl: this._createSphere(new Vector3(-w / 2, -h / 2, z), diameter, '0x55dd77', { type: 'resizer', point: 'bl' }),
+            br: this._createSphere(new Vector3(w / 2, -h / 2, z), diameter, '0x55dd77', { type: 'resizer', point: 'br' }),
         };
         super.add(this._resizers.tl);
         super.add(this._resizers.tr);
@@ -93,7 +98,7 @@ export class EditableGroup extends Group {
         super.add(this._resizers.br);
     }
 
-    private _createSphere(position, size, color, texture?){
+    private _createSphere(position, size, color, params, texture?) {
         const g = new SphereGeometry(size, 32, 32);
         const maretialConf = { color: color }
         if (texture) {
@@ -102,6 +107,8 @@ export class EditableGroup extends Group {
         }
         const material = new MeshStandardMaterial(maretialConf);
         const sphere = new Mesh(g, material);
+        sphere.userData.params = params;
+        sphere.name = params.type + '_' + params.point;
         sphere.position.x = position.x;
         sphere.position.y = position.y;
         sphere.position.z = position.z;

@@ -13,7 +13,7 @@ export class SceneSubjects {
     constructor(scene, world: World) {
         this.scene = scene;
         this.world = world;
-        
+
         this.mesh = new THREE.Mesh(
             new THREE.IcosahedronBufferGeometry(this.radius, 2),
             new THREE.MeshStandardMaterial({ flatShading: true })
@@ -36,8 +36,8 @@ export class SceneSubjects {
                 slideGroup.add(object);
                 world.draggables.push(object);
             });
-            slideGroup.position.x = slide.position.x+slide.width/2;
-            slideGroup.position.y = slide.position.y - slide.height/2;
+            slideGroup.position.x = slide.position.x + slide.width / 2;
+            slideGroup.position.y = slide.position.y - slide.height / 2;
             slideGroup.position.z = slide.position.z;
             slideGroup.name = 'slideGroup_' + index;
             const _groupGeometry = getGroupGeometry(slideGroup);
