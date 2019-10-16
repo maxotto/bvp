@@ -53,7 +53,7 @@ export class DragControls extends EventDispatcher {
         this._domElement.removeEventListener('touchend', this.onDocumentTouchEnd, false);
     }
 
-    private _correctEditableByResizer() {
+    private _adjustEditableByResizer() {
         let found = false;
         let editableGroup: EditableGroup;
         this._resizer.traverseAncestors((obj: EditableGroup) => {
@@ -90,7 +90,7 @@ export class DragControls extends EventDispatcher {
 
         if (this._isDragging && this._resizer) {
             if (raycaster.ray.intersectPlane(this._plane, this._intersection)) {
-                this._correctEditableByResizer();
+                this._adjustEditableByResizer();
             }
             this.dispatchEvent({ type: 'drag', object: this._resizer });
             return;
