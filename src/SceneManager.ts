@@ -13,15 +13,10 @@ export class SceneManager {
     private clock = new THREE.Clock();
     private screenDimensions;
     private myControls;
-    // private scene;
-    // private renderer;
-    // public camera;
-    // public orbitControl;
     public sceneSubjects;
     private slidesController;
 
     constructor(private canvas: HTMLCanvasElement, private world: World) {
-        // console.log(world);
         this.screenDimensions = {
             width: this.canvas.width,
             height: this.canvas.height,
@@ -49,7 +44,6 @@ export class SceneManager {
     changeMode(newMode: WorldMode) {
         this.world.mode = newMode;
         this.world.orbitControl.enabled = (WorldMode[newMode] != 'show');
-        console.log('this.world.mode = ', this.world.mode);
         if ((WorldMode[newMode] != 'show')) {
             this.myControls.show();
         } else {
@@ -107,7 +101,6 @@ export class SceneManager {
     }
 
     update() {
-        // console.log(this.world.mode);
         if (this.slidesController.getBusy()) {
             TWEEN.update();
         }

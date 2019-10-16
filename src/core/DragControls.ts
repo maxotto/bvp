@@ -12,7 +12,7 @@ export class DragControls {
     private _intersection: Vector3 = new Vector3();
     private _worldPosition: Vector3 = new Vector3();
     private _inverseMatrix: Matrix4 = new Matrix4();
-    private _selected: EditableGroup = null;
+    private _resizer: Mesh = null;
     private _groupHovered: EditableGroup = null;
     private _isDragging: boolean = false;
     private _draggables: EditableGroup[] = [];
@@ -41,7 +41,7 @@ export class DragControls {
     public deactivate() {
         this._domElement.style.cursor = 'auto';
         this._groupHovered = null;
-        this._selected = null;
+        this._resizer = null;
         this._domElement.removeEventListener('mousemove', this.onDocumentMouseMove, false);
         this._domElement.removeEventListener('mousedown', this.onDocumentMouseDown, false);
         this._domElement.removeEventListener('mouseup', this.onDocumentMouseCancel, false);
@@ -57,29 +57,38 @@ export class DragControls {
         this._mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
         this._mouse.y = - ((event.clientY - rect.top) / rect.height) * 2 + 1;
         this._raycaster.setFromCamera(this._mouse, this._camera);
-        if (!this._selected) { // 
-            var intersects = this._raycaster.intersectObjects(this._draggables, true);
-            if (intersects.length > 0) {
-                let found = false;
-                intersects[0].object.traverseAncestors((obj: EditableGroup) => {
-                    if (obj.isEditableGroup && !found) {
-                        found = true;
-                        this._groupHovered = obj;
-                    }
-                });
+        var intersects = this._raycaster.intersectObjects(this._draggables, true);
 
-            } else {
-                this._groupHovered = null;
-            }
-
-            this._draggables.forEach(d => {
-                if (d == this._groupHovered) {
-                    this._groupHovered.setState(EditableGroupState.editor);
-                } else {
-                    d.setState(EditableGroupState.show);
+        if (intersects.length > 0) {
+            // get hovered EditableGroup
+            let found = false;
+            intersects[0].object.traverseAncestors((obj: EditableGroup) => {
+                if (obj.isEditableGroup && !found) {
+                    found = true;
+                    this._groupHovered = obj;
                 }
             });
+            if (
+                intersects[0].object.userData.params &&
+                (intersects[0].object.userData.params.type == 'resizer' || intersects[0].object.userData.params.type == 'centralPoint')
+            ) {
+                this._domElement.style.cursor = 'pointer';
+                this._resizer = <Mesh>intersects[0].object;
+            } else {
+                this._domElement.style.cursor = 'auto';
+                this._resizer = null;
+            }
+        } else {
+            this._groupHovered = null;
         }
+
+        this._draggables.forEach(d => {
+            if (d == this._groupHovered) {
+                this._groupHovered.setState(EditableGroupState.editor);
+            } else {
+                d.setState(EditableGroupState.show);
+            }
+        });
 
     }
 

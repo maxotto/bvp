@@ -9,7 +9,6 @@ export class SlideEditor {
     constructor(private parent) {
         //this.initDragControls();
         this.parent.onSwitchToEditorMode.subscribe((a) => {
-            console.log(WorldMode.editor);
             this.dragControls.activate();
         });
         this.parent.onSwitchToShowMode.subscribe((a) => {
