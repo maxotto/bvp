@@ -76,7 +76,7 @@ export class EditableGroup extends Group {
             this._selectFrame.position.z = (box.max.z - box.min.z) / 2;
 
             super.add(this._selectFrame);
-            this._centerSphere = this._createSphere(new Vector3(0, 0, 0), 10, '0x55dd77', { type: 'centralPoint', point: 'center' });
+            this._centerSphere = this._createSphere(new Vector3(0, 0, 0), (box.max.x - box.min.x) / 30, new Color(0x990000), { type: 'centralPoint', point: 'center' });
             super.add(this._centerSphere);
 
             this._createResizers(box);
@@ -87,12 +87,12 @@ export class EditableGroup extends Group {
         const z = 0;
         const w = box.max.x - box.min.x;
         const h = box.max.y - box.min.y;
-        const diameter = 10;
+        const diameter = w / 25;
         this._resizers = {
-            tl: this._createSphere(new Vector3(-w / 2, h / 2, z), diameter, '0x55dd77', { type: 'resizer', point: 'tl' }),
-            tr: this._createSphere(new Vector3(w / 2, h / 2, z), diameter, '0x55dd77', { type: 'resizer', point: 'tr' }),
-            bl: this._createSphere(new Vector3(-w / 2, -h / 2, z), diameter, '0x55dd77', { type: 'resizer', point: 'bl' }),
-            br: this._createSphere(new Vector3(w / 2, -h / 2, z), diameter, '0x55dd77', { type: 'resizer', point: 'br' }),
+            tl: this._createSphere(new Vector3(-w / 2, h / 2, z), diameter, new Color(0x55dd77), { type: 'resizer', point: 'tl' }),
+            tr: this._createSphere(new Vector3(w / 2, h / 2, z), diameter, new Color(0x55dd77), { type: 'resizer', point: 'tr' }),
+            bl: this._createSphere(new Vector3(-w / 2, -h / 2, z), diameter, new Color(0x55dd77), { type: 'resizer', point: 'bl' }),
+            br: this._createSphere(new Vector3(w / 2, -h / 2, z), diameter, new Color(0x55dd77), { type: 'resizer', point: 'br' }),
         };
         super.add(this._resizers.tl);
         super.add(this._resizers.tr);
@@ -100,7 +100,7 @@ export class EditableGroup extends Group {
         super.add(this._resizers.br);
     }
 
-    private _createSphere(position, size, color, params, texture?) {
+    private _createSphere(position, size, color: Color, params, texture?) {
         const g = new SphereGeometry(size, 32, 32);
         const maretialConf = { color: color }
         if (texture) {

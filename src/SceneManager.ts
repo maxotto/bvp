@@ -7,6 +7,7 @@ import { SlidesController } from "./SlidesController";
 import { MyDataControls } from "./tools/datGui";
 
 import { WorldMode, World } from "./types";
+import * as Stats from 'stats.js';
 
 export class SceneManager {
 
@@ -15,6 +16,7 @@ export class SceneManager {
     private myControls;
     public sceneSubjects;
     private slidesController;
+    private stats: Stats;
 
     constructor(private canvas: HTMLCanvasElement, private world: World) {
         this.screenDimensions = {
@@ -71,6 +73,10 @@ export class SceneManager {
     }
 
     buildRender({ width, height }) {
+        this.stats = new Stats();
+        this.stats.showPanel(0);
+        document.body.appendChild(this.stats.dom);
+
         const renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true });
         const DPR = (window.devicePixelRatio) ? window.devicePixelRatio : 1;
         renderer.setPixelRatio(DPR);
@@ -101,6 +107,7 @@ export class SceneManager {
     }
 
     update() {
+        this.stats.begin();
         if (this.slidesController.getBusy()) {
             TWEEN.update();
         }
@@ -111,6 +118,7 @@ export class SceneManager {
 
         this.world.orbitControl.update();
         this.world.renderer.render(this.world.scene, this.world.camera);
+        this.stats.end();
     }
 
     onWindowResize() {

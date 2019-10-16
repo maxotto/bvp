@@ -68,9 +68,13 @@ export class DragControls {
                     this._groupHovered = obj;
                 }
             });
+            // catch resizer
             if (
                 intersects[0].object.userData.params &&
-                (intersects[0].object.userData.params.type == 'resizer' || intersects[0].object.userData.params.type == 'centralPoint')
+                (
+                    intersects[0].object.userData.params.type == 'resizer' ||
+                    intersects[0].object.userData.params.type == 'centralPoint'
+                )
             ) {
                 this._domElement.style.cursor = 'pointer';
                 this._resizer = <Mesh>intersects[0].object;
@@ -82,9 +86,10 @@ export class DragControls {
             this._groupHovered = null;
         }
 
+        //repaint Editables
         this._draggables.forEach(d => {
             if (d == this._groupHovered) {
-                this._groupHovered.setState(EditableGroupState.editor);
+                d.setState(EditableGroupState.editor);
             } else {
                 d.setState(EditableGroupState.show);
             }

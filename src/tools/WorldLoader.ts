@@ -200,6 +200,7 @@ export class WorldLoader {
             }).catch((e) => { console.log(e); });
 
         function loadSVG(data, x, y, z, scale, parentSlide = 0) {
+            //TODO сделать под SVG подложку, чтобы при наведении курсора на не пропадало окаймление редактора
             var paths = data.paths;
             var group = new THREE.Group();
             for (var i = 0; i < paths.length; i++) {
