@@ -6,6 +6,7 @@ import * as THREE from "three";
 import { ScenarioData, Slide, World, SVG, HotSpot } from "../types";
 import { EditableGroup } from '../core/EditableGroup';
 import { showSphere } from '../SlideEditor';
+import { Mesh, Vector3 } from 'three';
 
 export class WorldLoader {
     private _scenarioFolder: string;
@@ -223,12 +224,13 @@ export class WorldLoader {
                     group.add(mesh);
                 }
             }
+            
             // new THREE.Box3().setFromObject(group).getCenter(group.position);
-            group.scale.multiplyScalar(scale);
             group.renderOrder = z; // to prevent strange overlap
+            group.scale.multiplyScalar(scale);
             let _groupGeometry = getGroupGeometry(group);
-            group.position.x -= _groupGeometry.size.x / 2;
-            group.position.y += _groupGeometry.size.y / 2;
+            group.position.x -= _groupGeometry.size.x / 2+_groupGeometry.topLeftCorner.x;
+            group.position.y += _groupGeometry.size.y / 2-_groupGeometry.topLeftCorner.y;
             group.position.z += _groupGeometry.size.z / 2;
             _groupGeometry.parentSlide = parentSlide;
             _groupGeometry.delta.z = 0;
@@ -239,8 +241,37 @@ export class WorldLoader {
             eg.position.y = y;
             eg.position.z = z;
             eg.renderOrder = z; // to prevent strange overlap
+            //eg.add(bg);
             eg.add(group);
+            _groupGeometry = getGroupGeometry(group);
+            const bg = createBackGround(_groupGeometry.size.x, _groupGeometry.size.y); 
+            bg.position.sub(_groupGeometry.center);
+            group.add(bg);
+
             return eg;
         }
+
+        function createBackGround(x, y){
+            var shape = new THREE.Shape();
+            shape.moveTo( 0, 0 );
+            shape.lineTo( 0, -y );
+            shape.lineTo( x, -y );
+            shape.lineTo( x, 0 );
+            shape.lineTo( 0, 0 );
+
+
+            var geometry1 = new THREE.ShapeBufferGeometry(shape);
+            var material1 = new THREE.MeshBasicMaterial({
+                color: new THREE.Color().setStyle('0xee5533'),
+                opacity: 0.5,
+                transparent: true,
+                side: THREE.DoubleSide,
+                depthWrite: false,
+                wireframe: false
+            });
+            const mesh = new THREE.Mesh( geometry1, material1 );
+            return mesh; 
+        }
     }
+
 }
