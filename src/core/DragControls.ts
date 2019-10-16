@@ -9,7 +9,7 @@ export class DragControls extends EventDispatcher {
     // private _raycaster: Raycaster = new Raycaster();
     private _mouse: Vector2 = new Vector2();
     private _offset: Vector3 = new Vector3();
-    private _iniZ: number;
+    private _iniPosition: Vector3 = new Vector3();
     private _intersection: Vector3 = new Vector3();
     private _worldPosition: Vector3 = new Vector3();
     private _inverseMatrix: Matrix4 = new Matrix4();
@@ -53,6 +53,28 @@ export class DragControls extends EventDispatcher {
         this._domElement.removeEventListener('touchend', this.onDocumentTouchEnd, false);
     }
 
+    private _correctEditableByResizer(position) {
+        let found = false;
+        let editableGroup: EditableGroup;
+        this._resizer.traverseAncestors((obj: EditableGroup) => {
+            if (obj.isEditableGroup && !found) {
+                found = true;
+                editableGroup = obj;
+            }
+        });
+        const resizerType: string = this._resizer.userData.params.type;
+        const resizerPoint: string = this._resizer.userData.params.point;
+        if (resizerType == 'centralPoint') {
+            editableGroup.position.x = position.x;
+            editableGroup.position.y = position.y;
+            editableGroup.position.z = position.z;
+        } else if (resizerType == 'resizer') {
+
+        } else {
+            console.log('Why? resizerType =', resizerType);
+        }
+    }
+
     private onDocumentMouseMove = (event) => {
         event.preventDefault();
 
@@ -67,7 +89,11 @@ export class DragControls extends EventDispatcher {
         if (this._isDragging && this._resizer) {
             if (raycaster.ray.intersectPlane(this._plane, this._intersection)) {
                 this._resizer.position.copy(this._intersection.sub(this._offset).applyMatrix4(this._inverseMatrix));
-                this._resizer.position.z = this._iniZ;
+                let globalPosition: Vector3 = new Vector3();
+                globalPosition.setFromMatrixPosition(this._resizer.matrixWorld);
+                console.log(globalPosition);
+                this._correctEditableByResizer(globalPosition);
+                this._resizer.position.copy(this._iniPosition);
             }
             this.dispatchEvent({ type: 'drag', object: this._resizer });
             return;
@@ -123,7 +149,7 @@ export class DragControls extends EventDispatcher {
         const raycaster: Raycaster = new Raycaster();
         raycaster.setFromCamera(this._mouse, this._camera);
         if (this._resizer) {
-            this._iniZ = this._resizer.position.z;
+            this._iniPosition.copy(this._resizer.position);
             this._isDragging = true;
             this._domElement.style.cursor = 'move';
             this.dispatchEvent({ type: 'dragstart', object: this._resizer });
