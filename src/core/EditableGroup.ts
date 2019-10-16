@@ -11,8 +11,7 @@ import {
     MeshPhongMaterial,
     Vector3,
     Color,
-    MeshStandardMaterial,
-    Scene
+    MeshStandardMaterial
 } from "three";
 import { getGroupGeometry } from "../tools/helpers";
 
@@ -33,7 +32,6 @@ export class EditableGroup extends Group {
     private _centerSphere: Mesh;
     private _state = EditableGroupState.show;
     public isEditableGroup = true;
-    private _scene: Scene;
 
     constructor() {
         super();
@@ -54,20 +52,14 @@ export class EditableGroup extends Group {
     }
 
     private _updateFrame() {
-        if (!this._scene) {
-            this.traverseAncestors((parent: any) => {
-                if (parent.type == 'Scene') {
-                    this._scene = parent;
-                }
-            });
-        }
+
         if (this._selectFrame) {
             super.remove(this._selectFrame);
-            this._scene.remove(this._resizers.tl);
-            this._scene.remove(this._resizers.tr);
-            this._scene.remove(this._resizers.bl);
-            this._scene.remove(this._resizers.br);
-            this._scene.remove(this._centerSphere);
+            super.remove(this._resizers.tl);
+            super.remove(this._resizers.tr);
+            super.remove(this._resizers.bl);
+            super.remove(this._resizers.br);
+            super.remove(this._centerSphere);
         }
         if (this._state == EditableGroupState.editor) {
             const box = new Box3().setFromObject(this);
@@ -82,7 +74,10 @@ export class EditableGroup extends Group {
             this._selectFrame.position.x = 0;
             this._selectFrame.position.y = 0;
             this._selectFrame.position.z = (box.max.z - box.min.z) / 2;
+
             super.add(this._selectFrame);
+
+
             this._createResizers(box);
         }
     }
@@ -92,24 +87,23 @@ export class EditableGroup extends Group {
         const w = box.max.x - box.min.x;
         const h = box.max.y - box.min.y;
         const diameter = w / 25;
-        const boxPos: Vector3 = this.position;
         this._resizers = {
-            tl: this._createSphere(new Vector3(boxPos.x - w / 2, boxPos.y + h / 2, boxPos.z + z), diameter, new Color(0x55dd77), { type: 'resizer', point: 'tl' }),
-            tr: this._createSphere(new Vector3(boxPos.x + w / 2, boxPos.y + h / 2, boxPos.z + z), diameter, new Color(0x55dd77), { type: 'resizer', point: 'tr' }),
-            bl: this._createSphere(new Vector3(boxPos.x - w / 2, boxPos.y - h / 2, boxPos.z + z), diameter, new Color(0x55dd77), { type: 'resizer', point: 'bl' }),
-            br: this._createSphere(new Vector3(boxPos.x + w / 2, boxPos.y - h / 2, boxPos.z + z), diameter, new Color(0x55dd77), { type: 'resizer', point: 'br' }),
+            tl: this._createSphere(new Vector3(-w / 2, h / 2, z), diameter, new Color(0x55dd77), { type: 'resizer', point: 'tl' }),
+            tr: this._createSphere(new Vector3(w / 2, h / 2, z), diameter, new Color(0x55dd77), { type: 'resizer', point: 'tr' }),
+            bl: this._createSphere(new Vector3(-w / 2, -h / 2, z), diameter, new Color(0x55dd77), { type: 'resizer', point: 'bl' }),
+            br: this._createSphere(new Vector3(w / 2, -h / 2, z), diameter, new Color(0x55dd77), { type: 'resizer', point: 'br' }),
         };
+        super.add(this._resizers.tl);
+        super.add(this._resizers.tr);
+        super.add(this._resizers.bl);
+        super.add(this._resizers.br);
         this._centerSphere = this._createSphere(
-            new Vector3(boxPos.x, boxPos.y, boxPos.z),
-            w / 30,
+            new Vector3(0, 0, 0),
+            (box.max.x - box.min.x) / 30,
             new Color(0x990000),
             { type: 'centralPoint', point: 'center' }
         );
-        this._scene.add(this._centerSphere);
-        this._scene.add(this._resizers.tl);
-        this._scene.add(this._resizers.tr);
-        this._scene.add(this._resizers.bl);
-        this._scene.add(this._resizers.br);
+        super.add(this._centerSphere);
     }
 
     private _createSphere(position, size, color: Color, params, texture?) {

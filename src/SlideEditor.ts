@@ -18,8 +18,12 @@ export class SlideEditor {
         this.dragControls.addEventListener('dragstart', () => {
             this.parent.world.orbitControl.enabled = false;
         });
-        this.dragControls.addEventListener('dragend', () => {
+        this.dragControls.addEventListener('dragend', (data) => {
             this.parent.world.orbitControl.enabled = true;
+            // TODO Запомнить новое состояние, чтоб сюда смотрел камера при смене слайда
+            if (data.object) {
+                console.log(data);
+            }
         });
 
     }

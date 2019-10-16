@@ -53,7 +53,7 @@ export class DragControls extends EventDispatcher {
         this._domElement.removeEventListener('touchend', this.onDocumentTouchEnd, false);
     }
 
-    private _correctEditableByResizer(position) {
+    private _correctEditableByResizer() {
         let found = false;
         let editableGroup: EditableGroup;
         this._resizer.traverseAncestors((obj: EditableGroup) => {
@@ -62,12 +62,14 @@ export class DragControls extends EventDispatcher {
                 editableGroup = obj;
             }
         });
+        let localPosition: Vector3 = new Vector3();
+        let globalPosition: Vector3 = new Vector3();
+        localPosition.copy(this._intersection.sub(this._offset).applyMatrix4(this._inverseMatrix));
         const resizerType: string = this._resizer.userData.params.type;
         const resizerPoint: string = this._resizer.userData.params.point;
         if (resizerType == 'centralPoint') {
-            editableGroup.position.x = position.x;
-            editableGroup.position.y = position.y;
-            editableGroup.position.z = position.z;
+            globalPosition.copy(this._iniPosition).add(localPosition);
+            editableGroup.position.copy(globalPosition);
         } else if (resizerType == 'resizer') {
 
         } else {
@@ -88,12 +90,7 @@ export class DragControls extends EventDispatcher {
 
         if (this._isDragging && this._resizer) {
             if (raycaster.ray.intersectPlane(this._plane, this._intersection)) {
-                this._resizer.position.copy(this._intersection.sub(this._offset).applyMatrix4(this._inverseMatrix));
-                let globalPosition: Vector3 = new Vector3();
-                globalPosition.setFromMatrixPosition(this._resizer.matrixWorld);
-                console.log(globalPosition);
-                this._correctEditableByResizer(globalPosition);
-                this._resizer.position.copy(this._iniPosition);
+                this._correctEditableByResizer();
             }
             this.dispatchEvent({ type: 'drag', object: this._resizer });
             return;
@@ -149,10 +146,10 @@ export class DragControls extends EventDispatcher {
         const raycaster: Raycaster = new Raycaster();
         raycaster.setFromCamera(this._mouse, this._camera);
         if (this._resizer) {
-            this._iniPosition.copy(this._resizer.position);
+            this._iniPosition.copy(this._groupHovered.position);
             this._isDragging = true;
             this._domElement.style.cursor = 'move';
-            this.dispatchEvent({ type: 'dragstart', object: this._resizer });
+            this.dispatchEvent({ type: 'dragstart', object: this._groupHovered });
             if (raycaster.ray.intersectPlane(this._plane, this._intersection)) {
                 this._inverseMatrix.getInverse(this._resizer.matrixWorld);
                 this._offset.copy(this._intersection).sub(this._worldPosition.setFromMatrixPosition(this._resizer.matrixWorld)).sub(this._resizer.position);
@@ -165,7 +162,7 @@ export class DragControls extends EventDispatcher {
         event.preventDefault();
         this._isDragging = false;
         this._domElement.style.cursor = this._resizer ? 'pointer' : 'auto';
-        this.dispatchEvent({ type: 'dragend', object: this._resizer });
+        this.dispatchEvent({ type: 'dragend', object: this._groupHovered });
     }
 
     private onDocumentTouchMove = (event) => {
