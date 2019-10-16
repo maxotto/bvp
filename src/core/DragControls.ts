@@ -1,14 +1,15 @@
 import { EditableGroupState, EditableGroup } from '../core/EditableGroup';
-import { Camera, Plane, Raycaster, Vector2, Vector3, Matrix4, Mesh } from 'three';
+import { Camera, Plane, Raycaster, Vector2, Vector3, Matrix4, Mesh, EventDispatcher } from 'three';
 import { World } from '../types';
 
-export class DragControls {
+export class DragControls extends EventDispatcher {
     private _camera: Camera;
     private _domElement: HTMLElement;
     private _plane: Plane = new Plane();
-    private _raycaster: Raycaster = new Raycaster();
+    // private _raycaster: Raycaster = new Raycaster();
     private _mouse: Vector2 = new Vector2();
     private _offset: Vector3 = new Vector3();
+    private _iniZ: number;
     private _intersection: Vector3 = new Vector3();
     private _worldPosition: Vector3 = new Vector3();
     private _inverseMatrix: Matrix4 = new Matrix4();
@@ -18,6 +19,7 @@ export class DragControls {
     private _draggables: EditableGroup[] = [];
 
     constructor(private _world: World) {
+        super();
         //collect Editables into _draggables array
         this._camera = this._world.camera;
         this._domElement = this._world.renderer.domElement;
@@ -53,11 +55,26 @@ export class DragControls {
 
     private onDocumentMouseMove = (event) => {
         event.preventDefault();
+
         const rect: ClientRect = this._domElement.getBoundingClientRect();
         this._mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
         this._mouse.y = - ((event.clientY - rect.top) / rect.height) * 2 + 1;
-        this._raycaster.setFromCamera(this._mouse, this._camera);
-        var intersects = this._raycaster.intersectObjects(this._draggables, true);
+
+        const raycaster: Raycaster = new Raycaster();
+
+        raycaster.setFromCamera(this._mouse, this._camera);
+
+        if (this._isDragging && this._resizer) {
+            if (raycaster.ray.intersectPlane(this._plane, this._intersection)) {
+                this._resizer.position.copy(this._intersection.sub(this._offset).applyMatrix4(this._inverseMatrix));
+                this._resizer.position.z = this._iniZ;
+            }
+            this.dispatchEvent({ type: 'drag', object: this._resizer });
+            return;
+
+        }
+
+        var intersects = raycaster.intersectObjects(this._draggables, true);
 
         if (intersects.length > 0) {
             // get hovered EditableGroup
@@ -78,6 +95,10 @@ export class DragControls {
             ) {
                 this._domElement.style.cursor = 'pointer';
                 this._resizer = <Mesh>intersects[0].object;
+                this._plane.setFromNormalAndCoplanarPoint(
+                    this._camera.getWorldDirection(this._plane.normal),
+                    this._worldPosition.setFromMatrixPosition(this._resizer.matrixWorld)
+                );
             } else {
                 this._domElement.style.cursor = 'auto';
                 this._resizer = null;
@@ -99,10 +120,26 @@ export class DragControls {
 
     private onDocumentMouseDown = (event) => {
         event.preventDefault();
+        const raycaster: Raycaster = new Raycaster();
+        raycaster.setFromCamera(this._mouse, this._camera);
+        if (this._resizer) {
+            this._iniZ = this._resizer.position.z;
+            this._isDragging = true;
+            this._domElement.style.cursor = 'move';
+            this.dispatchEvent({ type: 'dragstart', object: this._resizer });
+            if (raycaster.ray.intersectPlane(this._plane, this._intersection)) {
+                this._inverseMatrix.getInverse(this._resizer.matrixWorld);
+                this._offset.copy(this._intersection).sub(this._worldPosition.setFromMatrixPosition(this._resizer.matrixWorld)).sub(this._resizer.position);
+
+            }
+        }
     }
 
     private onDocumentMouseCancel = (event) => {
         event.preventDefault();
+        this._isDragging = false;
+        this._domElement.style.cursor = this._resizer ? 'pointer' : 'auto';
+        this.dispatchEvent({ type: 'dragend', object: this._resizer });
     }
 
     private onDocumentTouchMove = (event) => {

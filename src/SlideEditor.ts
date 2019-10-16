@@ -7,7 +7,6 @@ import { getCameraState } from "./tools/helpers";
 export class SlideEditor {
     private dragControls;
     constructor(private parent) {
-        //this.initDragControls();
         this.parent.onSwitchToEditorMode.subscribe((a) => {
             this.dragControls.activate();
         });
@@ -16,6 +15,13 @@ export class SlideEditor {
             console.log(WorldMode.show);
         });
         this.dragControls = new DragControls(this.parent.world);
+        this.dragControls.addEventListener('dragstart', () => {
+            this.parent.world.orbitControl.enabled = false;
+        });
+        this.dragControls.addEventListener('dragend', () => {
+            this.parent.world.orbitControl.enabled = true;
+        });
+
     }
 
 
