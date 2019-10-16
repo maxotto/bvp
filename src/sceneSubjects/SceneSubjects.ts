@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { World } from '../types';
 import { getGroupGeometry } from '../tools/helpers';
 import { EditableGroup, EditableGroupState } from '../core/EditableGroup';
+import { Group } from 'three';
 
 
 export class SceneSubjects {
@@ -24,11 +25,12 @@ export class SceneSubjects {
         this.createGround();
 
         world.slides.forEach((slide, index) => {
-            var slideGroup = new EditableGroup();
+            let slideGroup;
             if (index === 0) {
                 this.createFrame();
-                slideGroup.setState(EditableGroupState.show);
+                slideGroup = new Group();
             } else {
+                slideGroup = new EditableGroup();
                 world.draggables.push(slideGroup)
             }
             slideGroup.add(slide.background);
