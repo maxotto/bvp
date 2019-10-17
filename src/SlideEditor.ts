@@ -18,11 +18,30 @@ export class SlideEditor {
         this.dragControls.addEventListener('dragstart', () => {
             this.parent.world.orbitControl.enabled = false;
         });
-        this.dragControls.addEventListener('dragend', (data) => {
+        this.dragControls.addEventListener('dragend', (event) => {
             this.parent.world.orbitControl.enabled = true;
-            // TODO Запомнить новое состояние, чтоб сюда смотрел камера при смене слайда
-            if (data.object) {
-                console.log(data);
+            if (event.object) {
+                if (event.object.name.indexOf('slideGroup_') == 0) {
+                    const userData = event.object.userData;
+                    const slideIndex = userData.parentSlide;
+                    const slide = <Slide>this.parent.world.slides[slideIndex];
+                    const center = new THREE.Vector3(
+                        event.object.position.x,
+                        event.object.position.y,
+                        event.object.position.z,
+                    );
+                    slide.hotspot.x = this.parent.world.width / 2 + center.x;
+                    slide.hotspot.y = this.parent.world.height / 2 - center.y;
+                    slide.hotspot.z = center.z;
+                    const cameraState = getCameraState(
+                        center,
+                        userData.size.y,
+                        event.object.position.z,
+                        this.parent.world.cameraFov);
+                    slide.cameraPosition = cameraState.cameraPosition;
+                    slide.cameraLookAt = cameraState.cameraLookAt;
+                    this.parent.world.orbitControl.update();
+                }
             }
         });
 
