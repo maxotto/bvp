@@ -104,7 +104,6 @@ export function getWorldFromXml(xmlText) {
     parseNode(xml.documentElement);
 
     const xmlObj = xmlConverter.xml2js(xmlText);
-    console.log(xmlObj);
 
     return world;
 }
@@ -167,7 +166,7 @@ export function putWorldToXml(world: World) {
             const svgList = [];
             if (slide.objects) {
                 slide.objects.forEach((object) => {
-                    if(object.type == 'svg'){
+                    if (object.type == 'svg') {
                         svgList.push(
                             {
                                 type: "element",

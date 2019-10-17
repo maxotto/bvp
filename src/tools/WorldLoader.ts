@@ -201,7 +201,6 @@ export class WorldLoader {
             }).catch((e) => { console.log(e); });
 
         function loadSVG(data, x, y, z, scale, parentSlide = 0) {
-            //TODO сделать под SVG подложку, чтобы при наведении курсора на не пропадало окаймление редактора
             var paths = data.paths;
             var group = new THREE.Group();
             for (var i = 0; i < paths.length; i++) {
@@ -224,53 +223,47 @@ export class WorldLoader {
                     group.add(mesh);
                 }
             }
-            
-            // new THREE.Box3().setFromObject(group).getCenter(group.position);
+
             group.renderOrder = z; // to prevent strange overlap
             group.scale.multiplyScalar(scale);
             let _groupGeometry = getGroupGeometry(group);
-            group.position.x -= _groupGeometry.size.x / 2+_groupGeometry.topLeftCorner.x;
-            group.position.y += _groupGeometry.size.y / 2-_groupGeometry.topLeftCorner.y;
+            group.position.x -= _groupGeometry.size.x / 2 + _groupGeometry.topLeftCorner.x;
+            group.position.y += _groupGeometry.size.y / 2 - _groupGeometry.topLeftCorner.y;
             group.position.z += _groupGeometry.size.z / 2;
             _groupGeometry.parentSlide = parentSlide;
             _groupGeometry.delta.z = 0;
             let eg = new EditableGroup();
             eg.name = 'group_s' + parentSlide + '_o_' + scope._currentObjectName;
             eg.userData = _groupGeometry;
-            eg.position.x = x;
-            eg.position.y = y;
-            eg.position.z = z;
+
+            eg.position.copy(new Vector3(x, y, z)).add(_groupGeometry.center).sub(_groupGeometry.topLeftCorner);
+
             eg.renderOrder = z; // to prevent strange overlap
-            //eg.add(bg);
             eg.add(group);
             _groupGeometry = getGroupGeometry(group);
-            const bg = createBackGround(_groupGeometry.size.x, _groupGeometry.size.y); 
-            bg.position.sub(_groupGeometry.center);
+            const bg = createBackGround(_groupGeometry.size.x, _groupGeometry.size.y);
+            bg.position.copy(_groupGeometry.topLeftCorner).sub(_groupGeometry.delta);
             group.add(bg);
-
             return eg;
         }
 
-        function createBackGround(x, y){
+        function createBackGround(x, y) {
             var shape = new THREE.Shape();
-            shape.moveTo( 0, 0 );
-            shape.lineTo( 0, -y );
-            shape.lineTo( x, -y );
-            shape.lineTo( x, 0 );
-            shape.lineTo( 0, 0 );
-
-
-            var geometry1 = new THREE.ShapeBufferGeometry(shape);
-            var material1 = new THREE.MeshBasicMaterial({
-                color: new THREE.Color().setStyle('0xee5533'),
-                opacity: 0.5,
+            shape.moveTo(0, 0);
+            shape.lineTo(0, -y);
+            shape.lineTo(x, -y);
+            shape.lineTo(x, 0);
+            shape.lineTo(0, 0);
+            var geometry = new THREE.ShapeBufferGeometry(shape);
+            var material = new THREE.MeshBasicMaterial({
+                color: new THREE.Color(0xea177c),
+                opacity: 0,
                 transparent: true,
-                side: THREE.DoubleSide,
                 depthWrite: false,
                 wireframe: false
             });
-            const mesh = new THREE.Mesh( geometry1, material1 );
-            return mesh; 
+            const mesh = new THREE.Mesh(geometry, material);
+            return mesh;
         }
     }
 
