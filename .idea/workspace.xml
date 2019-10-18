@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3d7d0308-ed6e-4815-8271-23bbaf8ec6ba" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SlideEditor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/SlideEditor.ts" afterDir="false" />
-    </list>
+    <list default="true" id="3d7d0308-ed6e-4815-8271-23bbaf8ec6ba" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +74,7 @@
       <workItem from="1571214386857" duration="261000" />
       <workItem from="1571294863115" duration="179000" />
       <workItem from="1571295382873" duration="183000" />
-      <workItem from="1571318700182" duration="425000" />
+      <workItem from="1571318700182" duration="1058000" />
     </task>
     <servers />
   </component>

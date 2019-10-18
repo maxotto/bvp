@@ -1,6 +1,7 @@
 import { EditableGroupState, EditableGroup } from '../core/EditableGroup';
 import { Camera, Plane, Raycaster, Vector2, Vector3, Matrix4, Mesh, EventDispatcher } from 'three';
 import { World } from '../types';
+import { getGroupGeometry } from '../tools/helpers';
 
 export class DragControls extends EventDispatcher {
     private _camera: Camera;
@@ -10,6 +11,8 @@ export class DragControls extends EventDispatcher {
     private _mouse: Vector2 = new Vector2();
     private _offset: Vector3 = new Vector3();
     private _iniPosition: Vector3 = new Vector3();
+    private _iniWidth: number;
+    private _iniScale: number;
     private _intersection: Vector3 = new Vector3();
     private _worldPosition: Vector3 = new Vector3();
     private _inverseMatrix: Matrix4 = new Matrix4();
@@ -62,8 +65,10 @@ export class DragControls extends EventDispatcher {
                 editableGroup = obj;
             }
         });
+        console.log(editableGroup);
         let localPosition: Vector3 = new Vector3();
         let globalPosition: Vector3 = new Vector3();
+
         localPosition.copy(this._intersection.sub(this._offset).applyMatrix4(this._inverseMatrix));
         const resizerType: string = this._resizer.userData.params.type;
         const resizerPoint: string = this._resizer.userData.params.point;
@@ -71,7 +76,29 @@ export class DragControls extends EventDispatcher {
             globalPosition.copy(this._iniPosition).add(localPosition);
             editableGroup.position.copy(globalPosition);
         } else if (resizerType == 'resizer') {
-
+            //console.log({ globalPosition });
+            switch (resizerPoint) {
+                case 'tl':
+                    break;
+                case 'tr':
+                    break;
+                case 'bl':
+                    break;
+                case 'br':
+                    break;
+            }
+            console.log(this._iniScale);
+            console.log(localPosition.x);
+            console.log(localPosition.x * this._iniScale);
+            const firstSize = editableGroup.iniData.width;
+            console.log({ firstSize });
+            const x = firstSize / 2;
+            const dX = -1 * (localPosition.x * this._iniScale + firstSize / 2);
+            console.log({ dX });
+            const scale = (dX + x) / x;
+            console.log(scale);
+            editableGroup.scale.x = scale;
+            editableGroup.scale.y = scale;
         } else {
             console.log('Why? resizerType =', resizerType);
         }
@@ -122,6 +149,8 @@ export class DragControls extends EventDispatcher {
                     this._camera.getWorldDirection(this._plane.normal),
                     this._worldPosition.setFromMatrixPosition(this._resizer.matrixWorld)
                 );
+                console.log(this._worldPosition);
+
             } else {
                 this._domElement.style.cursor = 'auto';
                 this._resizer = null;
@@ -147,12 +176,18 @@ export class DragControls extends EventDispatcher {
         raycaster.setFromCamera(this._mouse, this._camera);
         if (this._resizer) {
             this._iniPosition.copy(this._groupHovered.position);
+            this._iniWidth = this._groupHovered.userData.size.x;
+            this._iniScale = this._groupHovered.scale.x;
+            console.log(this._iniScale);
             this._isDragging = true;
             this._domElement.style.cursor = 'move';
             this.dispatchEvent({ type: 'dragstart', object: this._groupHovered });
             if (raycaster.ray.intersectPlane(this._plane, this._intersection)) {
                 this._inverseMatrix.getInverse(this._resizer.matrixWorld);
                 this._offset.copy(this._intersection).sub(this._worldPosition.setFromMatrixPosition(this._resizer.matrixWorld)).sub(this._resizer.position);
+                let localPosition: Vector3 = new Vector3();
+                localPosition.copy(this._intersection.sub(this._offset).applyMatrix4(this._inverseMatrix));
+                console.log(localPosition);
 
             }
         }
