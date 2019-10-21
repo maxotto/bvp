@@ -28,12 +28,6 @@ export class EditableGroup extends Group {
         width: number,
     };
 
-    private _resizers: {
-        tl: Mesh,
-        tr: Mesh,
-        bl: Mesh,
-        br: Mesh,
-    }
     private _centerSphere: Mesh;
     private _state = EditableGroupState.show;
     public isEditableGroup = true;
@@ -60,21 +54,8 @@ export class EditableGroup extends Group {
 
         if (this._selectFrame) {
             super.remove(this._selectFrame);
-            super.remove(this._resizers.tl);
-            super.remove(this._resizers.tr);
-            super.remove(this._resizers.bl);
-            super.remove(this._resizers.br);
             super.remove(this._centerSphere);
         }
-        if (!this.iniData) {
-            console.log(this);
-            if (this.userData.size && this.userData.size.x) {
-                this.iniData = {
-                    width: this.userData.size.x,
-                }
-            }
-        }
-        this._updateUserData();
         if (this._state == EditableGroupState.editor) {
             const box = new Box3().setFromObject(this);
             var wireframe = new WireframeGeometry(new BoxGeometry(
@@ -104,16 +85,6 @@ export class EditableGroup extends Group {
         const w = (box.max.x - box.min.x) / this.scale.x;
         const h = (box.max.y - box.min.y) / this.scale.y;
         const diameter = w / 25;
-        this._resizers = {
-            tl: this._createSphere(new Vector3(-w / 2, h / 2, z), diameter, new Color(0x55dd77), { type: 'resizer', point: 'tl' }),
-            tr: this._createSphere(new Vector3(w / 2, h / 2, z), diameter, new Color(0x55dd77), { type: 'resizer', point: 'tr' }),
-            bl: this._createSphere(new Vector3(-w / 2, -h / 2, z), diameter, new Color(0x55dd77), { type: 'resizer', point: 'bl' }),
-            br: this._createSphere(new Vector3(w / 2, -h / 2, z), diameter, new Color(0x55dd77), { type: 'resizer', point: 'br' }),
-        };
-        super.add(this._resizers.tl);
-        //super.add(this._resizers.tr);
-        //super.add(this._resizers.bl);
-        //super.add(this._resizers.br);
         this._centerSphere = this._createSphere(
             new Vector3(0, 0, 0),
             w / 30,
