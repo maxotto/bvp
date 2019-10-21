@@ -1,7 +1,6 @@
 import { EditableGroupState, EditableGroup } from '../core/EditableGroup';
 import { Camera, Plane, Raycaster, Vector2, Vector3, Matrix4, Mesh, EventDispatcher } from 'three';
 import { World } from '../types';
-import { getGroupGeometry } from '../tools/helpers';
 
 export class DragControls extends EventDispatcher {
     private _camera: Camera;
@@ -10,7 +9,6 @@ export class DragControls extends EventDispatcher {
     private _mouse: Vector2 = new Vector2();
     private _offset: Vector3 = new Vector3();
     private _iniPosition: Vector3 = new Vector3();
-    private _iniScale: number;
     private _intersection: Vector3 = new Vector3();
     private _worldPosition: Vector3 = new Vector3();
     private _inverseMatrix: Matrix4 = new Matrix4();

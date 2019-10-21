@@ -8,7 +8,6 @@ import {
     Mesh,
     SphereGeometry,
     DoubleSide,
-    MeshPhongMaterial,
     Vector3,
     Color,
     MeshStandardMaterial
