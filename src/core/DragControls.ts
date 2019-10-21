@@ -1,9 +1,12 @@
 import { EditableGroupState, EditableGroup } from '../core/EditableGroup';
-import { Camera, Plane, Raycaster, Vector2, Vector3, Matrix4, Mesh, EventDispatcher } from 'three';
+import { Camera, Plane, Raycaster, Vector2, Vector3, Matrix4, Mesh, EventDispatcher, Scene } from 'three';
 import { World } from '../types';
+import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
 
 export class DragControls extends EventDispatcher {
     private _camera: Camera;
+    private _scene: Scene;
+    private _transformControls: TransformControls;
     private _domElement: HTMLElement;
     private _plane: Plane = new Plane();
     private _mouse: Vector2 = new Vector2();
@@ -14,6 +17,7 @@ export class DragControls extends EventDispatcher {
     private _inverseMatrix: Matrix4 = new Matrix4();
     private _resizer: Mesh = null;
     private _groupHovered: EditableGroup = null;
+    private _selected: EditableGroup = null;
     private _isDragging: boolean = false;
     private _draggables: EditableGroup[] = [];
 
@@ -21,8 +25,13 @@ export class DragControls extends EventDispatcher {
         super();
         //collect Editables into _draggables array
         this._camera = this._world.camera;
+        this._scene = this._world.scene;
         this._domElement = this._world.renderer.domElement;
-        this._world.scene.traverse((e: EditableGroup) => {
+        this._transformControls = new TransformControls(this._camera, this._domElement);
+        this._transformControls.setMode('translate');
+        this._scene.add(this._transformControls);
+
+        this._scene.traverse((e: EditableGroup) => {
             if (e.isEditableGroup) {
                 this._draggables.push(e);
             }
@@ -37,6 +46,7 @@ export class DragControls extends EventDispatcher {
         this._domElement.addEventListener('touchmove', this.onDocumentTouchMove, false);
         this._domElement.addEventListener('touchstart', this.onDocumentTouchStart, false);
         this._domElement.addEventListener('touchend', this.onDocumentTouchEnd, false);
+        document.addEventListener('keydown', this.onDocumentKeyDown, false);
     }
 
     public deactivate() {
@@ -50,6 +60,7 @@ export class DragControls extends EventDispatcher {
         this._domElement.removeEventListener('touchmove', this.onDocumentTouchMove, false);
         this._domElement.removeEventListener('touchstart', this.onDocumentTouchStart, false);
         this._domElement.removeEventListener('touchend', this.onDocumentTouchEnd, false);
+        document.removeEventListener('keydown', this.onDocumentKeyDown, false);
     }
 
     private _adjustEditableByResizer() {
@@ -73,6 +84,32 @@ export class DragControls extends EventDispatcher {
             console.log('Why? resizerType =', resizerType);
         }
     }
+
+
+    private onDocumentKeyDown = (event) => {
+        event.preventDefault();
+        if (event.type === 'keydown') {
+            var alt = event.altKey ? 'Alt-' : '';
+            var ctrl = event.ctrlKey ? 'Ctrl-' : '';
+            var buttonPressed = alt + ctrl + event.code;
+            // console.log(buttonPressed);
+            switch (buttonPressed) {
+                case 'Escape': //Stop to show editor
+                    this._selected = null;
+                    this.attachTransformControl();
+                    break;
+                case 'Alt-KeyS': // Scale mode toggle   
+                    if (this._transformControls.getMode() !== 'scale') {
+                        this._transformControls.setMode('scale');
+                    } else {
+                        this._transformControls.setMode('translate');
+                    }
+                    // TODO show indicator for mode in ui.dat window
+                    break;
+            }
+        }
+    }
+
 
     private onDocumentMouseMove = (event) => {
         event.preventDefault();
@@ -138,21 +175,24 @@ export class DragControls extends EventDispatcher {
         });
 
     }
+    private attachTransformControl() {
+        if (this._selected) {
+            this.dispatchEvent({ type: 'editableselected', object: this._selected });
+            this._transformControls.attach(this._selected);
+        } else {
+            this._transformControls.detach();
+            this.dispatchEvent({ type: 'editabledeselected', object: this._selected });
+        }
+    }
 
     private onDocumentMouseDown = (event) => {
         event.preventDefault();
         const raycaster: Raycaster = new Raycaster();
         raycaster.setFromCamera(this._mouse, this._camera);
-        if (this._resizer) {
-            this._iniPosition.copy(this._groupHovered.position);
-            this._isDragging = true;
-            this._domElement.style.cursor = 'move';
-            this.dispatchEvent({ type: 'dragstart', object: this._groupHovered });
-            if (raycaster.ray.intersectPlane(this._plane, this._intersection)) {
-                this._inverseMatrix.getInverse(this._resizer.matrixWorld);
-                this._offset.copy(this._intersection).sub(this._worldPosition.setFromMatrixPosition(this._resizer.matrixWorld)).sub(this._resizer.position);
-            }
+        if (this._groupHovered) {
+            this._selected = this._groupHovered;
         }
+        this.attachTransformControl();
     }
 
     private onDocumentMouseCancel = (event) => {

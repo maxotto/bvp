@@ -18,9 +18,16 @@ export class SlideEditor {
         this.dragControls.addEventListener('dragstart', () => {
             this.parent.world.orbitControl.enabled = false;
         });
+        this.dragControls.addEventListener('editableselected', () => {
+            this.parent.world.orbitControl.enabled = false;
+        });
+        this.dragControls.addEventListener('editabledeselected', () => {
+            this.parent.world.orbitControl.enabled = true;
+        });
         this.dragControls.addEventListener('dragend', (event) => {
             this.parent.world.orbitControl.enabled = true;
             if (event.object) {
+                // TODO take in mind SCALE changed while resizing
                 if (event.object.name.indexOf('slideGroup_') == 0) {
                     const userData = event.object.userData;
                     const slideIndex = userData.parentSlide;

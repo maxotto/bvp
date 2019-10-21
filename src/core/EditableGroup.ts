@@ -12,7 +12,6 @@ import {
     Color,
     MeshStandardMaterial
 } from "three";
-import { getGroupGeometry } from "../tools/helpers";
 
 export enum EditableGroupState {
     'show',
@@ -51,10 +50,6 @@ export class EditableGroup extends Group {
 
     private _updateFrame() {
 
-        if (this._selectFrame) {
-            super.remove(this._selectFrame);
-            super.remove(this._centerSphere);
-        }
         if (this._state == EditableGroupState.editor) {
             const box = new Box3().setFromObject(this);
             var wireframe = new WireframeGeometry(new BoxGeometry(
@@ -69,13 +64,11 @@ export class EditableGroup extends Group {
             this._selectFrame.position.z = (box.max.z - box.min.z) / 2;
             super.add(this._selectFrame);
             this._createResizers();
-        }
-    }
 
-    private _updateUserData() {
-        const g = getGroupGeometry(this);
-        g.parentSlide = this.userData.parentSlide
-        this.userData = g;
+        } else {
+            super.remove(this._selectFrame);
+            super.remove(this._centerSphere);
+        }
     }
 
     private _createResizers() {
@@ -90,7 +83,7 @@ export class EditableGroup extends Group {
             new Color(0x990000),
             { type: 'centralPoint', point: 'center' }
         );
-        super.add(this._centerSphere);
+        // super.add(this._centerSphere);
     }
 
     private _createSphere(position, size, color: Color, params, texture?) {
