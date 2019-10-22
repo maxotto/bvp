@@ -87,7 +87,6 @@ export class DragControls extends EventDispatcher {
 
 
     private onDocumentKeyDown = (event) => {
-        event.preventDefault();
         if (event.type === 'keydown') {
             var alt = event.altKey ? 'Alt-' : '';
             var ctrl = event.ctrlKey ? 'Ctrl-' : '';
