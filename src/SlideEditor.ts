@@ -27,7 +27,6 @@ export class SlideEditor {
         this.dragControls.addEventListener('dragend', (event) => {
             this.parent.world.orbitControl.enabled = true;
             if (event.object) {
-                // TODO take in mind SCALE changed while resizing
                 if (event.object.name.indexOf('slideGroup_') == 0) {
                     const userData = event.object.userData;
                     const slideIndex = userData.parentSlide;
@@ -42,7 +41,7 @@ export class SlideEditor {
                     slide.hotspot.z = center.z;
                     const cameraState = getCameraState(
                         center,
-                        userData.size.y,
+                        userData.size.y * event.object.scale.y,
                         event.object.position.z,
                         this.parent.world.cameraFov);
                     slide.cameraPosition = cameraState.cameraPosition;

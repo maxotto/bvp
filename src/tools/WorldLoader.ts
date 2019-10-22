@@ -129,11 +129,7 @@ export class WorldLoader {
                                         x: -context._width / 2 + (+slide.hotspot.x),
                                         y: context._height / 2 - (+slide.hotspot.y),
                                     }
-                                    var center = {
-                                        x: topLeft.x + slide.width / 2 / scale,
-                                        y: topLeft.y - slide.height / 2 / scale,
-                                        z: +(slide.hotspot.z)
-                                    }
+                                    var center = new Vector3(topLeft.x + slide.width / 2 / scale, topLeft.y - slide.height / 2 / scale, +(slide.hotspot.z));
                                     const cameraState = getCameraState(center, slide.height / scale, +(slide.hotspot.z), context._cameraFov);
                                     const newSlide = <Slide>{
                                         width: slide.width / scale,
