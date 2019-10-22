@@ -1,73 +1,59 @@
 import * as THREE from "three";
 import { World, WorldMode, Slide } from "./types";
-import { DragControls } from './tools/MyDragControls';
+// import { DragControls } from './tools/MyDragControls';
+import { DragControls } from './core/DragControls'
 import { getCameraState } from "./tools/helpers";
 
 export class SlideEditor {
     private dragControls;
     constructor(private parent) {
-        this.initDragControls();
         this.parent.onSwitchToEditorMode.subscribe((a) => {
-            console.log(WorldMode.editor);
             this.dragControls.activate();
         });
         this.parent.onSwitchToShowMode.subscribe((a) => {
             this.dragControls.deactivate();
             console.log(WorldMode.show);
         });
-    }
-
-    initDragControls() {
-        this.dragControls = new DragControls(
-            this.parent.world.draggables,
-            this.parent.world.camera,
-            this.parent.world.renderer.domElement
-        );
-
-        this.dragControls.setSlide(0);
-        this.dragControls.deactivate();
-
+        this.dragControls = new DragControls(this.parent.world);
         this.dragControls.addEventListener('dragstart', () => {
             this.parent.world.orbitControl.enabled = false;
         });
-
+        this.dragControls.addEventListener('editableselected', () => {
+            this.parent.world.orbitControl.enabled = false;
+        });
+        this.dragControls.addEventListener('editabledeselected', () => {
+            this.parent.world.orbitControl.enabled = true;
+        });
         this.dragControls.addEventListener('dragend', (event) => {
             this.parent.world.orbitControl.enabled = true;
-
-            // по результату перемещения надо откорректировать позицию камеры для правильного показа переехавшего слайда.
-            // но надо проверить, что это слайд
-            // showSphere(this.parent.world.scene, event.object.position, 8, '0x55dd77');
-            if (event.object.name.indexOf('slideGroup_') == 0) {
-                const userData = event.object.userData;
-                const slideIndex = userData.parentSlide;
-                const slide = <Slide>this.parent.world.slides[slideIndex];
-                const center = new THREE.Vector3(
-                    event.object.position.x,
-                    event.object.position.y,
-                    event.object.position.z,
-                );
-                const topLeft = new THREE.Vector3(
-                    slide.position.x + event.object.position.x,
-                    slide.position.y + event.object.position.y,
-                    slide.position.z + event.object.position.z,
-                );
-                slide.hotspot.x = this.parent.world.width / 2 + topLeft.x;
-                slide.hotspot.y = this.parent.world.height / 2 - topLeft.y;
-                slide.hotspot.z = topLeft.z;
-                // console.log(topLeft);
-                // console.log({ slide });
-                const cameraState = getCameraState(
-                    center,
-                    userData.size.y,
-                    event.object.position.z,
-                    this.parent.world.cameraFov);
-                slide.cameraPosition = cameraState.cameraPosition;
-                slide.cameraLookAt = cameraState.cameraLookAt;
+            if (event.object) {
+                if (event.object.name.indexOf('slideGroup_') == 0) {
+                    const userData = event.object.userData;
+                    const slideIndex = userData.parentSlide;
+                    const slide = <Slide>this.parent.world.slides[slideIndex];
+                    const center = new THREE.Vector3(
+                        event.object.position.x,
+                        event.object.position.y,
+                        event.object.position.z,
+                    );
+                    slide.hotspot.x = this.parent.world.width / 2 + center.x;
+                    slide.hotspot.y = this.parent.world.height / 2 - center.y;
+                    slide.hotspot.z = center.z;
+                    const cameraState = getCameraState(
+                        center,
+                        userData.size.y * event.object.scale.y,
+                        event.object.position.z,
+                        this.parent.world.cameraFov);
+                    slide.cameraPosition = cameraState.cameraPosition;
+                    slide.cameraLookAt = cameraState.cameraLookAt;
+                    this.parent.world.orbitControl.update();
+                }
             }
+        });
 
-        }
-        );
     }
+
+
 
     onMouseEvent(event) {
         const type = event.type;

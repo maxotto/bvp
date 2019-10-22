@@ -34,6 +34,7 @@
     "controlkit": "latest",
     "dat.gui": "^0.7.6",
     "file-saver": "^2.0.2",
+    "stats.js": "^0.17.0",
     "strongly-typed-events": "^1.6.3",
     "three": "latest",
     "xml-js": "^1.6.11"

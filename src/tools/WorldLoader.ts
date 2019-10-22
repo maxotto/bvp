@@ -6,6 +6,7 @@ import * as THREE from "three";
 import { ScenarioData, Slide, World, SVG, HotSpot } from "../types";
 import { EditableGroup } from '../core/EditableGroup';
 import { showSphere } from '../SlideEditor';
+import { Mesh, Vector3 } from 'three';
 
 export class WorldLoader {
     private _scenarioFolder: string;
@@ -81,9 +82,6 @@ export class WorldLoader {
                             cameraPosition: cameraState.cameraPosition,
                             cameraLookAt: cameraState.cameraLookAt
                         }
-                        // mesh.position.x = 0;
-                        // mesh.position.y = 0;
-                        // mesh.position.z = 0;
                         newSlide.objects = [];
                         let p;
                         if (scenarioData.objects) {
@@ -128,11 +126,7 @@ export class WorldLoader {
                                         x: -context._width / 2 + (+slide.hotspot.x),
                                         y: context._height / 2 - (+slide.hotspot.y),
                                     }
-                                    var center = {
-                                        x: topLeft.x + slide.width / 2 / scale,
-                                        y: topLeft.y - slide.height / 2 / scale,
-                                        z: +(slide.hotspot.z)
-                                    }
+                                    var center = new Vector3(topLeft.x + slide.width / 2 / scale, topLeft.y - slide.height / 2 / scale, +(slide.hotspot.z));
                                     const cameraState = getCameraState(center, slide.height / scale, +(slide.hotspot.z), context._cameraFov);
                                     const newSlide = <Slide>{
                                         width: slide.width / scale,
@@ -145,16 +139,12 @@ export class WorldLoader {
                                             topLeft.x,
                                             topLeft.y,
                                             +(slide.hotspot.z)),
-                                        // svg: <any>slide.svg,
                                         transitionDuration: +slide.animation.duration,
                                         scale: scale,
                                         cameraPosition: cameraState.cameraPosition,
                                         cameraLookAt: cameraState.cameraLookAt
                                     }
                                     newSlide.objects = [];
-                                    //mesh.position.x = center.x;
-                                    //mesh.position.y = center.y;
-                                    //mesh.position.z = newSlide.position.z;
                                     let p;
                                     if (slide.objects) {
                                         p = forEachPromise(slide.objects, (svg, context) => {
@@ -222,24 +212,48 @@ export class WorldLoader {
                     group.add(mesh);
                 }
             }
-            // new THREE.Box3().setFromObject(group).getCenter(group.position);
-            group.scale.multiplyScalar(scale);
+
             group.renderOrder = z; // to prevent strange overlap
+            group.scale.multiplyScalar(scale);
             let _groupGeometry = getGroupGeometry(group);
-            group.position.x -= _groupGeometry.size.x / 2;
-            group.position.y += _groupGeometry.size.y / 2;
+            group.position.x -= _groupGeometry.size.x / 2 + _groupGeometry.topLeftCorner.x;
+            group.position.y += _groupGeometry.size.y / 2 - _groupGeometry.topLeftCorner.y;
             group.position.z += _groupGeometry.size.z / 2;
             _groupGeometry.parentSlide = parentSlide;
             _groupGeometry.delta.z = 0;
             let eg = new EditableGroup();
             eg.name = 'group_s' + parentSlide + '_o_' + scope._currentObjectName;
             eg.userData = _groupGeometry;
-            eg.position.x = x;
-            eg.position.y = y;
-            eg.position.z = z;
+
+            eg.position.copy(new Vector3(x, y, z)).add(_groupGeometry.center).sub(_groupGeometry.topLeftCorner);
+
             eg.renderOrder = z; // to prevent strange overlap
             eg.add(group);
+            _groupGeometry = getGroupGeometry(group);
+            const bg = createBackGround(_groupGeometry.size.x, _groupGeometry.size.y);
+            bg.position.copy(_groupGeometry.topLeftCorner).sub(_groupGeometry.delta);
+            group.add(bg);
             return eg;
         }
+
+        function createBackGround(x, y) {
+            var shape = new THREE.Shape();
+            shape.moveTo(0, 0);
+            shape.lineTo(0, -y);
+            shape.lineTo(x, -y);
+            shape.lineTo(x, 0);
+            shape.lineTo(0, 0);
+            var geometry = new THREE.ShapeBufferGeometry(shape);
+            var material = new THREE.MeshBasicMaterial({
+                color: new THREE.Color(0xea177c),
+                opacity: 0,
+                transparent: true,
+                depthWrite: false,
+                wireframe: false
+            });
+            const mesh = new THREE.Mesh(geometry, material);
+            return mesh;
+        }
     }
+
 }

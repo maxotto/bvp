@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { Mesh } from "three";
+import { Mesh, Vector3 } from "three";
 
 export function promisifyLoader(loader, onProgress) {
   function promiseLoader(url) {
@@ -70,7 +70,7 @@ export function getGroupGeometry(mesh: THREE.Group) {
   }
 }
 
-export function getCameraState(center, objectHeight, iniZ, cameraFov) {
+export function getCameraState(center: Vector3, objectHeight: number, iniZ: number, cameraFov: number) {
   const cameraPosition = new THREE.Vector3(
     center.x,
     center.y,
