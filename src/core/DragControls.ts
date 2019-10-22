@@ -198,7 +198,7 @@ export class DragControls extends EventDispatcher {
         event.preventDefault();
         this._isDragging = false;
         this._domElement.style.cursor = this._resizer ? 'pointer' : 'auto';
-        this.dispatchEvent({ type: 'dragend', object: this._groupHovered });
+        this.dispatchEvent({ type: 'dragend', object: this._selected });
     }
 
     private onDocumentTouchMove = (event) => {
