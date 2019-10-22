@@ -82,9 +82,6 @@ export class WorldLoader {
                             cameraPosition: cameraState.cameraPosition,
                             cameraLookAt: cameraState.cameraLookAt
                         }
-                        // mesh.position.x = 0;
-                        // mesh.position.y = 0;
-                        // mesh.position.z = 0;
                         newSlide.objects = [];
                         let p;
                         if (scenarioData.objects) {
@@ -142,16 +139,12 @@ export class WorldLoader {
                                             topLeft.x,
                                             topLeft.y,
                                             +(slide.hotspot.z)),
-                                        // svg: <any>slide.svg,
                                         transitionDuration: +slide.animation.duration,
                                         scale: scale,
                                         cameraPosition: cameraState.cameraPosition,
                                         cameraLookAt: cameraState.cameraLookAt
                                     }
                                     newSlide.objects = [];
-                                    //mesh.position.x = center.x;
-                                    //mesh.position.y = center.y;
-                                    //mesh.position.z = newSlide.position.z;
                                     let p;
                                     if (slide.objects) {
                                         p = forEachPromise(slide.objects, (svg, context) => {
