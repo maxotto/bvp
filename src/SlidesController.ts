@@ -80,8 +80,18 @@ export class SlidesController {
                     this.world.mode = WorldMode.show;
                     this._signals.get("show").dispatch();
                 }
+                this.statsEnable(this.world.mode === WorldMode.editor);
             }
 
+        }
+    }
+
+    statsEnable(state: boolean) {
+        const statsElem = document.getElementById('stats')
+        if (state) {
+            statsElem.style.display = 'block';
+        } else {
+            statsElem.style.display = 'none';
         }
     }
 

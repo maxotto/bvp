@@ -52,7 +52,11 @@ export class DragControls extends EventDispatcher {
     public deactivate() {
         this._domElement.style.cursor = 'auto';
         this._groupHovered = null;
-        this._resizer = null;
+        this._selected = null;
+        this._draggables.forEach(d => {
+            d.setState(EditableGroupState.show);
+        });
+        this._transformControls.detach();
         this._domElement.removeEventListener('mousemove', this.onDocumentMouseMove, false);
         this._domElement.removeEventListener('mousedown', this.onDocumentMouseDown, false);
         this._domElement.removeEventListener('mouseup', this.onDocumentMouseCancel, false);
@@ -121,15 +125,6 @@ export class DragControls extends EventDispatcher {
 
         raycaster.setFromCamera(this._mouse, this._camera);
 
-        if (this._isDragging && this._resizer) {
-            if (raycaster.ray.intersectPlane(this._plane, this._intersection)) {
-                this._adjustEditableByResizer();
-            }
-            this.dispatchEvent({ type: 'drag', object: this._resizer });
-            return;
-
-        }
-
         var intersects = raycaster.intersectObjects(this._draggables, true);
 
         if (intersects.length > 0) {
@@ -141,25 +136,6 @@ export class DragControls extends EventDispatcher {
                     this._groupHovered = obj;
                 }
             });
-            // catch resizer
-            if (
-                intersects[0].object.userData.params &&
-                (
-                    intersects[0].object.userData.params.type == 'resizer' ||
-                    intersects[0].object.userData.params.type == 'centralPoint'
-                )
-            ) {
-                this._domElement.style.cursor = 'pointer';
-                this._resizer = <Mesh>intersects[0].object;
-                this._plane.setFromNormalAndCoplanarPoint(
-                    this._camera.getWorldDirection(this._plane.normal),
-                    this._worldPosition.setFromMatrixPosition(this._resizer.matrixWorld)
-                );
-
-            } else {
-                this._domElement.style.cursor = 'auto';
-                this._resizer = null;
-            }
         } else {
             this._groupHovered = null;
         }
@@ -174,20 +150,20 @@ export class DragControls extends EventDispatcher {
         });
 
     }
+
+
     private attachTransformControl() {
         if (this._selected) {
             this.dispatchEvent({ type: 'editableselected', object: this._selected });
             this._transformControls.attach(this._selected);
         } else {
             this._transformControls.detach();
-            this.dispatchEvent({ type: 'editabledeselected', object: this._selected });
+            this.dispatchEvent({ type: 'editabledeselected' });
         }
     }
 
     private onDocumentMouseDown = (event) => {
         event.preventDefault();
-        const raycaster: Raycaster = new Raycaster();
-        raycaster.setFromCamera(this._mouse, this._camera);
         if (this._groupHovered) {
             this._selected = this._groupHovered;
         }
@@ -196,8 +172,6 @@ export class DragControls extends EventDispatcher {
 
     private onDocumentMouseCancel = (event) => {
         event.preventDefault();
-        this._isDragging = false;
-        this._domElement.style.cursor = this._resizer ? 'pointer' : 'auto';
         this.dispatchEvent({ type: 'dragend', object: this._selected });
     }
 

@@ -75,6 +75,8 @@ export class SceneManager {
     buildRender({ width, height }) {
         this.stats = new Stats();
         this.stats.showPanel(0);
+        this.stats.dom.id = 'stats';
+        this.stats.dom.style.display = 'none';
         document.body.appendChild(this.stats.dom);
 
         const renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true });
