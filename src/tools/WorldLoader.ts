@@ -21,7 +21,7 @@ export class WorldLoader {
     private _currentObjectName;
 
     constructor(scenarioFolder: string) {
-        this._scenarioFolder = scenarioFolder;
+        this._scenarioFolder = scenarioFolder + '/';
     }
     public load() {
         const scope = this;

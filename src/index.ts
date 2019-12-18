@@ -2,13 +2,20 @@ import "./style.css";
 import { SceneManager } from "./SceneManager";
 import { WorldLoader } from './tools/WorldLoader';
 import { World, MouseEvents, KeyboardEvents, TouchEvents } from "./types";
+import { findGetParameters } from "./tools/helpers";
 
 
 const canvas = <HTMLCanvasElement>document.getElementById("canvas");
 let sceneManager;
 var startButton = document.getElementById('startButton');
 startButton.addEventListener('click', init);
-const l = new WorldLoader('NTerebilenko/');
+const getParams: any = findGetParameters();
+console.log(getParams);
+if (!getParams.p) {
+    alert('Project name required');
+    throw new Error("Something went badly wrong!");
+}
+const l = new WorldLoader(getParams.p);
 l.load().then((world) => {
     init();
     sceneManager = new SceneManager(canvas, <World>world);

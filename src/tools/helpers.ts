@@ -1,5 +1,15 @@
 import * as THREE from "three";
-import { Mesh, Vector3 } from "three";
+import { Vector3 } from "three";
+
+
+/**
+ * https://stackoverflow.com/questions/5448545/how-to-retrieve-get-parameters-from-javascript
+ */
+export function findGetParameters() { //
+  const queryDict = {}
+  location.search.substr(1).split("&").forEach(function (item) { queryDict[item.split("=")[0]] = item.split("=")[1] })
+  return queryDict;
+}
 
 export function promisifyLoader(loader, onProgress) {
   function promiseLoader(url) {
