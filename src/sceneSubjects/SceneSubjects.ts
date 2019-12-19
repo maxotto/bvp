@@ -23,7 +23,7 @@ export class SceneSubjects {
         this.mesh.position.set(-300, 50, 120);
         this.scene.add(this.mesh);
 
-        this.createGround();
+        // this.createGround();
         this.createPanorama();
         // this.createTiger();
 
