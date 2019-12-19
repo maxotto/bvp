@@ -36,7 +36,7 @@ export class SlideEditor {
                         event.object.position.y,
                         event.object.position.z,
                     );
-                    slide.hotspot.size = userData.size.y * event.object.scale.y;
+                    slide.hotspot.size = userData.size.x * event.object.scale.x;
                     const sizeX = slide.hotspot.size / slide.height * slide.width;
                     slide.hotspot.x = this.parent.world.width / 2 + center.x - sizeX / 2;
                     slide.hotspot.y = this.parent.world.height / 2 - center.y - slide.hotspot.size / 2;

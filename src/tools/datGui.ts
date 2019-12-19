@@ -10,9 +10,8 @@ export class MyDataControls {
             this.speed = 0.8;
             this.displayOutline = false;
             this.saveFile = () => {
-                console.log('Lets save it');
                 const xml = putWorldToXml(world);
-                var blob = new Blob([xml], {type: "text/plain;charset=utf-8"});
+                var blob = new Blob([xml], { type: "text/plain;charset=utf-8" });
                 FileSaver.saveAs(blob, "scenario.xml");
 
             };

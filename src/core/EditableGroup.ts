@@ -13,6 +13,8 @@ import {
     MeshStandardMaterial
 } from "three";
 
+import { promisifyLoader, forEachPromise, getGroupGeometry, getCameraState, createSphere } from '../tools/helpers';
+
 export enum EditableGroupState {
     'show',
     'editor'
@@ -51,7 +53,8 @@ export class EditableGroup extends Group {
     private _updateFrame() {
 
         if (this._state == EditableGroupState.editor) {
-            const box = new Box3().setFromObject(this);
+            const gg = getGroupGeometry(this);
+            const box = gg.box;
             var wireframe = new WireframeGeometry(new BoxGeometry(
                 box.max.x - box.min.x,
                 box.max.y - box.min.y,
@@ -61,7 +64,8 @@ export class EditableGroup extends Group {
             this._selectFrame = new LineSegments(wireframe);
             this._selectFrame.position.x = 0;
             this._selectFrame.position.y = 0;
-            this._selectFrame.position.z = (box.max.z - box.min.z) / 2;
+            this._selectFrame.position.z = 0;
+            //this._selectFrame.position.add(gg.center);
             super.add(this._selectFrame);
             this._createResizers();
 

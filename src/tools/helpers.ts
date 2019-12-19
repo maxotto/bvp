@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { Vector3 } from "three";
+import { Vector3, SphereGeometry, MeshStandardMaterial, Mesh, Color, DoubleSide } from "three";
 
 
 /**
@@ -58,21 +58,24 @@ export function getPointsByCurve(curveFunctionName, ...curveFunctionArgs) {
 export function getGroupGeometry(mesh: THREE.Group) {
   var center = new THREE.Vector3();
   var size = new THREE.Vector3();
-  var boundingBox = new THREE.Box3().setFromObject(mesh);
-  boundingBox.getCenter(center);
-  boundingBox.getSize(size)
-  var topLeftCorner = new THREE.Vector3(center.x - size.x / 2, center.y + size.y / 2, center.z - size.z / 2);
+  const box = new THREE.Box3();
+  mesh.traverse((child) => {
+    var bb = new THREE.Box3().setFromObject(child);
+    if (bb.max.x < Infinity) {
+      box.union(bb);
+    }
+  });
+  box.getCenter(center);
+  box.getSize(size)
+  var topLeftCorner = new THREE.Vector3(center.x - size.x / 2, -1 * (center.y + size.y / 2), 0);
   var delta = new THREE.Vector3(
     mesh.position.x - (center.x),
     mesh.position.y - (center.y),
-    mesh.position.z - (center.y),
+    mesh.position.z - (center.z),
   );
   return {
-    size: {
-      x: size.x,
-      y: size.y,
-      z: size.z,
-    },
+    box: box,
+    size: size,
     center: center,
     topLeftCorner: topLeftCorner,
     delta: delta,
@@ -96,4 +99,20 @@ export function getCameraState(center: Vector3, objectHeight: number, iniZ: numb
     cameraLookAt: cameraLookAt
   }
 
+}
+export function createSphere(position, size, color: Color, params, texture?) {
+  const g = new SphereGeometry(size, 32, 32);
+  const maretialConf = { color: color }
+  if (texture) {
+    maretialConf['map'] = texture;
+    maretialConf['side'] = DoubleSide;
+  }
+  const material = new MeshStandardMaterial(maretialConf);
+  const sphere = new Mesh(g, material);
+  sphere.userData.params = params;
+  sphere.name = params.type + '_' + params.point;
+  sphere.position.x = position.x;
+  sphere.position.y = position.y;
+  sphere.position.z = position.z;
+  return sphere;
 }

@@ -10,7 +10,6 @@ let sceneManager;
 var startButton = document.getElementById('startButton');
 startButton.addEventListener('click', init);
 const getParams: any = findGetParameters();
-console.log(getParams);
 if (!getParams.p) {
     alert('Project name required');
     throw new Error("Something went badly wrong!");

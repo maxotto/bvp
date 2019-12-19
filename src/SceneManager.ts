@@ -68,7 +68,7 @@ export class SceneManager {
     buildScene() {
         const scene = new THREE.Scene();
         scene.background = new THREE.Color("#000");
-        scene.fog = new THREE.Fog(0x000000, 50, 4000);
+        scene.fog = new THREE.Fog(0x000099, 50, 16000);
         return scene;
     }
 

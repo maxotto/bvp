@@ -109,6 +109,8 @@ export function getWorldFromXml(xmlText) {
 }
 
 export function putWorldToXml(world: World) {
+
+    //TODO save SVGs
     let xmlText;
     const obj = {
         declaration: {
@@ -217,6 +219,5 @@ export function putWorldToXml(world: World) {
 
 
     xmlText = xmlConverter.js2xml(obj);
-    console.log(xmlText);
     return xmlText;
 }
