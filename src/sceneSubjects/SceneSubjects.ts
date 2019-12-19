@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { World } from '../types';
 import { getGroupGeometry } from '../tools/helpers';
 import { EditableGroup, EditableGroupState } from '../core/EditableGroup';
+import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader';
+import { Group } from 'three';
 
 
 export class SceneSubjects {
@@ -13,7 +15,7 @@ export class SceneSubjects {
     constructor(scene, world: World) {
         this.scene = scene;
         this.world = world;
-        
+
         this.mesh = new THREE.Mesh(
             new THREE.IcosahedronBufferGeometry(this.radius, 2),
             new THREE.MeshStandardMaterial({ flatShading: true })
@@ -22,13 +24,16 @@ export class SceneSubjects {
         this.scene.add(this.mesh);
 
         this.createGround();
+        this.createPanorama();
+        // this.createTiger();
 
         world.slides.forEach((slide, index) => {
-            var slideGroup = new EditableGroup();
+            let slideGroup;
             if (index === 0) {
-                this.createFrame();
-                slideGroup.setState(EditableGroupState.show);
+                // this.createFrame();
+                slideGroup = new Group();
             } else {
+                slideGroup = new EditableGroup();
                 world.draggables.push(slideGroup)
             }
             slideGroup.add(slide.background);
@@ -36,8 +41,8 @@ export class SceneSubjects {
                 slideGroup.add(object);
                 world.draggables.push(object);
             });
-            slideGroup.position.x = slide.position.x+slide.width/2;
-            slideGroup.position.y = slide.position.y - slide.height/2;
+            slideGroup.position.x = slide.position.x + slide.width / 2;
+            slideGroup.position.y = slide.position.y - slide.height / 2;
             slideGroup.position.z = slide.position.z;
             slideGroup.name = 'slideGroup_' + index;
             const _groupGeometry = getGroupGeometry(slideGroup);
@@ -45,6 +50,59 @@ export class SceneSubjects {
             _groupGeometry.delta.z = 0;
             slideGroup.userData = _groupGeometry;
             this.scene.add(slideGroup);
+        });
+    }
+
+    createTiger() {
+        var loader = new SVGLoader();
+        loader.load('/assets/NTerebilenko/tiger.svg', (data: any) => {
+            var paths = data.paths;
+            var group = new THREE.Group();
+            group.scale.multiplyScalar(0.25);
+            group.position.x = - 70;
+            group.position.y = 70;
+            group.scale.y *= - 1;
+            for (var i = 0; i < paths.length; i++) {
+                var path = paths[i];
+                var fillColor = path.userData.style.fill;
+                if (fillColor !== undefined && fillColor !== 'none') {
+                    var material = new THREE.MeshBasicMaterial({
+                        color: new THREE.Color().setStyle(fillColor),
+                        opacity: path.userData.style.fillOpacity,
+                        transparent: path.userData.style.fillOpacity < 1,
+                        side: THREE.DoubleSide,
+                        depthWrite: false,
+                        wireframe: false
+                    });
+                    var shapes = path.toShapes(true);
+                    for (var j = 0; j < shapes.length; j++) {
+                        var shape = shapes[j];
+                        var geometry = new THREE.ShapeBufferGeometry(shape);
+                        var mesh = new THREE.Mesh(geometry, material);
+                        group.add(mesh);
+                    }
+                }
+                var strokeColor = path.userData.style.stroke;
+                if (strokeColor !== undefined && strokeColor !== 'none') {
+                    var material = new THREE.MeshBasicMaterial({
+                        color: new THREE.Color().setStyle(strokeColor),
+                        opacity: path.userData.style.strokeOpacity,
+                        transparent: path.userData.style.strokeOpacity < 1,
+                        side: THREE.DoubleSide,
+                        depthWrite: false,
+                        wireframe: false
+                    });
+                    for (var j = 0, jl = path.subPaths.length; j < jl; j++) {
+                        var subPath = path.subPaths[j];
+                        var geometry = SVGLoader.pointsToStroke(subPath.getPoints(), path.userData.style, 20, 1);
+                        if (geometry) {
+                            var mesh = new THREE.Mesh(geometry, material);
+                            group.add(mesh);
+                        }
+                    }
+                }
+            }
+            this.scene.add(group);
         });
     }
 
@@ -86,6 +144,19 @@ export class SceneSubjects {
         var floorHeight = (-1 * this.world.height) / 2;
         meshCanvas.position.y = floorHeight;
         this.scene.add(meshCanvas);
+    }
+
+    createPanorama() {
+        const geometry = new THREE.SphereBufferGeometry(this.world.camera.position.z * 1.15, 100, 100);
+        // invert the geometry on the x-axis so that all of the faces point inward
+        geometry.scale(-1, 1, 1);
+        geometry.center();
+        const texture = new THREE.TextureLoader().load('assets/2121.jpg');
+        const material = new THREE.MeshBasicMaterial({ map: texture });
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.position.set(this.world.camera.position.x, this.world.camera.position.y, this.world.camera.position.z / 2);
+        mesh.rotation.y = - Math.PI / 2;
+        this.scene.add(mesh);
     }
 
     update(time) {

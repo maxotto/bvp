@@ -7,21 +7,18 @@ import { SlidesController } from "./SlidesController";
 import { MyDataControls } from "./tools/datGui";
 
 import { WorldMode, World } from "./types";
+import * as Stats from 'stats.js';
 
 export class SceneManager {
 
     private clock = new THREE.Clock();
     private screenDimensions;
     private myControls;
-    // private scene;
-    // private renderer;
-    // public camera;
-    // public orbitControl;
     public sceneSubjects;
     private slidesController;
+    private stats: Stats;
 
     constructor(private canvas: HTMLCanvasElement, private world: World) {
-        // console.log(world);
         this.screenDimensions = {
             width: this.canvas.width,
             height: this.canvas.height,
@@ -49,7 +46,6 @@ export class SceneManager {
     changeMode(newMode: WorldMode) {
         this.world.mode = newMode;
         this.world.orbitControl.enabled = (WorldMode[newMode] != 'show');
-        console.log('this.world.mode = ', this.world.mode);
         if ((WorldMode[newMode] != 'show')) {
             this.myControls.show();
         } else {
@@ -72,11 +68,17 @@ export class SceneManager {
     buildScene() {
         const scene = new THREE.Scene();
         scene.background = new THREE.Color("#000");
-        scene.fog = new THREE.Fog(0x000000, 50, 4000);
+        scene.fog = new THREE.Fog(0x000099, 50, 16000);
         return scene;
     }
 
     buildRender({ width, height }) {
+        this.stats = new Stats();
+        this.stats.showPanel(0);
+        this.stats.dom.id = 'stats';
+        this.stats.dom.style.display = 'none';
+        document.body.appendChild(this.stats.dom);
+
         const renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true });
         const DPR = (window.devicePixelRatio) ? window.devicePixelRatio : 1;
         renderer.setPixelRatio(DPR);
@@ -107,7 +109,7 @@ export class SceneManager {
     }
 
     update() {
-        // console.log(this.world.mode);
+        this.stats.begin();
         if (this.slidesController.getBusy()) {
             TWEEN.update();
         }
@@ -118,6 +120,7 @@ export class SceneManager {
 
         this.world.orbitControl.update();
         this.world.renderer.render(this.world.scene, this.world.camera);
+        this.stats.end();
     }
 
     onWindowResize() {

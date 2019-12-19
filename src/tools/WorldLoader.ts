@@ -1,11 +1,12 @@
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader';
 import { XmlLoader } from "./XmlLoader";
-import { promisifyLoader, forEachPromise, getGroupGeometry, getCameraState } from './helpers';
+import { promisifyLoader, forEachPromise, getGroupGeometry, getCameraState, createSphere } from './helpers';
 import * as THREE from "three";
 
 import { ScenarioData, Slide, World, SVG, HotSpot } from "../types";
 import { EditableGroup } from '../core/EditableGroup';
 import { showSphere } from '../SlideEditor';
+import { Mesh, Vector3, Color, WireframeGeometry, BoxGeometry, LineSegments } from 'three';
 
 export class WorldLoader {
     private _scenarioFolder: string;
@@ -20,7 +21,7 @@ export class WorldLoader {
     private _currentObjectName;
 
     constructor(scenarioFolder: string) {
-        this._scenarioFolder = scenarioFolder;
+        this._scenarioFolder = scenarioFolder + '/';
     }
     public load() {
         const scope = this;
@@ -60,7 +61,8 @@ export class WorldLoader {
                             side: THREE.DoubleSide
                         });
 
-                        var geometry = new THREE.PlaneBufferGeometry(this._width, this._height);
+                        // TODO var geometry = new THREE.PlaneBufferGeometry(this._width, this._height);
+                        var geometry = new THREE.PlaneBufferGeometry(0.1, 0.1);
                         var mesh = new THREE.Mesh(geometry, materialPainting);
                         mesh.name = 'slide0Bg';
                         const cameraState = getCameraState(new THREE.Vector3(0, 0, 0), scenarioData.height, 0, this._cameraFov);
@@ -81,9 +83,6 @@ export class WorldLoader {
                             cameraPosition: cameraState.cameraPosition,
                             cameraLookAt: cameraState.cameraLookAt
                         }
-                        // mesh.position.x = 0;
-                        // mesh.position.y = 0;
-                        // mesh.position.z = 0;
                         newSlide.objects = [];
                         let p;
                         if (scenarioData.objects) {
@@ -128,11 +127,7 @@ export class WorldLoader {
                                         x: -context._width / 2 + (+slide.hotspot.x),
                                         y: context._height / 2 - (+slide.hotspot.y),
                                     }
-                                    var center = {
-                                        x: topLeft.x + slide.width / 2 / scale,
-                                        y: topLeft.y - slide.height / 2 / scale,
-                                        z: +(slide.hotspot.z)
-                                    }
+                                    var center = new Vector3(topLeft.x + slide.width / 2 / scale, topLeft.y - slide.height / 2 / scale, +(slide.hotspot.z));
                                     const cameraState = getCameraState(center, slide.height / scale, +(slide.hotspot.z), context._cameraFov);
                                     const newSlide = <Slide>{
                                         width: slide.width / scale,
@@ -145,16 +140,12 @@ export class WorldLoader {
                                             topLeft.x,
                                             topLeft.y,
                                             +(slide.hotspot.z)),
-                                        // svg: <any>slide.svg,
                                         transitionDuration: +slide.animation.duration,
                                         scale: scale,
                                         cameraPosition: cameraState.cameraPosition,
                                         cameraLookAt: cameraState.cameraLookAt
                                     }
                                     newSlide.objects = [];
-                                    //mesh.position.x = center.x;
-                                    //mesh.position.y = center.y;
-                                    //mesh.position.z = newSlide.position.z;
                                     let p;
                                     if (slide.objects) {
                                         p = forEachPromise(slide.objects, (svg, context) => {
@@ -166,9 +157,9 @@ export class WorldLoader {
                                                     const z = +(slide.hotspot.z) + (+svg['z']);
                                                     const mesh = loadSVG(
                                                         svgData,
-                                                        (+svg['x']),
-                                                        (-svg['y']),
-                                                        (+svg['z']),
+                                                        (+svg['x']) - (newSlide.width) / 2,
+                                                        (-svg['y']) + (newSlide.height) / 2,
+                                                        z,
                                                         (+svg['scale']) / scale,
                                                         slideNumber
                                                     );
@@ -202,44 +193,122 @@ export class WorldLoader {
         function loadSVG(data, x, y, z, scale, parentSlide = 0) {
             var paths = data.paths;
             var group = new THREE.Group();
+            group.position.x = 0;
+            group.position.y = 0;
+            group.position.z = 0;
+            group.scale.y *= - 1;
+            group.renderOrder = z;
             for (var i = 0; i < paths.length; i++) {
                 var path = paths[i];
                 var fillColor = path.userData.style.fill;
-                var material = new THREE.MeshBasicMaterial({
-                    color: new THREE.Color().setStyle(fillColor),
-                    opacity: path.userData.style.fillOpacity,
-                    transparent: path.userData.style.fillOpacity < 1,
-                    side: THREE.DoubleSide,
-                    depthWrite: false,
-                    wireframe: false
-                });
-                var shapes = path.toShapes(true);
-                for (var j = 0; j < shapes.length; j++) {
-                    var shape = shapes[j];
-                    var geometry = new THREE.ShapeBufferGeometry(shape);
-                    geometry.applyMatrix(new THREE.Matrix4().makeScale(1, -1, 1)) // <-- this
-                    var mesh = new THREE.Mesh(geometry, material);
-                    group.add(mesh);
+                if (fillColor !== undefined && fillColor !== 'none') {
+                    var material = new THREE.MeshBasicMaterial({
+                        color: new THREE.Color().setStyle(fillColor),
+                        opacity: path.userData.style.fillOpacity,
+                        transparent: path.userData.style.fillOpacity < 1,
+                        side: THREE.DoubleSide,
+                        depthWrite: false,
+                        wireframe: false
+                    });
+                    var shapes = path.toShapes(true);
+                    for (var j = 0; j < shapes.length; j++) {
+                        var shape = shapes[j];
+                        var geometry = new THREE.ShapeBufferGeometry(shape);
+                        var mesh = new THREE.Mesh(geometry, material);
+                        mesh.renderOrder = z;
+                        group.add(mesh);
+                    }
+                }
+                var strokeColor = path.userData.style.stroke;
+                if (strokeColor !== undefined && strokeColor !== 'none') {
+                    var material = new THREE.MeshBasicMaterial({
+                        color: new THREE.Color().setStyle(strokeColor),
+                        opacity: path.userData.style.strokeOpacity,
+                        transparent: path.userData.style.strokeOpacity < 1,
+                        side: THREE.DoubleSide,
+                        depthWrite: false,
+                        wireframe: false
+                    });
+                    for (var j = 0, jl = path.subPaths.length; j < jl; j++) {
+                        var subPath = path.subPaths[j];
+                        var geometry = SVGLoader.pointsToStroke(subPath.getPoints(), path.userData.style, 20, 1);
+                        if (geometry) {
+                            var mesh = new THREE.Mesh(geometry, material);
+                            mesh.renderOrder = z;
+                            group.add(mesh);
+                        }
+                    }
                 }
             }
-            // new THREE.Box3().setFromObject(group).getCenter(group.position);
             group.scale.multiplyScalar(scale);
-            group.renderOrder = z; // to prevent strange overlap
+            // group.geometry.getCenter();
             let _groupGeometry = getGroupGeometry(group);
-            group.position.x -= _groupGeometry.size.x / 2;
-            group.position.y += _groupGeometry.size.y / 2;
-            group.position.z += _groupGeometry.size.z / 2;
+            let box = _groupGeometry.box;
+            var wireframe = new WireframeGeometry(new BoxGeometry(
+                box.max.x - box.min.x,
+                box.max.y - box.min.y,
+                box.max.z - box.min.z,
+            ));
+            console.log(group);
+            wireframe.scale(1 / scale, 1 / scale, 1 / scale);
+            let _selectFrame = new LineSegments(wireframe);
+            _selectFrame.position.x = 0;
+            _selectFrame.position.y = 0;
+            _selectFrame.position.z = 50;
+            group.add(_selectFrame);
+            return group;
+            //this._selectFrame.position.add(gg.center);
+            //group.position.x -= _groupGeometry.size.x / 2 + _groupGeometry.topLeftCorner.x;
+            //group.position.y += _groupGeometry.size.y / 2 - _groupGeometry.topLeftCorner.y;
+            //group.position.z += _groupGeometry.size.z / 2;
+            const s = createSphere(group.position, 20, new Color(0x990000),
+                { type: 'centralPoint', point: 'center' });
+            // var box = new THREE.BoxHelper(group, new Color(0x990000));
+            // group.add(s);
+            // group.add(box);
+            //return group;
             _groupGeometry.parentSlide = parentSlide;
             _groupGeometry.delta.z = 0;
             let eg = new EditableGroup();
             eg.name = 'group_s' + parentSlide + '_o_' + scope._currentObjectName;
             eg.userData = _groupGeometry;
+
+            // eg.position.copy(new Vector3(x, y, z)).add(_groupGeometry.center).sub(_groupGeometry.topLeftCorner);
+
+            eg.renderOrder = z; // to prevent strange overlap
+            eg.add(group);
+            // _groupGeometry = getGroupGeometry(eg);
+
+            /// console.log(_groupGeometry);
+            const bg = createBackGround(_groupGeometry.size.x, _groupGeometry.size.y);
+            bg.position.add(_groupGeometry.topLeftCorner);
+            group.add(bg);
+            group.scale.multiplyScalar(scale);
             eg.position.x = x;
             eg.position.y = y;
             eg.position.z = z;
-            eg.renderOrder = z; // to prevent strange overlap
-            eg.add(group);
+            eg.position.add(new Vector3(- _groupGeometry.topLeftCorner.x * scale, _groupGeometry.topLeftCorner.y * scale, 0));
             return eg;
         }
+
+        function createBackGround(x, y) {
+            var shape = new THREE.Shape();
+            shape.moveTo(0, 0);
+            shape.lineTo(x, 0);
+            shape.lineTo(x, y);
+            shape.lineTo(0, y);
+            shape.lineTo(0, 0);
+            var geometry = new THREE.ShapeBufferGeometry(shape);
+            var material = new THREE.MeshBasicMaterial({
+                color: new THREE.Color(0xea177c),
+                opacity: 0.5,
+                transparent: true,
+                depthWrite: false,
+                wireframe: false
+            });
+            const mesh = new THREE.Mesh(geometry, material);
+            return mesh;
+        }
     }
+
 }

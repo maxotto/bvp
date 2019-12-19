@@ -104,12 +104,13 @@ export function getWorldFromXml(xmlText) {
     parseNode(xml.documentElement);
 
     const xmlObj = xmlConverter.xml2js(xmlText);
-    console.log(xmlObj);
 
     return world;
 }
 
 export function putWorldToXml(world: World) {
+
+    //TODO save SVGs
     let xmlText;
     const obj = {
         declaration: {
@@ -167,7 +168,7 @@ export function putWorldToXml(world: World) {
             const svgList = [];
             if (slide.objects) {
                 slide.objects.forEach((object) => {
-                    if(object.type == 'svg'){
+                    if (object.type == 'svg') {
                         svgList.push(
                             {
                                 type: "element",
@@ -218,6 +219,5 @@ export function putWorldToXml(world: World) {
 
 
     xmlText = xmlConverter.js2xml(obj);
-    console.log(xmlText);
     return xmlText;
 }
