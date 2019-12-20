@@ -17,6 +17,11 @@ export class WorldLoader {
     private _mainSlideDuration: number;
     private _mainBackgroundColor: number;
     private _mainBackgroundPic: string;
+    private _panoramaPic: string;
+    private _panoX: number;
+    private _panoY: number;
+    private _panoZ: number;
+    private _panoCenter: Vector3;
     private _cameraFov = 45;
     private _currentObjectName;
 
@@ -49,9 +54,14 @@ export class WorldLoader {
                 this._steps = scenarioData.steps;
                 this._mainBackgroundColor = scenarioData.mainBackgroundColor;
                 this._mainBackgroundPic = scenarioData.mainBackgroundPic;
+                this._panoramaPic = scenarioData.panoramaPic;
+                this._panoX = +scenarioData.panoX;
+                this._panoY = +scenarioData.panoY;
+                this._panoZ = +scenarioData.panoZ;
                 this._mainSlideDuration = +scenarioData.mainDuration;
                 this._cameraFov = +scenarioData.cameraFov;
-                this._currentObjectName = scenarioData.mainBackgroundPic
+                this._currentObjectName = scenarioData.mainBackgroundPic;
+                this._panoCenter = new Vector3(this._panoX, this._panoY, this._panoZ);
                 return promisifyLoader(new THREE.TextureLoader(manager), onProgress)
                     .load('assets/' + this._scenarioFolder + this._currentObjectName)
                     .then((_texturePainting: THREE.Texture) => {
@@ -61,15 +71,18 @@ export class WorldLoader {
                             side: THREE.DoubleSide
                         });
 
-                        // TODO var geometry = new THREE.PlaneBufferGeometry(this._width, this._height);
+                        // TODO 
+                        // var geometry = new THREE.PlaneBufferGeometry(this._width, this._height);
                         var geometry = new THREE.PlaneBufferGeometry(0.1, 0.1);
                         var mesh = new THREE.Mesh(geometry, materialPainting);
                         mesh.name = 'slide0Bg';
-                        const cameraState = getCameraState(new THREE.Vector3(0, 0, 0), scenarioData.height, 0, this._cameraFov);
+                        const cameraState = getCameraState(new THREE.Vector3(0, 0, 0), 5000, 0, this._cameraFov);
+                        console.log(cameraState);
                         const newSlide = <Slide>{
                             width: this._width,
                             height: this._height,
                             background: mesh,
+                            texture: _texturePainting,
                             hotspot: null,
                             picture: this._currentObjectName,
                             position: new THREE.Vector3(
@@ -117,12 +130,14 @@ export class WorldLoader {
                                     var materialPainting = new THREE.MeshBasicMaterial(<THREE.MeshBasicMaterialParameters>{
                                         color: 0xffffff,
                                         map: _texturePainting,
-                                        side: THREE.DoubleSide
+                                        side: THREE.DoubleSide,
+                                        transparent: true
                                     });
                                     var scale = slide.width / slide.hotspot.size;
                                     var geometry = new THREE.PlaneBufferGeometry(slide.hotspot.size, slide.height / scale);
                                     var mesh = new THREE.Mesh(geometry, materialPainting);
                                     mesh.name = 'slide' + slideNumber + 'bg';
+                                    mesh.lookAt(this._panoCenter);
                                     var topLeft = {
                                         x: -context._width / 2 + (+slide.hotspot.x),
                                         y: context._height / 2 - (+slide.hotspot.y),
@@ -186,6 +201,8 @@ export class WorldLoader {
                     cameraFov: this._cameraFov,
                     mainSlideDuration: this._mainSlideDuration,
                     mainBackgroundColor: this._mainBackgroundColor,
+                    panoramaPic: 'assets/' + this._scenarioFolder + this._panoramaPic,
+                    panoCenter: this._panoCenter,
                     draggables: []
                 })
             }).catch((e) => { console.log(e); });

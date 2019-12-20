@@ -68,7 +68,7 @@ export class SceneManager {
     buildScene() {
         const scene = new THREE.Scene();
         scene.background = new THREE.Color("#000");
-        scene.fog = new THREE.Fog(0x000099, 50, 16000);
+        // scene.fog = new THREE.Fog(0x0099ff, 5, 160);
         return scene;
     }
 
@@ -79,7 +79,12 @@ export class SceneManager {
         this.stats.dom.style.display = 'none';
         document.body.appendChild(this.stats.dom);
 
-        const renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true });
+        const renderer = new THREE.WebGLRenderer({
+            canvas: this.canvas,
+            antialias: true,
+            alpha: true,
+            logarithmicDepthBuffer: true
+        });
         const DPR = (window.devicePixelRatio) ? window.devicePixelRatio : 1;
         renderer.setPixelRatio(DPR);
         renderer.setSize(width, height);
@@ -93,10 +98,9 @@ export class SceneManager {
     buildCamera({ width, height, fov }) {
         const aspectRatio = width / height;
         const fieldOfView = fov;
-        const nearPlane = 1;
-        const farPlane = 8000;
+        const nearPlane = 0.1;
+        const farPlane = 39000;
         const camera = new THREE.PerspectiveCamera(fieldOfView, aspectRatio, nearPlane, farPlane);
-        camera.position.z = this.world.height / 2 / Math.tan(this.world.cameraFov / 2 * Math.PI / 180);
         return camera;
     }
 

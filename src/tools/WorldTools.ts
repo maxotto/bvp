@@ -127,6 +127,7 @@ export function putWorldToXml(world: World) {
                     height: world.height,
                     mainBackgroundColor: world.mainBackgroundColor,
                     mainBackgroundPic: world.slides[0].picture,
+                    panoramaPic: world.panoramaPic,
                     mainDuration: world.mainSlideDuration,
                     showControlPanel: "true",
                     width: world.width,

@@ -20,10 +20,10 @@ export class SceneSubjects {
             new THREE.IcosahedronBufferGeometry(this.radius, 2),
             new THREE.MeshStandardMaterial({ flatShading: true })
         );
-        this.mesh.position.set(-300, 50, 120);
-        this.scene.add(this.mesh);
+        this.mesh.position.set(-3000, 50, 120);
+        // this.scene.add(this.mesh);
 
-        this.createGround();
+        // this.createGround();
         this.createPanorama();
         // this.createTiger();
 
@@ -31,6 +31,8 @@ export class SceneSubjects {
             let slideGroup;
             if (index === 0) {
                 // this.createFrame();
+                this.scene.background = slide.texture;
+                console.log(slide.background);
                 slideGroup = new Group();
             } else {
                 slideGroup = new EditableGroup();
@@ -147,27 +149,27 @@ export class SceneSubjects {
     }
 
     createPanorama() {
-        const geometry = new THREE.SphereBufferGeometry(this.world.camera.position.z * 1.15, 100, 100);
+        const geometry = new THREE.SphereBufferGeometry(340, 100, 100);
+        //const geometry = new THREE.IcosahedronBufferGeometry(1600, 4);
         // invert the geometry on the x-axis so that all of the faces point inward
         geometry.scale(-1, 1, 1);
         geometry.center();
-        const texture = new THREE.TextureLoader().load('assets/2121.jpg');
+        const texture = new THREE.TextureLoader().load(this.world.panoramaPic);
         const material = new THREE.MeshBasicMaterial({ map: texture });
         const mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set(this.world.camera.position.x, this.world.camera.position.y, this.world.camera.position.z / 2);
+        mesh.position.copy(this.world.panoCenter);
         mesh.rotation.y = - Math.PI / 2;
         this.scene.add(mesh);
     }
 
     update(time) {
-        const scale = Math.sin(time / 3.4) + 2;
-        const z = Math.sin(time / 2) * 250 + 0;
-        const y = Math.sin(time / 2) * 250 + 0;
-        const x = Math.cos(time / 2) * 540 + 380;
-        // this.mesh.scale.set(scale, scale, scale);
+        /*
+        const z = Math.sin(time / 5) * 1650 + 650;
+        const y = Math.sin(time / 5) * 350 + 0;
+        const x = Math.cos(time / 5) * 1650 + 0;
         this.mesh.position.z = z;
         this.mesh.position.y = y;
         this.mesh.position.x = x;
-        // console.log(this.mesh.position.z);
+        */
     }
 }

@@ -51,27 +51,27 @@ export class EditableGroup extends Group {
     }
 
     private _updateFrame() {
-
+        return;
         if (this._state == EditableGroupState.editor) {
             const gg = getGroupGeometry(this);
             const box = gg.box;
             var wireframe = new WireframeGeometry(new BoxGeometry(
                 box.max.x - box.min.x,
                 box.max.y - box.min.y,
-                box.max.z - box.min.z,
+                box.max.z - box.min.z + 0.2,
             ));
-            wireframe.scale(1 / this.scale.x, 1 / this.scale.y, 1 / this.scale.z);
+            //wireframe.scale(1 / this.scale.x, 1 / this.scale.y, 1);
             this._selectFrame = new LineSegments(wireframe);
             this._selectFrame.position.x = 0;
             this._selectFrame.position.y = 0;
             this._selectFrame.position.z = 0;
             //this._selectFrame.position.add(gg.center);
-            super.add(this._selectFrame);
-            this._createResizers();
+            // super.add(this._selectFrame);
+            // this._createResizers();
 
         } else {
-            super.remove(this._selectFrame);
-            super.remove(this._centerSphere);
+            // super.remove(this._selectFrame);
+            // super.remove(this._centerSphere);
         }
     }
 

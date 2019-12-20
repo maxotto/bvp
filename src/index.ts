@@ -11,8 +11,9 @@ var startButton = document.getElementById('startButton');
 startButton.addEventListener('click', init);
 const getParams: any = findGetParameters();
 if (!getParams.p) {
-    alert('Project name required');
-    throw new Error("Something went badly wrong!");
+    //alert('Project name required');
+    getParams.p = 'Rom202001';
+    // throw new Error("Something went badly wrong!");
 }
 const l = new WorldLoader(getParams.p);
 l.load().then((world) => {
@@ -24,8 +25,8 @@ l.load().then((world) => {
 function init() {
     var overlay = document.getElementById('overlay');
     overlay.remove();
-    var audioElement = <HTMLVideoElement>document.getElementById('music');
-    audioElement.play();
+    // var audioElement = <HTMLVideoElement>document.getElementById('music');
+    // audioElement.play();
 }
 
 function bindEventListeners() {

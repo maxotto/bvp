@@ -4,8 +4,8 @@ export class GeneralLights {
     private light;
     constructor(scene) {
         this.light = new PointLight("#FFFFFF", 1);
-        this.light.position.set(150, 50, 550);
-        scene.add(this.light);
+        this.light.position.set(1150, 1050, 1550);
+        // scene.add(this.light);
     }
 
     update(time) {

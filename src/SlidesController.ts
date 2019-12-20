@@ -14,6 +14,11 @@ export class SlidesController {
         this.onSwitchToShowMode.subscribe(() => (this.world.mode = WorldMode.show));
         this.onSwitchToEditorMode.subscribe(() => (this.world.mode = WorldMode.editor));
         this.slideEditor = new SlideEditor(this);
+        //this.world.slides[0].cameraPosition = this.world.slides[1].cameraPosition;
+        //this.world.slides[0].cameraLookAt = this.world.slides[1].cameraLookAt;
+        this.world.camera.position.copy(this.world.slides[0].cameraPosition);
+        this.world.camera.lookAt(this.world.slides[0].cameraLookAt);
+        this.world.orbitControl.target = this.world.slides[0].cameraLookAt;
     }
 
     public get onSwitchToShowMode(): ISignal {
@@ -123,13 +128,16 @@ export class SlidesController {
                 this.world.slides[finishSlideIndex].cameraPosition.y,
                 this.world.slides[finishSlideIndex].cameraPosition.z
             );
-            const jump = calculateJump(this.world.slides[startSlideIndex], this.world.slides[finishSlideIndex]);
+            let jump = 0;
+            if (startPoint.distanceTo(finishPoint) > 0.10) {
+                jump = calculateJump(this.world.slides[startSlideIndex], this.world.slides[finishSlideIndex]);
+            }
             const middlePoint = new THREE.Vector3(
                 startPoint.x - (startPoint.x - finishPoint.x) / 2,
                 startPoint.y - (startPoint.y - finishPoint.y) / 2,
                 startPoint.z - (startPoint.z - finishPoint.z) / 2 + jump,
             );
-            const pNums = 1500;
+            const pNums = 2500;
             const points = getPointsByCurve('QuadraticBezierCurve3',
                 startPoint,
                 middlePoint,

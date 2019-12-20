@@ -1,4 +1,4 @@
-import { Mesh } from "three"
+import { Mesh, Vector3 } from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 
 export type ScenarioData = {
@@ -10,6 +10,10 @@ export type ScenarioData = {
     mainBackgroundColor: number,
     mainDuration: number,
     cameraFov: number,
+    panoramaPic: string,
+    panoX: number,
+    panoY: number,
+    panoZ: number,
     objects: [],
 }
 
@@ -33,6 +37,7 @@ export type Slide = {
     height: number,
     picture: string,
     hotspot: HotSpot,
+    texture: THREE.Texture,
     background: THREE.Mesh,
     position: THREE.Vector3,
     transitionDuration: number,
@@ -61,6 +66,8 @@ export type World = {
     mainSlideDuration: number,
     mainBackgroundColor: number,
     mainBackgroundPic: string,
+    panoramaPic: string,
+    panoCenter: Vector3,
     mode: WorldMode,
     draggables: any[]
 }
