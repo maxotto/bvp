@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<world
+    panoramaPic="pano.jpg"
+    panoX="0"
+    panoY="25"
+    panoZ="250"
+    cameraFov="45"
+    height="50"
+    mainBackgroundColor="0xff0000"
+    mainBackgroundPic="astronomy-3186755.jpg"
+    mainDuration="1500"
+    showControlPanel="true"
+    width="100">
+    <slides>
+        <slide height="108" picture="1.png" width="192">
+            <hotspot x="2000" y="-900" z="3500" size="1"/>
+            <animation duration="3500"/>
+        </slide>
+        <slide height="108" picture="empty.png" width="192">
+            <hotspot x="50" y="0" z="1000" size="1"/>
+            <animation duration="3500"/>
+        </slide>
+        <slide height="108" picture="empty.png" width="192">
+            <hotspot x="50" y="0" z="50" size="1"/>
+            <animation duration="3500"/>
+        </slide>
+        <slide height="1507" picture="2.jpg" width="2261">
+            <hotspot x="46" y="100" z="0" size="100"/>
+            <animation duration="2500"/>
+        </slide>
+        <slide height="108" picture="3.jpg" width="192">
+            <hotspot x="48" y="0" z="10" size="1"/>
+            <animation duration="2500"/>
+        </slide>
+        <slide height="108" picture="4.jpg" width="192">
+            <hotspot x="50" y="0" z="10" size="1"/>
+            <animation duration="2500"/>
+        </slide>
+        <slide height="108" picture="5.jpg" width="192">
+            <hotspot x="52" y="0" z="10" size="1"/>
+            <animation duration="2500"/>
+        </slide>
+        <slide height="108" picture="6.jpg" width="192">
+            <hotspot x="54" y="0" z="10" size="1"/>
+            <animation duration="2500"/>
+        </slide>
+    </slides>
+    <show>
+        <step slide="0"/>
+        <step slide="1"/>
+        <step slide="2"/>
+        <step slide="3"/>
+        <step slide="4"/>
+        <step slide="5"/>
+        <step slide="6"/>
+        <step slide="7"/>
+        <step slide="8"/>
+        <step slide="3"/>
+    </show>
+    <objects/>
+</world>
