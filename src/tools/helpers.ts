@@ -89,6 +89,7 @@ export function getGroupGeometry(mesh: THREE.Group) {
 }
 
 export function getCameraState(center: Vector3, objectHeight: number, iniZ: number, cameraFov: number) {
+  // TODO https://stackoverflow.com/questions/28123164/position-camera-relative-to-plane
   const cameraPosition = new THREE.Vector3(
     center.x,
     center.y,
