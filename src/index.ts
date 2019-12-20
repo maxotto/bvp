@@ -24,8 +24,8 @@ l.load().then((world) => {
 function init() {
     var overlay = document.getElementById('overlay');
     overlay.remove();
-    var audioElement = <HTMLVideoElement>document.getElementById('music');
-    audioElement.play();
+    // var audioElement = <HTMLVideoElement>document.getElementById('music');
+    // audioElement.play();
 }
 
 function bindEventListeners() {

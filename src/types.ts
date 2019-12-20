@@ -10,6 +10,7 @@ export type ScenarioData = {
     mainBackgroundColor: number,
     mainDuration: number,
     cameraFov: number,
+    panoramaPic: string,
     objects: [],
 }
 
@@ -33,6 +34,7 @@ export type Slide = {
     height: number,
     picture: string,
     hotspot: HotSpot,
+    texture: THREE.Texture,
     background: THREE.Mesh,
     position: THREE.Vector3,
     transitionDuration: number,
@@ -61,6 +63,7 @@ export type World = {
     mainSlideDuration: number,
     mainBackgroundColor: number,
     mainBackgroundPic: string,
+    panoramaPic: string,
     mode: WorldMode,
     draggables: any[]
 }

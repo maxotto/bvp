@@ -12,9 +12,14 @@ export function findGetParameters() { //
 }
 
 export function promisifyLoader(loader, onProgress) {
-  function promiseLoader(url) {
+  function promiseLoader(url, allowSkip = false) {
     return new Promise((resolve, reject) => {
-      loader.load(url, resolve, onProgress, reject);
+      loader.load(
+        url,
+        resolve,
+        onProgress,
+        reject
+      );
     });
   }
   return {

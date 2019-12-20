@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<world cameraFov="45" height="1080" mainBackgroundColor="0xff0000" mainBackgroundPic="ball-63527.jpg" mainDuration="1500" showControlPanel="true" width="1920">
+    <slides>
+        <slide height="1080" picture="1.png" width="1920">
+            <hotspot x="16592.633254946824" y="29.341520208975" z="22151.472836384328" size="1920"/>
+            <animation duration="3500"/>
+        </slide>
+        <slide height="1080" picture="empty.png" width="1920">
+            <hotspot x="889.6948683612877" y="474.5016244026855" z="3500" size="300"/>
+            <animation duration="3500"/>
+        </slide>
+        <slide height="1080" picture="2.jpg" width="1920">
+            <hotspot x="889.6948683612877" y="474.5016244026855" z="100" size="300"/>
+            <animation duration="1500"/>
+        </slide>
+        <slide height="1080" picture="3.jpg" width="1920">
+            <hotspot x="96" y="54" z="9" size="200"/>
+            <animation duration="1500"/>
+        </slide>
+        <slide height="1080" picture="4.jpg" width="1920">
+            <hotspot x="600" y="350" z="200" size="100"/>
+            <animation duration="1500"/>
+        </slide>
+        <slide height="1080" picture="5.jpg" width="1920">
+            <hotspot x="717.9200487116516" y="219.91116523516843" z="150.00000000000045" size="100"/>
+            <animation duration="1500"/>
+        </slide>
+        <slide height="1080" picture="6.jpg" width="1920">
+            <hotspot x="1090.4842338404562" y="443.41390200863896" z="200.98687474423187" size="100"/>
+            <animation duration="1500"/>
+        </slide>
+    </slides>
+    <show>
+        <step slide="0"/>
+        <step slide="1"/>
+        <step slide="2"/>
+        <step slide="3"/>
+        <step slide="4"/>
+        <step slide="0"/>
+        <step slide="5"/>
+        <step slide="6"/>
+        <step slide="7"/>
+        <step slide="2"/>
+    </show>
+    <objects/>
+</world>

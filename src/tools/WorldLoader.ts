@@ -17,6 +17,7 @@ export class WorldLoader {
     private _mainSlideDuration: number;
     private _mainBackgroundColor: number;
     private _mainBackgroundPic: string;
+    private _panoramaPic: string;
     private _cameraFov = 45;
     private _currentObjectName;
 
@@ -49,6 +50,7 @@ export class WorldLoader {
                 this._steps = scenarioData.steps;
                 this._mainBackgroundColor = scenarioData.mainBackgroundColor;
                 this._mainBackgroundPic = scenarioData.mainBackgroundPic;
+                this._panoramaPic = scenarioData.panoramaPic;
                 this._mainSlideDuration = +scenarioData.mainDuration;
                 this._cameraFov = +scenarioData.cameraFov;
                 this._currentObjectName = scenarioData.mainBackgroundPic
@@ -61,15 +63,18 @@ export class WorldLoader {
                             side: THREE.DoubleSide
                         });
 
-                        // TODO var geometry = new THREE.PlaneBufferGeometry(this._width, this._height);
+                        // TODO 
+                        // var geometry = new THREE.PlaneBufferGeometry(this._width, this._height);
                         var geometry = new THREE.PlaneBufferGeometry(0.1, 0.1);
                         var mesh = new THREE.Mesh(geometry, materialPainting);
                         mesh.name = 'slide0Bg';
-                        const cameraState = getCameraState(new THREE.Vector3(0, 0, 0), scenarioData.height, 0, this._cameraFov);
+                        const cameraState = getCameraState(new THREE.Vector3(0, 0, 0), 25000, 0, this._cameraFov);
+                        console.log(cameraState);
                         const newSlide = <Slide>{
                             width: this._width,
                             height: this._height,
                             background: mesh,
+                            texture: _texturePainting,
                             hotspot: null,
                             picture: this._currentObjectName,
                             position: new THREE.Vector3(
@@ -117,7 +122,8 @@ export class WorldLoader {
                                     var materialPainting = new THREE.MeshBasicMaterial(<THREE.MeshBasicMaterialParameters>{
                                         color: 0xffffff,
                                         map: _texturePainting,
-                                        side: THREE.DoubleSide
+                                        side: THREE.DoubleSide,
+                                        transparent: true
                                     });
                                     var scale = slide.width / slide.hotspot.size;
                                     var geometry = new THREE.PlaneBufferGeometry(slide.hotspot.size, slide.height / scale);
@@ -186,6 +192,7 @@ export class WorldLoader {
                     cameraFov: this._cameraFov,
                     mainSlideDuration: this._mainSlideDuration,
                     mainBackgroundColor: this._mainBackgroundColor,
+                    panoramaPic: 'assets/' + this._scenarioFolder + this._panoramaPic,
                     draggables: []
                 })
             }).catch((e) => { console.log(e); });
