@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3d7d0308-ed6e-4815-8271-23bbaf8ec6ba" name="Default Changelist" comment="" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <list default="true" id="3d7d0308-ed6e-4815-8271-23bbaf8ec6ba" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tools/helpers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools/helpers.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,26 +24,20 @@
     </option>
   </component>
   <component name="ProjectId" id="1SJxCz7dTJUXgUOOBbKpUHbJRSB" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
-    <property name="ts.external.directory.path" value="C:\Users\amihailichenko\Desktop\likePrezi\bird_view_presentations\node_modules\typescript\lib" />
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
+    <property name="ts.external.directory.path" value="C:\Users\Andrey\Desktop\WorkFolder\bvp\node_modules\typescript\lib" />
   </component>
   <component name="RunManager">
     <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
@@ -60,6 +56,18 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -75,7 +83,23 @@
       <workItem from="1571294863115" duration="179000" />
       <workItem from="1571295382873" duration="183000" />
       <workItem from="1571318700182" duration="1058000" />
+      <workItem from="1577001342717" duration="10972000" />
     </task>
+    <task id="LOCAL-00001" summary="color of the default light">
+      <created>1577012593340</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1577012593340</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Slides rotate to face to the center of panorama.&#10;Camera moves accordingly to look at slide">
+      <created>1577012760522</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1577012760522</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -86,11 +110,40 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="color of the default light" />
+    <MESSAGE value="Slides rotate to face to the center of panorama.&#10;Camera moves accordingly to look at slide" />
+    <option name="LAST_COMMIT_MESSAGE" value="Slides rotate to face to the center of panorama.&#10;Camera moves accordingly to look at slide" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="490" y="38" width="1244" height="964" key="CommitChangelistDialog2" timestamp="1577013000180">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="490" y="38" width="1244" height="964" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1577013000180" />
+    <state x="600" y="158" key="MultipleFileMergeDialog" timestamp="1577012854022">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="600" y="158" key="MultipleFileMergeDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1577012854022" />
+    <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1577012963162">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1577012963162" />
+    <state x="586" y="297" key="com.intellij.ide.util.TipDialog" timestamp="1577002332545">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="586" y="297" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1577002332545" />
+    <state x="643" y="271" key="git4idea.merge.GitPullDialog" timestamp="1577013082520">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="643" y="271" key="git4idea.merge.GitPullDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1577013082520" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
