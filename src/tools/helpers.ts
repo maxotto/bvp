@@ -90,7 +90,11 @@ export function getGroupGeometry(mesh: THREE.Group) {
 
 export function getCameraState(center: Vector3, objectHeight: number, iniZ: number, cameraFov: number) {
   const distance = objectHeight / 2 / Math.tan(cameraFov / 2 * Math.PI / 180);
-  const cameraPosition = new THREE.Vector3();
+  const cameraPosition = new THREE.Vector3(
+      center.x,
+      center.y,
+      distance+iniZ
+  );
   const cameraLookAt = new THREE.Vector3(
     center.x,
     center.y,

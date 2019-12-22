@@ -3,6 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="3d7d0308-ed6e-4815-8271-23bbaf8ec6ba" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/Rom202001/scenario.xml" beforeDir="false" afterPath="$PROJECT_DIR$/assets/Rom202001/scenario.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SlideEditor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/SlideEditor.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SlidesController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/SlidesController.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sceneSubjects/SceneSubjects.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/sceneSubjects/SceneSubjects.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/tools/helpers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools/helpers.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -83,7 +87,8 @@
       <workItem from="1571294863115" duration="179000" />
       <workItem from="1571295382873" duration="183000" />
       <workItem from="1571318700182" duration="1058000" />
-      <workItem from="1577001342717" duration="10972000" />
+      <workItem from="1577001342717" duration="11225000" />
+      <workItem from="1577014212821" duration="7205000" />
     </task>
     <task id="LOCAL-00001" summary="color of the default light">
       <created>1577012593340</created>
@@ -99,7 +104,14 @@
       <option name="project" value="LOCAL" />
       <updated>1577012760522</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Merge branch 'develop' of https://github.com/maxotto/bvp into develop&#10;&#10;# Conflicts:&#10;#&#9;src/tools/helpers.ts">
+      <created>1577013117747</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1577013117747</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -121,13 +133,14 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="color of the default light" />
     <MESSAGE value="Slides rotate to face to the center of panorama.&#10;Camera moves accordingly to look at slide" />
-    <option name="LAST_COMMIT_MESSAGE" value="Slides rotate to face to the center of panorama.&#10;Camera moves accordingly to look at slide" />
+    <MESSAGE value="Merge branch 'develop' of https://github.com/maxotto/bvp into develop&#10;&#10;# Conflicts:&#10;#&#9;src/tools/helpers.ts" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge branch 'develop' of https://github.com/maxotto/bvp into develop&#10;&#10;# Conflicts:&#10;#&#9;src/tools/helpers.ts" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="490" y="38" width="1244" height="964" key="CommitChangelistDialog2" timestamp="1577013000180">
+    <state x="490" y="38" width="1244" height="964" key="CommitChangelistDialog2" timestamp="1577038230701">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="490" y="38" width="1244" height="964" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1577013000180" />
+    <state x="490" y="38" width="1244" height="964" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1577038230701" />
     <state x="600" y="158" key="MultipleFileMergeDialog" timestamp="1577012854022">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -136,10 +149,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="92" y="92" width="1736" height="856" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1577012963162" />
-    <state x="586" y="297" key="com.intellij.ide.util.TipDialog" timestamp="1577002332545">
+    <state x="586" y="297" key="com.intellij.ide.util.TipDialog" timestamp="1577038193744">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="586" y="297" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1577002332545" />
+    <state x="586" y="297" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1577038193744" />
     <state x="643" y="271" key="git4idea.merge.GitPullDialog" timestamp="1577013082520">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

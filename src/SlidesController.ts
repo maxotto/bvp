@@ -128,6 +128,17 @@ export class SlidesController {
                 this.world.slides[finishSlideIndex].cameraPosition.y,
                 this.world.slides[finishSlideIndex].cameraPosition.z
             );
+
+            const startLookAt = new THREE.Vector3(
+                this.world.slides[startSlideIndex].cameraLookAt.x,
+                this.world.slides[startSlideIndex].cameraLookAt.y,
+                this.world.slides[startSlideIndex].cameraLookAt.z
+            );
+            const finishLookAt = new THREE.Vector3(
+                this.world.slides[finishSlideIndex].cameraLookAt.x,
+                this.world.slides[finishSlideIndex].cameraLookAt.y,
+                this.world.slides[finishSlideIndex].cameraLookAt.z
+            );
             let jump = 0;
             if (startPoint.distanceTo(finishPoint) > 0.10) {
                 jump = calculateJump(this.world.slides[startSlideIndex], this.world.slides[finishSlideIndex]);
@@ -137,24 +148,52 @@ export class SlidesController {
                 startPoint.y - (startPoint.y - finishPoint.y) / 2,
                 startPoint.z - (startPoint.z - finishPoint.z) / 2 + jump,
             );
-            const pNums = 2500;
+
+            const lookAtMiddlePoint = new THREE.Vector3(
+                startLookAt.x - (startLookAt.x - finishLookAt.x) / 2,
+                startLookAt.y - (startLookAt.y - finishLookAt.y) / 2,
+                startLookAt.z - (startLookAt.z - finishLookAt.z) / 2,
+            );
+
+            const pNums = 1000;
             const points = getPointsByCurve('QuadraticBezierCurve3',
                 startPoint,
                 middlePoint,
-                finishPoint, pNums);
+                finishPoint,
+                pNums
+            );
+
+            const lookAtPointsNum = pNums;
+            const lookAtPoints = getPointsByCurve('QuadraticBezierCurve3',
+                startLookAt,
+                lookAtMiddlePoint,
+                finishLookAt,
+                lookAtPointsNum
+            );
             const from = { index: 0 };
             const to = { index: pNums };
+            var material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+            this.world.orbitControl.target = startLookAt;
             new TWEEN.Tween(from)
                 .to(to, duration)
                 .easing(TWEEN.Easing.Quadratic.InOut) // change here
                 .onUpdate(() => {
                     const pointNum = Math.ceil(from.index);
-                    this.world.camera.position.set(points[pointNum].x, points[pointNum].y, points[pointNum].z);
-                    this.world.orbitControl.target = new THREE.Vector3(
+                    this.world.camera.position.set(
                         points[pointNum].x,
                         points[pointNum].y,
-                        0
+                        points[pointNum].z
                     );
+                    let lookAtZ = lookAtPoints[pointNum].z;
+                    if(lookAtZ > points[pointNum].z) {
+                        lookAtZ = points[pointNum].z + 10;
+                    }
+                    this.world.orbitControl.target = new THREE.Vector3(
+                        lookAtPoints[pointNum].x,
+                        lookAtPoints[pointNum].y,
+                        lookAtZ,
+                    );
+
                 })
                 .onComplete(() => {
                     this.world.camera.position.set(finishPoint.x, finishPoint.y, finishPoint.z);

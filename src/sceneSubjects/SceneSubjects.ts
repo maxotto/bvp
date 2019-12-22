@@ -52,18 +52,31 @@ export class SceneSubjects {
             _groupGeometry.delta.z = 0;
             slideGroup.userData = _groupGeometry;
             this.scene.add(slideGroup);
-
             //update cameraPosition for every slide according to view from the center of panorama
 
-            slideGroup.lookAt(world.panoCenter);
-            const newCameraPos = slideGroup.position.clone();
-            this.world.scene.updateMatrixWorld(); //Update world positions
-            var objectWorldPosition = new THREE.Vector3();
-            objectWorldPosition.setFromMatrixPosition( slide.background.matrixWorld );
-            const directionVector = objectWorldPosition.sub(world.panoCenter); 	//Get vector from object to panorama center
-            const unitDirectionVector = directionVector.normalize(); // Convert to unit vector
-            newCameraPos.sub(unitDirectionVector.multiplyScalar(slide.distanceToCamera)); //Multiply unit vector times cameraZ distance
-            this.world.slides[index].cameraPosition.copy(newCameraPos);
+            if(slideGroup.position.z < world.panoCenter.z){
+                slideGroup.lookAt(world.panoCenter);
+                const newCameraPos = slideGroup.position.clone();
+                //this.world.scene.updateMatrixWorld(); //Update world positions
+                var objectWorldPosition = new THREE.Vector3();
+                objectWorldPosition.setFromMatrixPosition( slide.background.matrixWorld );
+                const directionVector = objectWorldPosition.sub(world.panoCenter); 	//Get vector from object to panorama center
+                const unitDirectionVector = directionVector.normalize(); // Convert to unit vector
+                newCameraPos.sub(unitDirectionVector.multiplyScalar(slide.distanceToCamera)); //Multiply unit vector times cameraZ distance
+                this.world.slides[index].cameraPosition.copy(newCameraPos);
+                this.world.slides[index].cameraLookAt.copy(slideGroup.position);
+            } else {
+                // slideGroup.lookAt(world.panoCenter);
+                const newCameraPos = slideGroup.position.clone();
+                //this.world.scene.updateMatrixWorld(); //Update world positions
+                var objectWorldPosition = new THREE.Vector3();
+                objectWorldPosition.setFromMatrixPosition( slide.background.matrixWorld );
+                const directionVector = objectWorldPosition.sub(world.panoCenter); 	//Get vector from object to panorama center
+                const unitDirectionVector = directionVector.normalize(); // Convert to unit vector
+                newCameraPos.sub(unitDirectionVector.multiplyScalar(slide.distanceToCamera)); //Multiply unit vector times cameraZ distance
+                // this.world.slides[index].cameraPosition.copy(newCameraPos);
+                //this.world.slides[index].cameraLookAt.copy(slideGroup.position);
+            }
         });
     }
 

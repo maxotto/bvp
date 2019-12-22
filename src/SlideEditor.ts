@@ -41,6 +41,7 @@ export class SlideEditor {
                     slide.hotspot.x = this.parent.world.width / 2 + center.x - sizeX / 2;
                     slide.hotspot.y = this.parent.world.height / 2 - center.y - slide.hotspot.size / 2;
                     slide.hotspot.z = center.z;
+                    // TODO update lookAt of object, camera position and it lookAt
                     const cameraState = getCameraState(
                         center,
                         userData.size.y * event.object.scale.y,
