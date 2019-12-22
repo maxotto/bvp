@@ -44,6 +44,7 @@ export type Slide = {
     scale: number,
     cameraPosition: THREE.Vector3,
     cameraLookAt: THREE.Vector3,
+    distanceToCamera: number,
     objects: any[]
 }
 

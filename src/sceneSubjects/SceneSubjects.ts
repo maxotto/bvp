@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import { World } from '../types';
-import { getGroupGeometry } from '../tools/helpers';
+import {createSphere, getGroupGeometry} from '../tools/helpers';
 import { EditableGroup, EditableGroupState } from '../core/EditableGroup';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader';
-import { Group } from 'three';
+import {Color, Group, Vector3} from 'three';
 
 
 export class SceneSubjects {
@@ -32,7 +32,7 @@ export class SceneSubjects {
             if (index === 0) {
                 // this.createFrame();
                 this.scene.background = slide.texture;
-                console.log(slide.background);
+                // console.log(slide.background);
                 slideGroup = new Group();
             } else {
                 slideGroup = new EditableGroup();
@@ -52,6 +52,18 @@ export class SceneSubjects {
             _groupGeometry.delta.z = 0;
             slideGroup.userData = _groupGeometry;
             this.scene.add(slideGroup);
+
+            //update cameraPosition for every slide according to view from the center of panorama
+
+            slideGroup.lookAt(world.panoCenter);
+            const newCameraPos = slideGroup.position.clone();
+            this.world.scene.updateMatrixWorld(); //Update world positions
+            var objectWorldPosition = new THREE.Vector3();
+            objectWorldPosition.setFromMatrixPosition( slide.background.matrixWorld );
+            const directionVector = objectWorldPosition.sub(world.panoCenter); 	//Get vector from object to panorama center
+            const unitDirectionVector = directionVector.normalize(); // Convert to unit vector
+            newCameraPos.sub(unitDirectionVector.multiplyScalar(slide.distanceToCamera)); //Multiply unit vector times cameraZ distance
+            this.world.slides[index].cameraPosition.copy(newCameraPos);
         });
     }
 

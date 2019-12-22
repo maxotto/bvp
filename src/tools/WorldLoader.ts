@@ -77,7 +77,6 @@ export class WorldLoader {
                         var mesh = new THREE.Mesh(geometry, materialPainting);
                         mesh.name = 'slide0Bg';
                         const cameraState = getCameraState(new THREE.Vector3(0, 0, 0), 5000, 0, this._cameraFov);
-                        console.log(cameraState);
                         const newSlide = <Slide>{
                             width: this._width,
                             height: this._height,
@@ -94,6 +93,7 @@ export class WorldLoader {
                             transitionDuration: +scenarioData.mainDuration,
                             scale: 1,
                             cameraPosition: cameraState.cameraPosition,
+                            distanceToCamera: cameraState.distance,
                             cameraLookAt: cameraState.cameraLookAt
                         }
                         newSlide.objects = [];
@@ -137,11 +137,10 @@ export class WorldLoader {
                                     var geometry = new THREE.PlaneBufferGeometry(slide.hotspot.size, slide.height / scale);
                                     var mesh = new THREE.Mesh(geometry, materialPainting);
                                     mesh.name = 'slide' + slideNumber + 'bg';
-                                    mesh.lookAt(this._panoCenter);
                                     var topLeft = {
                                         x: -context._width / 2 + (+slide.hotspot.x),
                                         y: context._height / 2 - (+slide.hotspot.y),
-                                    }
+                                    };
                                     var center = new Vector3(topLeft.x + slide.width / 2 / scale, topLeft.y - slide.height / 2 / scale, +(slide.hotspot.z));
                                     const cameraState = getCameraState(center, slide.height / scale, +(slide.hotspot.z), context._cameraFov);
                                     const newSlide = <Slide>{
@@ -157,6 +156,7 @@ export class WorldLoader {
                                             +(slide.hotspot.z)),
                                         transitionDuration: +slide.animation.duration,
                                         scale: scale,
+                                        distanceToCamera: cameraState.distance,
                                         cameraPosition: cameraState.cameraPosition,
                                         cameraLookAt: cameraState.cameraLookAt
                                     }
