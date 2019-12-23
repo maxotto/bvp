@@ -27,6 +27,10 @@ export class SlideEditor {
         this.dragControls.addEventListener('dragend', (event) => {
             this.parent.world.orbitControl.enabled = true;
             if (event.object) {
+                //TODO correct slide for panorama mode
+                //TODO 1 - make slide loom at center
+                //TODO 2 - calculate cameraState
+                //TODO 3 - update Radius, Phi and Theta for saving in XML 
                 if (event.object.name.indexOf('slideGroup_') == 0) {
                     const userData = event.object.userData;
                     const slideIndex = userData.parentSlide;
