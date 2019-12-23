@@ -6,8 +6,9 @@ import { SceneSubjects } from './sceneSubjects/SceneSubjects';
 import { SlidesController } from "./SlidesController";
 import { MyDataControls } from "./tools/datGui";
 
-import { WorldMode, World } from "./types";
+import { WorldMode, World, WorldCoordinatesType } from "./types";
 import * as Stats from 'stats.js';
+import { Panorama } from './sceneSubjects/panorama';
 
 export class SceneManager {
 
@@ -105,10 +106,14 @@ export class SceneManager {
     }
 
     createSceneSubjects(scene, world) {
-        const sceneSubjects = [
-            new GeneralLights(scene),
-            new SceneSubjects(scene, world)
-        ];
+        let sceneSubjects = [];
+        sceneSubjects.push(new GeneralLights(scene));
+        sceneSubjects.push(new SceneSubjects(scene, world));
+        if (world.type == WorldCoordinatesType.sphere) {
+            sceneSubjects.push(
+                new Panorama(world, 32)
+            );
+        }
         return sceneSubjects;
     }
 

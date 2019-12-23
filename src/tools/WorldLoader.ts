@@ -1,9 +1,9 @@
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader';
 import { XmlLoader } from "./XmlLoader";
-import { promisifyLoader, forEachPromise, getGroupGeometry, getCameraState, createSphere } from './helpers';
+import { promisifyLoader, forEachPromise, getGroupGeometry, getCameraState, createSphere, recalcFromSpherical } from './helpers';
 import * as THREE from "three";
 
-import { ScenarioData, Slide, World, SVG, HotSpot } from "../types";
+import { ScenarioData, Slide, World, SVG, HotSpot, WorldCoordinatesType } from "../types";
 import { EditableGroup } from '../core/EditableGroup';
 import { showSphere } from '../SlideEditor';
 import { Mesh, Vector3, Color, WireframeGeometry, BoxGeometry, LineSegments } from 'three';
@@ -21,6 +21,7 @@ export class WorldLoader {
     private _panoX: number;
     private _panoY: number;
     private _panoZ: number;
+    private _panoRadius: number;
     private _panoCenter: Vector3;
     private _cameraFov = 45;
     private _currentObjectName;
@@ -58,6 +59,7 @@ export class WorldLoader {
                 this._panoX = +scenarioData.panoX;
                 this._panoY = +scenarioData.panoY;
                 this._panoZ = +scenarioData.panoZ;
+                this._panoRadius = +scenarioData.panoRadius;
                 this._mainSlideDuration = +scenarioData.mainDuration;
                 this._cameraFov = +scenarioData.cameraFov;
                 this._currentObjectName = scenarioData.mainBackgroundPic;
@@ -76,7 +78,7 @@ export class WorldLoader {
                         var geometry = new THREE.PlaneBufferGeometry(0.1, 0.1);
                         var mesh = new THREE.Mesh(geometry, materialPainting);
                         mesh.name = 'slide0Bg';
-                        const cameraState = getCameraState(new THREE.Vector3(0, 0, 0), 5000, 0, this._cameraFov);
+                        const cameraState = getCameraState(new THREE.Vector3(0, 0, 0), 12000, 0, this._cameraFov);
                         const newSlide = <Slide>{
                             width: this._width,
                             height: this._height,
@@ -133,6 +135,19 @@ export class WorldLoader {
                                         side: THREE.DoubleSide,
                                         transparent: true
                                     });
+                                    if (this.getWorldCoordinatesType() == WorldCoordinatesType.sphere) {
+                                        if (slide.hotspot.radius && slide.hotspot.phi && slide.hotspot.theta) {
+                                            const panoCenter = new Vector3(
+                                                this._panoX,
+                                                this._panoY,
+                                                this._panoZ,
+                                            );
+                                            const newCoords = this.recalcFromSpherical(slide, panoCenter, context);
+                                            slide.hotspot.x = newCoords.x;
+                                            slide.hotspot.y = newCoords.y;
+                                            slide.hotspot.z = newCoords.z;
+                                        }
+                                    }
                                     var scale = slide.width / slide.hotspot.size;
                                     var geometry = new THREE.PlaneBufferGeometry(slide.hotspot.size, slide.height / scale);
                                     var mesh = new THREE.Mesh(geometry, materialPainting);
@@ -194,6 +209,7 @@ export class WorldLoader {
                     });
             }).then(() => {
                 return Promise.resolve(<World>{
+                    type: this.getWorldCoordinatesType(),
                     width: this._width,
                     height: this._height,
                     slides: this._outSlides,
@@ -203,6 +219,7 @@ export class WorldLoader {
                     mainBackgroundColor: this._mainBackgroundColor,
                     panoramaPic: 'assets/' + this._scenarioFolder + this._panoramaPic,
                     panoCenter: this._panoCenter,
+                    panoRadius: this._panoRadius,
                     draggables: []
                 })
             }).catch((e) => { console.log(e); });
@@ -327,5 +344,23 @@ export class WorldLoader {
             return mesh;
         }
     }
+    private getWorldCoordinatesType() {
+        let result = WorldCoordinatesType.vector;
+        if (this._panoCenter && this._panoRadius && this._panoramaPic) {
+            result = WorldCoordinatesType.sphere;
+        }
+        return result;
+    }
+
+    private recalcFromSpherical(slide: Slide, panoCenter, context) {
+        const pos = recalcFromSpherical(slide.hotspot.radius, slide.hotspot.phi, slide.hotspot.theta, panoCenter, context._width, context._height);
+        // do correction to center
+        return pos.sub(new Vector3(
+            slide.hotspot.size / 2,
+            slide.hotspot.size / 2 / slide.height * slide.width,
+            0
+        ));
+    }
+
 
 }

@@ -1,15 +1,15 @@
 import * as THREE from 'three';
 import { World } from '../types';
-import {createSphere, getGroupGeometry} from '../tools/helpers';
+import { createSphere, getGroupGeometry } from '../tools/helpers';
 import { EditableGroup, EditableGroupState } from '../core/EditableGroup';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader';
-import {Color, Group, Vector3} from 'three';
+import { Color, Group, Vector3 } from 'three';
 
 
 export class SceneSubjects {
     private scene;
     private world: World;
-    private radius = 20;
+    private radius = 5;
     private mesh;
 
     constructor(scene, world: World) {
@@ -21,16 +21,15 @@ export class SceneSubjects {
             new THREE.MeshStandardMaterial({ flatShading: true })
         );
         this.mesh.position.set(-3000, 50, 120);
-        // this.scene.add(this.mesh);
+        this.scene.add(this.mesh);
 
-        // this.createGround();
-        this.createPanorama();
+        // TODO this.createGround();
         // this.createTiger();
 
         world.slides.forEach((slide, index) => {
             let slideGroup;
             if (index === 0) {
-                // this.createFrame();
+                // TODO this.createFrame();
                 this.scene.background = slide.texture;
                 // console.log(slide.background);
                 slideGroup = new Group();
@@ -54,12 +53,12 @@ export class SceneSubjects {
             this.scene.add(slideGroup);
             //update cameraPosition for every slide according to view from the center of panorama
 
-            if(slideGroup.position.z < world.panoCenter.z){
+            if (slideGroup.position.z < world.panoCenter.z) {
                 slideGroup.lookAt(world.panoCenter);
                 const newCameraPos = slideGroup.position.clone();
                 //this.world.scene.updateMatrixWorld(); //Update world positions
                 var objectWorldPosition = new THREE.Vector3();
-                objectWorldPosition.setFromMatrixPosition( slide.background.matrixWorld );
+                objectWorldPosition.setFromMatrixPosition(slide.background.matrixWorld);
                 const directionVector = objectWorldPosition.sub(world.panoCenter); 	//Get vector from object to panorama center
                 const unitDirectionVector = directionVector.normalize(); // Convert to unit vector
                 newCameraPos.sub(unitDirectionVector.multiplyScalar(slide.distanceToCamera)); //Multiply unit vector times cameraZ distance
@@ -70,7 +69,7 @@ export class SceneSubjects {
                 const newCameraPos = slideGroup.position.clone();
                 //this.world.scene.updateMatrixWorld(); //Update world positions
                 var objectWorldPosition = new THREE.Vector3();
-                objectWorldPosition.setFromMatrixPosition( slide.background.matrixWorld );
+                objectWorldPosition.setFromMatrixPosition(slide.background.matrixWorld);
                 const directionVector = objectWorldPosition.sub(world.panoCenter); 	//Get vector from object to panorama center
                 const unitDirectionVector = directionVector.normalize(); // Convert to unit vector
                 newCameraPos.sub(unitDirectionVector.multiplyScalar(slide.distanceToCamera)); //Multiply unit vector times cameraZ distance
@@ -173,28 +172,14 @@ export class SceneSubjects {
         this.scene.add(meshCanvas);
     }
 
-    createPanorama() {
-        const geometry = new THREE.SphereBufferGeometry(340, 100, 100);
-        //const geometry = new THREE.IcosahedronBufferGeometry(1600, 4);
-        // invert the geometry on the x-axis so that all of the faces point inward
-        geometry.scale(-1, 1, 1);
-        geometry.center();
-        const texture = new THREE.TextureLoader().load(this.world.panoramaPic);
-        const material = new THREE.MeshBasicMaterial({ map: texture });
-        const mesh = new THREE.Mesh(geometry, material);
-        mesh.position.copy(this.world.panoCenter);
-        mesh.rotation.y = - Math.PI / 2;
-        this.scene.add(mesh);
-    }
-
     update(time) {
-        /*
-        const z = Math.sin(time / 5) * 1650 + 650;
-        const y = Math.sin(time / 5) * 350 + 0;
-        const x = Math.cos(time / 5) * 1650 + 0;
+
+        const z = Math.sin(time / 7) * 300;
+        const y = Math.sin(time / 7) * 300 - 100;
+        const x = Math.cos(time / 7) * 300;
         this.mesh.position.z = z;
         this.mesh.position.y = y;
         this.mesh.position.x = x;
-        */
+
     }
 }

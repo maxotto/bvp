@@ -5,7 +5,7 @@ export class GeneralLights {
     constructor(scene) {
         this.light = new PointLight("#0099DD", 1);
         this.light.position.set(1150, 1050, 1550);
-        // scene.add(this.light);
+        scene.add(this.light);
     }
 
     update(time) {

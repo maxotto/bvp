@@ -14,6 +14,7 @@ export type ScenarioData = {
     panoX: number,
     panoY: number,
     panoZ: number,
+    panoRadius: number,
     objects: [],
 }
 
@@ -21,6 +22,9 @@ export type HotSpot = {
     x: number,
     y: number,
     z: number,
+    radius: number,
+    phi: number,
+    theta: number,
     size: number
 }
 
@@ -53,7 +57,13 @@ export enum WorldMode {
     'editor'
 }
 
+export enum WorldCoordinatesType {
+    'vector',
+    'sphere'
+}
+
 export type World = {
+    type: WorldCoordinatesType,
     scene: THREE.Scene,
     renderer: THREE.Renderer,
     camera: THREE.PerspectiveCamera,
@@ -69,6 +79,7 @@ export type World = {
     mainBackgroundPic: string,
     panoramaPic: string,
     panoCenter: Vector3,
+    panoRadius: number,
     mode: WorldMode,
     draggables: any[]
 }

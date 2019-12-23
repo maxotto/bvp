@@ -2,6 +2,25 @@ import * as THREE from "three";
 import { Vector3, SphereGeometry, MeshStandardMaterial, Mesh, Color, DoubleSide } from "three";
 
 
+export function recalcFromSpherical(radius, phi, theta, panoCenter, worldWidth, worldHeight) {
+  const _phi = THREE.Math.degToRad(-90 - phi);
+  const _theta = THREE.Math.degToRad(0 - theta);
+  let tmp = new Vector3().setFromSphericalCoords(radius, _phi, _theta);
+  const newCoords = new Vector3(
+    tmp.x,
+    tmp.y,
+    tmp.z,
+  )
+    .add(panoCenter)
+    .add(new Vector3(
+      worldWidth / 2,
+      worldHeight / 2,
+      0
+    ));
+  return newCoords;
+}
+
+
 /**
  * https://stackoverflow.com/questions/5448545/how-to-retrieve-get-parameters-from-javascript
  */
@@ -45,7 +64,7 @@ export function forEachPromise(items, fn, context) {
 
 
 export function calculateJump(pointA, pointB) {
-  let jumpBySize = Math.min(pointA.width, pointB.width) / 2.5;
+  let jumpBySize = Math.min(pointA.width, pointB.width) / 1.5;
   let jumpByZ = 0;
   if (pointA.cameraPosition.z <= pointB.cameraPosition.z) {
     jumpByZ = pointB.width / 1.5;
@@ -91,9 +110,9 @@ export function getGroupGeometry(mesh: THREE.Group) {
 export function getCameraState(center: Vector3, objectHeight: number, iniZ: number, cameraFov: number) {
   const distance = objectHeight / 2 / Math.tan(cameraFov / 2 * Math.PI / 180);
   const cameraPosition = new THREE.Vector3(
-      center.x,
-      center.y,
-      distance+iniZ
+    center.x,
+    center.y,
+    distance + iniZ
   );
   const cameraLookAt = new THREE.Vector3(
     center.x,
