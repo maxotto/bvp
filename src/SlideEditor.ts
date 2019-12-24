@@ -1,8 +1,9 @@
 import * as THREE from "three";
-import { World, WorldMode, Slide } from "./types";
+import {Slide, WorldCoordinatesType, WorldMode} from "./types";
 // import { DragControls } from './tools/MyDragControls';
-import { DragControls } from './core/DragControls'
-import { getCameraState } from "./tools/helpers";
+import {DragControls} from './core/DragControls'
+import {calcCameraPosition, getCameraState} from "./tools/helpers";
+import {EditableGroup} from "./core/EditableGroup";
 
 export class SlideEditor {
     private dragControls;
@@ -27,33 +28,69 @@ export class SlideEditor {
         this.dragControls.addEventListener('dragend', (event) => {
             this.parent.world.orbitControl.enabled = true;
             if (event.object) {
-                //TODO correct slide for panorama mode
-                //TODO 1 - make slide loom at center
-                //TODO 2 - calculate cameraState
-                //TODO 3 - update Radius, Phi and Theta for saving in XML 
-                if (event.object.name.indexOf('slideGroup_') == 0) {
-                    const userData = event.object.userData;
-                    const slideIndex = userData.parentSlide;
-                    const slide = <Slide>this.parent.world.slides[slideIndex];
-                    const center = new THREE.Vector3(
-                        event.object.position.x,
-                        event.object.position.y,
-                        event.object.position.z,
-                    );
-                    slide.hotspot.size = userData.size.x * event.object.scale.x;
-                    const sizeX = slide.hotspot.size / slide.height * slide.width;
-                    slide.hotspot.x = this.parent.world.width / 2 + center.x - sizeX / 2;
-                    slide.hotspot.y = this.parent.world.height / 2 - center.y - slide.hotspot.size / 2;
-                    slide.hotspot.z = center.z;
-                    // TODO update lookAt of object, camera position and it lookAt
-                    const cameraState = getCameraState(
-                        center,
-                        userData.size.y * event.object.scale.y,
-                        event.object.position.z,
-                        this.parent.world.cameraFov);
-                    slide.cameraPosition = cameraState.cameraPosition;
-                    slide.cameraLookAt = cameraState.cameraLookAt;
-                    this.parent.world.orbitControl.update();
+                if(this.parent.world.type == WorldCoordinatesType.vector){
+                    if (event.object.name.indexOf('slideGroup_') == 0) {
+                        const userData = event.object.userData;
+                        const slideIndex = userData.parentSlide;
+                        const slide = <Slide>this.parent.world.slides[slideIndex];
+                        const center = new THREE.Vector3(
+                            event.object.position.x,
+                            event.object.position.y,
+                            event.object.position.z,
+                        );
+                        slide.hotspot.size = userData.size.x * event.object.scale.x;
+                        const sizeX = slide.hotspot.size / slide.height * slide.width;
+                        slide.hotspot.x = this.parent.world.width / 2 + center.x - sizeX / 2;
+                        slide.hotspot.y = this.parent.world.height / 2 - center.y - slide.hotspot.size / 2;
+                        slide.hotspot.z = center.z;
+                        const cameraState = getCameraState(
+                            center,
+                            userData.size.y * event.object.scale.y,
+                            event.object.position.z,
+                            this.parent.world.cameraFov);
+                        slide.cameraPosition = cameraState.cameraPosition;
+                        slide.cameraLookAt = cameraState.cameraLookAt;
+                        this.parent.world.orbitControl.update();
+                    }
+                } else {
+                    console.log(event.object);
+                    if (event.object.name.indexOf('slideGroup_') == 0) {
+                        const slideGroup = <EditableGroup>event.object;
+                        // correct slide for panorama mode
+                        const userData = event.object.userData;
+                        const slideIndex = userData.parentSlide;
+                        const slide = <Slide>this.parent.world.slides[slideIndex];
+                        const center = new THREE.Vector3(
+                            event.object.position.x,
+                            event.object.position.y,
+                            event.object.position.z,
+                        );
+                        slide.hotspot.size = userData.size.x * event.object.scale.x;
+                        const sizeX = slide.hotspot.size / slide.height * slide.width;
+                        slide.hotspot.x = this.parent.world.width / 2 + center.x - sizeX / 2;
+                        slide.hotspot.y = this.parent.world.height / 2 - center.y - slide.hotspot.size / 2;
+                        slide.hotspot.z = center.z;
+                        // calculate cameraState to look at moved object
+                        if (slideGroup.position.z < this.parent.world.panoCenter.z) {
+                            //  make slide look at center of pano
+                            slideGroup.lookAt(this.parent.world.panoCenter);
+                            const newCameraPos = calcCameraPosition(this.parent.world, slide, slideGroup);
+                            slide.cameraPosition.copy(newCameraPos);
+                            slide.cameraLookAt.copy(slideGroup.position);
+                        } else {
+                            const cameraState = getCameraState(
+                                center,
+                                userData.size.y * event.object.scale.y,
+                                event.object.position.z,
+                                this.parent.world.cameraFov);
+                            slide.cameraPosition = cameraState.cameraPosition;
+                            slide.cameraLookAt = cameraState.cameraLookAt;
+                        }
+                        this.parent.world.orbitControl.update();
+                        //TODO 3 - update Radius, Phi and Theta for saving in XML
+
+                    }
+
                 }
             }
         });

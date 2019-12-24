@@ -26,7 +26,7 @@
             <animation duration="3500"/>
         </slide>
         <slide height="1507" picture="2.jpg" width="2261">
-            <hotspot radius="150" phi="0" theta="-2" size="1"/>
+            <hotspot radius="150" phi="0" theta="0" size="10"/>
             <animation duration="2500"/>
         </slide>
         <slide height="108" picture="3.jpg" width="192">

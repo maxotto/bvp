@@ -1,6 +1,18 @@
 import * as THREE from "three";
 import { Vector3, SphereGeometry, MeshStandardMaterial, Mesh, Color, DoubleSide } from "three";
+import {Slide, World} from "../types";
+import {EditableGroup} from "../core/EditableGroup";
 
+
+export function calcCameraPosition(world: World, slide: Slide, slideGroup: EditableGroup){
+  const newCameraPos = slideGroup.position.clone();
+  const objectWorldPosition = new THREE.Vector3();
+  objectWorldPosition.setFromMatrixPosition(slide.background.matrixWorld);
+  const directionVector = objectWorldPosition.sub(world.panoCenter); 	//Get vector from object to panorama center
+  const unitDirectionVector = directionVector.normalize(); // Convert to unit vector
+  newCameraPos.sub(unitDirectionVector.multiplyScalar(slide.distanceToCamera)); //Multiply unit vector times cameraZ distance
+  return newCameraPos;
+}
 
 export function recalcFromSpherical(radius, phi, theta, panoCenter, worldWidth, worldHeight) {
   const _phi = THREE.Math.degToRad(-90 - phi);
@@ -48,7 +60,7 @@ export function promisifyLoader(loader, onProgress) {
 }
 
 /**
-* 
+*
 * @param items An array of items.
 * @param fn A function that accepts an item from the array and returns a promise.
 * @returns {Promise}
