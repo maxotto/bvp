@@ -44,7 +44,7 @@ export class WorldLoader {
   private _panoZ: number
   private _panoRadius: number
   private _panoCenter: Vector3
-  private _cameraFov = 45
+  private _cameraFov: number
   private _currentObjectName
 
   constructor(scenarioFolder: string) {
@@ -54,18 +54,14 @@ export class WorldLoader {
     const scope = this
     var manager = new THREE.LoadingManager()
     var slideNumber = 0
-    manager.onProgress = function(item, loaded, total) {
-      // console.log(item, loaded, total);
+    manager.onProgress = function (item, loaded, total) {
     }
 
-    manager.onLoad = function() {
-      // console.log('Resources are loaded! Lets start animation!')
+    manager.onLoad = function () {
     }
 
-    var onProgress = function(xhr) {
+    var onProgress = function (xhr) {
       if (xhr.lengthComputable) {
-        // var percentComplete = xhr.loaded / xhr.total * 100;
-        // console.log(Math.round(percentComplete) + '% downloaded');
       }
     }
     return promisifyLoader(new XmlLoader(manager), onProgress)
@@ -90,15 +86,13 @@ export class WorldLoader {
           .then((_texturePainting: THREE.Texture) => {
             var materialPainting = new THREE.MeshBasicMaterial(<
               THREE.MeshBasicMaterialParameters
-            >{
-              color: 0xffffff,
-              map: _texturePainting,
-              side: THREE.DoubleSide,
-            })
+              >{
+                color: 0xffffff,
+                map: _texturePainting,
+                side: THREE.DoubleSide,
+              })
 
-            // TODO
-            // var geometry = new THREE.PlaneBufferGeometry(this._width, this._height);
-            var geometry = new THREE.PlaneBufferGeometry(0.1, 0.1)
+            var geometry = new THREE.PlaneBufferGeometry(0.001, 0.001)
             var mesh = new THREE.Mesh(geometry, materialPainting)
             mesh.name = 'slide0Bg'
             const cameraState = getCameraState(
@@ -177,12 +171,12 @@ export class WorldLoader {
                   .then((_texturePainting: THREE.Texture) => {
                     var materialPainting = new THREE.MeshBasicMaterial(<
                       THREE.MeshBasicMaterialParameters
-                    >{
-                      color: 0xffffff,
-                      map: _texturePainting,
-                      side: THREE.DoubleSide,
-                      transparent: true,
-                    })
+                      >{
+                        color: 0xffffff,
+                        map: _texturePainting,
+                        side: THREE.DoubleSide,
+                        transparent: true,
+                      })
                     if (
                       this.getWorldCoordinatesType() ==
                       WorldCoordinatesType.sphere
@@ -314,6 +308,7 @@ export class WorldLoader {
       })
 
     function loadSVG(data, x, y, z, scale, parentSlide = 0) {
+      // TODO make this part alive againg
       var paths = data.paths
       var group = new THREE.Group()
       group.position.x = 0
@@ -448,6 +443,7 @@ export class WorldLoader {
       return mesh
     }
   }
+
   private getWorldCoordinatesType() {
     let result = WorldCoordinatesType.vector
     if (this._panoCenter && this._panoRadius && this._panoramaPic) {

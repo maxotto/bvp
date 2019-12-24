@@ -6,26 +6,24 @@ import { findGetParameters } from './tools/helpers'
 
 const canvas = <HTMLCanvasElement>document.getElementById('canvas')
 let sceneManager
-var startButton = document.getElementById('startButton')
-startButton.addEventListener('click', init)
 const getParams: any = findGetParameters()
 if (!getParams.p) {
-  //alert('Project name required');
+  // alert('Project name required');
   getParams.p = 'Rom202001'
-  // throw new Error("Something went badly wrong!");
+  // throw new Error("Something went wrong!");
 }
 const l = new WorldLoader(getParams.p)
+
 l.load().then(world => {
   init()
   sceneManager = new SceneManager(canvas, <World>world)
   bindEventListeners()
   render()
 })
+
 function init() {
   var overlay = document.getElementById('overlay')
   overlay.remove()
-  // var audioElement = <HTMLVideoElement>document.getElementById('music');
-  // audioElement.play();
 }
 
 function bindEventListeners() {

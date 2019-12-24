@@ -1,14 +1,16 @@
 import * as THREE from 'three'
 import TWEEN from '@tweenjs/tween.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+
 import { GeneralLights } from './sceneSubjects/GeneralLights'
 import { SceneSubjects } from './sceneSubjects/SceneSubjects'
+import { Panorama } from './sceneSubjects/panorama'
+
 import { SlidesController } from './SlidesController'
 import { MyDataControls } from './tools/datGui'
 
 import { WorldMode, World, WorldCoordinatesType } from './types'
 import * as Stats from 'stats.js'
-import { Panorama } from './sceneSubjects/panorama'
 
 export class SceneManager {
   private clock = new THREE.Clock()
