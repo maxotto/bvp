@@ -1,116 +1,116 @@
-import { Mesh, Vector3 } from "three"
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
+import { Mesh, Vector3 } from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 export type ScenarioData = {
-    width: number,
-    height: number,
-    slides: [],
-    steps: [],
-    mainBackgroundPic: string,
-    mainBackgroundColor: number,
-    mainDuration: number,
-    cameraFov: number,
-    panoramaPic: string,
-    panoX: number,
-    panoY: number,
-    panoZ: number,
-    panoRadius: number,
-    objects: [],
+  width: number
+  height: number
+  slides: []
+  steps: []
+  mainBackgroundPic: string
+  mainBackgroundColor: number
+  mainDuration: number
+  cameraFov: number
+  panoramaPic: string
+  panoX: number
+  panoY: number
+  panoZ: number
+  panoRadius: number
+  objects: []
 }
 
 export type HotSpot = {
-    x: number,
-    y: number,
-    z: number,
-    radius: number,
-    phi: number,
-    theta: number,
-    size: number
+  x: number
+  y: number
+  z: number
+  radius: number
+  phi: number
+  theta: number
+  size: number
 }
 
 export type SVG = {
-    url: string,
-    x: number,
-    y: number,
-    z: number,
-    scale: number,
+  url: string
+  x: number
+  y: number
+  z: number
+  scale: number
 }
 
 export type Slide = {
-    width: number,
-    height: number,
-    picture: string,
-    hotspot: HotSpot,
-    texture: THREE.Texture,
-    background: THREE.Mesh,
-    position: THREE.Vector3,
-    transitionDuration: number,
-    scale: number,
-    cameraPosition: THREE.Vector3,
-    cameraLookAt: THREE.Vector3,
-    distanceToCamera: number,
-    objects: any[]
+  width: number
+  height: number
+  picture: string
+  hotspot: HotSpot
+  texture: THREE.Texture
+  background: THREE.Mesh
+  position: THREE.Vector3
+  transitionDuration: number
+  scale: number
+  cameraPosition: THREE.Vector3
+  cameraLookAt: THREE.Vector3
+  distanceToCamera: number
+  objects: any[]
 }
 
 export enum WorldMode {
-    'show',
-    'editor'
+  'show',
+  'editor',
 }
 
 export enum WorldCoordinatesType {
-    'vector',
-    'sphere'
+  'vector',
+  'sphere',
 }
 
 export type World = {
-    type: WorldCoordinatesType,
-    scene: THREE.Scene,
-    renderer: THREE.Renderer,
-    camera: THREE.PerspectiveCamera,
-    orbitControl: OrbitControls,
-    width: number,
-    height: number,
-    slides: Slide[],
-    objects: [],
-    steps: [],
-    cameraFov: number,
-    mainSlideDuration: number,
-    mainBackgroundColor: number,
-    mainBackgroundPic: string,
-    panoramaPic: string,
-    panoCenter: Vector3,
-    panoRadius: number,
-    mode: WorldMode,
-    draggables: any[]
+  type: WorldCoordinatesType
+  scene: THREE.Scene
+  renderer: THREE.Renderer
+  camera: THREE.PerspectiveCamera
+  orbitControl: OrbitControls
+  width: number
+  height: number
+  slides: Slide[]
+  objects: []
+  steps: []
+  cameraFov: number
+  mainSlideDuration: number
+  mainBackgroundColor: number
+  mainBackgroundPic: string
+  panoramaPic: string
+  panoCenter: Vector3
+  panoRadius: number
+  mode: WorldMode
+  draggables: any[]
 }
 
 export enum UserAction {
-    'navigate',
-    'mode'
+  'navigate',
+  'mode',
 }
 
 export enum MouseEvents {
-    'mousedown',
-    'mouseup',
-    'click',
-    'dblclick',
-    'mousemove',
-    'mouseover',
-    'mousewheel',
-    'mouseout',
-    'contextmenu'
+  'mousedown',
+  'mouseup',
+  'click',
+  'dblclick',
+  'mousemove',
+  'mouseover',
+  'mousewheel',
+  'mouseout',
+  'contextmenu',
 }
 
 export enum KeyboardEvents {
-    'keydown',
-    'keypress',
-    'keyup'
+  'keydown',
+  'keypress',
+  'keyup',
 }
 
 export enum TouchEvents {
-    'touchstart',
-    'touchmove',
-    'touchend',
-    'touchenter',
-    'touchleave'
+  'touchstart',
+  'touchmove',
+  'touchend',
+  'touchenter',
+  'touchleave',
 }
