@@ -19,59 +19,62 @@ export class EditableText extends Object3D {
   constructor(
     private text: string,
     private font: string,
-    private fontWeight: number,
+    private fontWeight: string,
     private size: number,
-    private curvedSegments: number,
+    private curveSegments: number,
     private materials: Material[],
     private hover: number
   ) {
     super()
     const loader = new FontLoader()
-    loader.load('fonts/' + font + '_' + fontWeight + '.json', function (
-      fontLoaded
-    ) {
-      let textGeo = new TextGeometry(text, {
-        font: fontLoaded,
-        size: this.size,
-        height: this.size * this._thicknessRatio,
-        curveSegments: this.curveSegments,
-        bevelThickness: this.size * this._bevelThicknessRatio,
-        bevelSize: this.size * this._bevelSizeRatio,
-        bevelEnabled: this._bevelEnabled,
-      })
-      textGeo.computeBoundingBox()
-      textGeo.computeVertexNormals()
-      const triangleAreaHeuristics =
-        0.001 * (this.size * this._thicknessRatio * this.size)
-      for (let i = 0; i < textGeo.faces.length; i++) {
-        const face = textGeo.faces[i]
-        if (face.materialIndex == 1) {
+    loader.load('fonts/' + font + '_' + fontWeight + '.json', fontLoaded => {
+      this.createTextMesh(fontLoaded)
+    })
+  }
+
+  private createTextMesh(fontLoaded) {
+    let textGeo = new TextGeometry(this.text, {
+      font: fontLoaded,
+      size: this.size,
+      height: this.size * this._thicknessRatio,
+      curveSegments: this.curveSegments,
+      bevelThickness: this.size * this._bevelThicknessRatio,
+      bevelSize: this.size * this._bevelSizeRatio,
+      bevelEnabled: this._bevelEnabled,
+    })
+    textGeo.computeBoundingBox()
+    textGeo.computeVertexNormals()
+    const triangleAreaHeuristics =
+      0.001 * (this.size * this._thicknessRatio * this.size)
+    for (let i = 0; i < textGeo.faces.length; i++) {
+      const face = textGeo.faces[i]
+      if (face.materialIndex == 1) {
+        for (let j = 0; j < face.vertexNormals.length; j++) {
+          face.vertexNormals[j].z = 0
+          face.vertexNormals[j].normalize()
+        }
+        let va = textGeo.vertices[face.a]
+        let vb = textGeo.vertices[face.b]
+        let vc = textGeo.vertices[face.c]
+        let s = GeometryUtils.triangleArea(va, vb, vc)
+        if (s > triangleAreaHeuristics) {
           for (let j = 0; j < face.vertexNormals.length; j++) {
-            face.vertexNormals[j].z = 0
-            face.vertexNormals[j].normalize()
-          }
-          let va = textGeo.vertices[face.a]
-          let vb = textGeo.vertices[face.b]
-          let vc = textGeo.vertices[face.c]
-          let s = GeometryUtils.triangleArea(va, vb, vc)
-          if (s > triangleAreaHeuristics) {
-            for (let j = 0; j < face.vertexNormals.length; j++) {
-              face.vertexNormals[j].copy(face.normal)
-            }
+            face.vertexNormals[j].copy(face.normal)
           }
         }
       }
+    }
 
-      const centerOffset =
-        -0.5 * (textGeo.boundingBox.max.x - textGeo.boundingBox.min.x)
-      const textGeoBuff = new BufferGeometry().fromGeometry(textGeo)
-      const textMesh1 = new Mesh(textGeo, this.materials)
-      textMesh1.position = new Vector3(centerOffset, this.hover, 0)
-      textMesh1.rotation.x = 0
-      textMesh1.rotation.y = Math.PI * 2
+    const centerOffset =
+      -0.5 * (textGeo.boundingBox.max.x - textGeo.boundingBox.min.x)
 
-      this.super.add(textMesh1)
-    })
+    const textGeoBuff = new BufferGeometry().fromGeometry(textGeo)
+    const textMesh1 = new Mesh(textGeoBuff, this.materials)
+    textMesh1.position.copy(new Vector3(centerOffset, this.hover, 0))
+    textMesh1.rotation.x = 0
+    textMesh1.rotation.y = Math.PI * 2
+
+    super.add(textMesh1)
   }
 
   get thicknessRatio(): number {
