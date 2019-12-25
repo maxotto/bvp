@@ -2,7 +2,11 @@ import * as THREE from 'three'
 import { Slide, WorldCoordinatesType, WorldMode } from './types'
 // import { DragControls } from './tools/MyDragControls';
 import { DragControls } from './core/DragControls'
-import { calcCameraPosition, getCameraState, recalcToSpherical } from './tools/helpers'
+import {
+  calcCameraPosition,
+  getCameraState,
+  recalcToSpherical,
+} from './tools/helpers'
 import { EditableGroup } from './core/EditableGroup'
 import { Spherical, Vector2, Vector3 } from 'three'
 
@@ -94,7 +98,10 @@ export class SlideEditor {
               slide.cameraPosition = cameraState.cameraPosition
               slide.cameraLookAt = cameraState.cameraLookAt
             }
-            const { radius, phi, theta } = recalcToSpherical(slide, this.parent.world.panoCenter)
+            const { radius, phi, theta } = recalcToSpherical(
+              slide,
+              this.parent.world.panoCenter
+            )
             slide.hotspot.radius = radius
             slide.hotspot.phi = phi
             slide.hotspot.theta = 0 - theta

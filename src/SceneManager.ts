@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import { GeneralLights } from './sceneSubjects/GeneralLights'
 import { SceneSubjects } from './sceneSubjects/SceneSubjects'
+import { TextObjects } from './sceneSubjects/TextObjects'
 import { Panorama } from './sceneSubjects/panorama'
 
 import { SlidesController } from './SlidesController'
@@ -121,6 +122,7 @@ export class SceneManager {
     if (world.type == WorldCoordinatesType.sphere) {
       sceneSubjects.push(new Panorama(world, 32))
     }
+    sceneSubjects.push(new TextObjects(scene))
     return sceneSubjects
   }
 

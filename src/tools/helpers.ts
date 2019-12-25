@@ -27,13 +27,15 @@ export function calcCameraPosition(
 }
 
 export function recalcToSpherical(slide: Slide, panoCenter: Vector3) {
-  const coordsFromPanoCenter = new Vector3().copy(panoCenter).sub(slide.cameraLookAt)
-  const sphereCoordinates = new Spherical().setFromVector3(coordsFromPanoCenter);
+  const coordsFromPanoCenter = new Vector3()
+    .copy(panoCenter)
+    .sub(slide.cameraLookAt)
+  const sphereCoordinates = new Spherical().setFromVector3(coordsFromPanoCenter)
 
   return {
     radius: sphereCoordinates.radius,
     phi: THREE.Math.radToDeg(sphereCoordinates.phi) - 90,
-    theta: THREE.Math.radToDeg(sphereCoordinates.theta)
+    theta: THREE.Math.radToDeg(sphereCoordinates.theta),
   }
 }
 
@@ -63,7 +65,7 @@ export function findGetParameters() {
   location.search
     .substr(1)
     .split('&')
-    .forEach(function (item) {
+    .forEach(function(item) {
       queryDict[item.split('=')[0]] = item.split('=')[1]
     })
   return queryDict
@@ -89,8 +91,8 @@ export function promisifyLoader(loader, onProgress) {
  * based on https://stackoverflow.com/questions/31413749/node-js-promise-all-and-foreach/41791149#41791149
  */
 export function forEachPromise(items, fn, context) {
-  return items.reduce(function (promise, item) {
-    return promise.then(function () {
+  return items.reduce(function(promise, item) {
+    return promise.then(function() {
       return fn(item, context)
     })
   }, Promise.resolve())

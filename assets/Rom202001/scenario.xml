@@ -15,6 +15,7 @@
     <slides>
         <slide height="108" picture="1.png" width="192">
             <hotspot x="3500" y="-1000" z="5500" size="1"/>
+            <text ></text>
             <animation duration="3500"/>
         </slide>
         <slide height="108" picture="empty.png" width="192">
