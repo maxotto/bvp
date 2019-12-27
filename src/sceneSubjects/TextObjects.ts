@@ -1,16 +1,14 @@
-import * as THREE from 'three'
-import { GeometryUtils } from 'three/examples/jsm/utils/GeometryUtils.js'
-import { createSphere } from '../tools/helpers'
-import { Color, Vector3 } from 'three'
+import { Vector3, MeshPhongMaterial } from 'three'
 import { EditableText } from '../core/EditableText'
 
 export class TextObjects {
+  private mesh:EditableText
   constructor(private scene) {
     const materials = [
-      new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true }), // front
-      new THREE.MeshPhongMaterial({ color: 0xffffff }), // side
+      new MeshPhongMaterial({ color: 0xffffff, flatShading: true }), // front
+      new MeshPhongMaterial({ color: 0xffffff }), // side
     ]
-    const textObj = new EditableText(
+    this.mesh = new EditableText(
       'На радость Виталику 2',
       'droid_serif',
       'bold.typeface',
@@ -19,12 +17,13 @@ export class TextObjects {
       materials,
       0
     )
-    textObj.position.copy(new Vector3(0, 0, 254))
-    scene.add(textObj)
+    this.mesh.position.copy(new Vector3(0, 0, 254))
+    scene.add(this.mesh)
   }
 
   update(time) {
-    //this.light.intensity = (Math.sin(time) + 1.5) / 1.5;
-    //this.light.color.setHSL(Math.sin(time), 0.5, 0.5);
+    // this.mesh.rotateZ(0.03)
+    // this.mesh.rotateX(0.02)
+    // this.mesh.rotateY(0.05)
   }
 }
