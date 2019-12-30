@@ -34,7 +34,7 @@ export class TextObjects {
             curveSegments: 10,
             bevelThickness: 15,
             bevelSize: 15,
-            bevelEnabled: false,
+            bevelEnabled: true,
             bevelSegments: 100,
           })
         )

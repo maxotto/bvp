@@ -20,7 +20,7 @@ export class TestLetter extends Letter {
     });
     const geometry = <TextBufferGeometry>this.geometry
     var count = geometry.attributes.position.count;
-    var displacement = new Float32BufferAttribute(count * 3, 30);
+    var displacement = new Float32BufferAttribute(count * 3, 3);
     geometry.setAttribute('displacement', displacement);
     var customColor = new Float32BufferAttribute(count * 3, 3);
     geometry.setAttribute('customColor', customColor);
@@ -30,8 +30,8 @@ export class TestLetter extends Letter {
       color.toArray(customColor.array, i * customColor.itemSize);
     }
     const line = new Line(this.geometry, shaderMaterial);
-    line.rotation.x = 0.2;
-    super.children = []
+    line.rotation.x = 0.8;
+    // super.children = []
     super.add(line)
   }
 }
