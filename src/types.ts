@@ -1,4 +1,4 @@
-import { Mesh, Vector3 } from 'three'
+import { Mesh, Vector3, Font } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 export type ScenarioData = {
@@ -16,6 +16,17 @@ export type ScenarioData = {
   panoZ: number
   panoRadius: number
   objects: []
+}
+
+export type TextParams = {
+  font?: Font,
+  size: number,
+  height: number,
+  curveSegments: number,
+  bevelThickness: number,
+  bevelSize: number,
+  bevelEnabled: boolean,
+  bevelSegments: number,
 }
 
 export type HotSpot = {
