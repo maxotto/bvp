@@ -1,10 +1,10 @@
-import { Letter } from "./Letter";
+import { Text } from "./Text";
 import { Font, Color, ShaderMaterial, AdditiveBlending, Line, TextBufferGeometry, Float32BufferAttribute } from "three";
 import { TextParams } from "../../types";
 
-export class TestLetter extends Letter {
-  constructor(letter: string, font: Font, params: TextParams) {
-    super(letter, font, params)
+export class LineText extends Text {
+  constructor(text: string, font: Font, params: TextParams) {
+    super(text, font, params)
     const uniforms = {
       amplitude: { value: 5.0 },
       opacity: { value: 0.3 },
@@ -31,7 +31,7 @@ export class TestLetter extends Letter {
     }
     const line = new Line(this.geometry, shaderMaterial);
     line.rotation.x = 0.8;
-    // super.children = []
+    super.children = []
     super.add(line)
   }
 }

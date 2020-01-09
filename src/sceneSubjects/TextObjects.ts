@@ -1,62 +1,67 @@
-import { Vector3, MeshPhongMaterial, Color, ShaderMaterial, AdditiveBlending, TextBufferGeometry, FontLoader, Float32BufferAttribute, Line, MeshStandardMaterial } from 'three'
-import { EditableText } from '../core/Text/EditableText'
-import { Letter } from '../core/Text/Letter'
-import { TestLetter } from '../core/Text/TestLetter'
+import { Vector3, FontLoader, MeshPhongMaterial } from 'three'
+import { Text } from '../core/Text/Text'
+import { LineText } from '../core/Text/LineText'
 
 export class TextObjects {
-  private mesh: EditableText
-  constructor(private scene) {
-    const materials = [
-      new MeshPhongMaterial({ color: 0xffffff, flatShading: true }), // front
-      new MeshPhongMaterial({ color: 0xffffff }), // side
-    ]
-    this.mesh = new EditableText(
-      'На радость Виталику 2',
-      'droid_serif',
-      'bold.typeface',
-      10,
-      3,
-      materials,
-      0
-    )
-    this.mesh.position.copy(new Vector3(0, 0, 254))
-    scene.add(this.mesh)
-    // TEST
+  private line: Text
+  private text: Text
+  constructor(scene) {
     var loader = new FontLoader();
+    const material = new MeshPhongMaterial({ color: 0xffffff, flatShading: true })
     const text = "На радость Виталику 3"
     loader.load('fonts/Fira Code Light_Regular.json', (font) => {
-      const letters: Letter[] = []
-      for (var i = 0; i < text.length; i++) {
-        letters.push(
-          new TestLetter(text[i], font, {
-            size: 200,
-            height: 30,
-            curveSegments: 10,
-            bevelThickness: 15,
-            bevelSize: 15,
-            bevelEnabled: true,
-            bevelSegments: 100,
-          })
-        )
-      }
+      const all = new Text(
+        text,
+        font,
+        {
+          size: 200,
+          height: 30,
+          curveSegments: 10,
+          bevelThickness: 15,
+          bevelSize: 15,
+          bevelEnabled: true,
+          bevelSegments: 100,
+        },
+        material
+      )
+
       let startX = -1000;
-      letters[0].position.copy(new Vector3(0, 0, 1000))
-      letters.forEach((e, i, l) => {
-        e.position.copy(new Vector3(
-          startX + i * 300,
-          0,
-          1000
-        ));
-        scene.add(e);
-      });
+      all.position.copy(new Vector3(
+        startX + 1660,
+        -250,
+        1000
+      ))
+
+      scene.add(all)
+      this.text = all
+
+      const line = new LineText(text, font, {
+        size: 200,
+        height: 30,
+        curveSegments: 10,
+        bevelThickness: 15,
+        bevelSize: 15,
+        bevelEnabled: false,
+        bevelSegments: 100,
+      })
+
+      line.position.copy(new Vector3(
+        startX + 1660,
+        0,
+        1000
+      ))
+
+      scene.add(line)
+      this.line = line
+
     });
 
 
   }
 
   update(time) {
-    // this.mesh.rotateZ(0.03)
-    // this.mesh.rotateX(0.02)
-    // this.mesh.rotateY(0.05)
+    // this.line.rotateX(0.02)
+    // this.text.rotateY(0.03)
+    // this.text.rotateX(0.1)
   }
 }
