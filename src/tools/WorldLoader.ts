@@ -7,6 +7,8 @@ import {
   getCameraState,
   createSphere,
   recalcFromSpherical,
+  justifyText,
+  createMaterial,
 } from './helpers'
 import * as THREE from 'three'
 
@@ -27,7 +29,12 @@ import {
   WireframeGeometry,
   BoxGeometry,
   LineSegments,
+  FontLoader,
+  Font,
 } from 'three'
+
+import { Text } from '../core/Text/Text'
+import { TextBox } from '../core/Text/TextBox'
 
 export class WorldLoader {
   private _scenarioFolder: string
@@ -54,11 +61,11 @@ export class WorldLoader {
     const scope = this
     var manager = new THREE.LoadingManager()
     var slideNumber = 0
-    manager.onProgress = function(item, loaded, total) {}
+    manager.onProgress = function (item, loaded, total) { }
 
-    manager.onLoad = function() {}
+    manager.onLoad = function () { }
 
-    var onProgress = function(xhr) {
+    var onProgress = function (xhr) {
       if (xhr.lengthComputable) {
       }
     }
@@ -84,11 +91,11 @@ export class WorldLoader {
           .then((_texturePainting: THREE.Texture) => {
             var materialPainting = new THREE.MeshBasicMaterial(<
               THREE.MeshBasicMaterialParameters
-            >{
-              color: 0xffffff,
-              map: _texturePainting,
-              side: THREE.DoubleSide,
-            })
+              >{
+                color: 0xffffff,
+                map: _texturePainting,
+                side: THREE.DoubleSide,
+              })
 
             var geometry = new THREE.PlaneBufferGeometry(0.001, 0.001)
             var mesh = new THREE.Mesh(geometry, materialPainting)
@@ -142,6 +149,8 @@ export class WorldLoader {
                         )
                         newSlide.objects.push(mesh)
                       })
+                  } else if (object.type == 'text') {
+                    return Promise.resolve(true)
                   }
                 },
                 this
@@ -169,12 +178,12 @@ export class WorldLoader {
                   .then((_texturePainting: THREE.Texture) => {
                     var materialPainting = new THREE.MeshBasicMaterial(<
                       THREE.MeshBasicMaterialParameters
-                    >{
-                      color: 0xffffff,
-                      map: _texturePainting,
-                      side: THREE.DoubleSide,
-                      transparent: true,
-                    })
+                      >{
+                        color: 0xffffff,
+                        map: _texturePainting,
+                        side: THREE.DoubleSide,
+                        transparent: true,
+                      })
                     if (
                       this.getWorldCoordinatesType() ==
                       WorldCoordinatesType.sphere
@@ -244,29 +253,51 @@ export class WorldLoader {
                     if (slide.objects) {
                       p = forEachPromise(
                         slide.objects,
-                        (svg, context) => {
-                          this._currentObjectName = svg['url']
-                          var svgUrl =
-                            'assets/' +
-                            context._scenarioFolder +
-                            this._currentObjectName
-                          return promisifyLoader(
-                            new SVGLoader(manager),
-                            onProgress
-                          )
-                            .load(svgUrl)
-                            .then(svgData => {
-                              const z = +slide.hotspot.z + +svg['z']
-                              const mesh = loadSVG(
-                                svgData,
-                                +svg['x'] - newSlide.width / 2,
-                                -svg['y'] + newSlide.height / 2,
-                                z,
-                                +svg['scale'] / scale,
-                                slideNumber
-                              )
-                              newSlide.objects.push(mesh)
-                            })
+                        (object, context) => {
+                          if (object.type == 'svg') {
+                            this._currentObjectName = object['url']
+                            var svgUrl =
+                              'assets/' +
+                              context._scenarioFolder +
+                              this._currentObjectName
+                            return promisifyLoader(
+                              new SVGLoader(manager),
+                              onProgress
+                            )
+                              .load(svgUrl)
+                              .then(svgData => {
+                                const z = +slide.hotspot.z + +object['z']
+                                const mesh = loadSVG(
+                                  svgData,
+                                  +object['x'] - newSlide.width / 2,
+                                  -object['y'] + newSlide.height / 2,
+                                  z,
+                                  +object['scale'] / scale,
+                                  slideNumber
+                                )
+                                newSlide.objects.push(mesh)
+                              })
+                          } else if (object.type == 'text') {
+                            return promisifyLoader(new FontLoader(manager), onProgress)
+                              .load('fonts/' + object.font)
+                              .then(font => {
+                                const params = {
+                                  size: +object.size,
+                                  height: + object.thickness,
+                                  curveSegments: +object.curveSegments,
+                                  bevelThickness: +object.bevelThickness,
+                                  bevelSize: +object.bevelSize,
+                                  bevelEnabled: object.bevelEnabled == 'true' ? true : false,
+                                  bevelSegments: +object.bevelSegments,
+                                }
+                                const text = justifyText(object.text, object.paragraphWidth, object.justify)
+                                const material = createMaterial(object.material, { color: +object.color })
+                                const mesh = new Text(text, <Font>font, params, material)
+                                const tb = new TextBox(20, 'center', object.text, <Font>font, params, material)
+                                mesh.position.copy(new Vector3(+object.x, +object.y, +object.z))
+                                newSlide.objects.push(mesh)
+                              })
+                          }
                         },
                         this
                       )

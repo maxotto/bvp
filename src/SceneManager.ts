@@ -22,6 +22,7 @@ export class SceneManager {
   private stats: Stats
 
   constructor(private canvas: HTMLCanvasElement, private world: World) {
+    console.log(world)
     this.screenDimensions = {
       width: this.canvas.width,
       height: this.canvas.height,
@@ -122,7 +123,7 @@ export class SceneManager {
     if (world.type == WorldCoordinatesType.sphere) {
       sceneSubjects.push(new Panorama(world, 32))
     }
-    sceneSubjects.push(new TextObjects(scene))
+    // sceneSubjects.push(new TextObjects(scene))
     return sceneSubjects
   }
 

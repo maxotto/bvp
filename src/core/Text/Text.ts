@@ -10,7 +10,6 @@ export class Text extends Object3D {
     this.type = 'Text'
     params.font = font;
     this.geometry = new TextBufferGeometry(text, params)
-    console.log(this.geometry)
     this.geometry.center();
     super.add(new Mesh(
       this.geometry,

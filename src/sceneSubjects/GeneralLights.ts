@@ -3,7 +3,7 @@ import { PointLight } from 'three'
 export class GeneralLights {
   private light
   constructor(scene) {
-    this.light = new PointLight('#ffffffw', 1)
+    this.light = new PointLight('#ffffff', 1)
     this.light.position.set(1550, 1050, 15050)
     scene.add(this.light)
   }

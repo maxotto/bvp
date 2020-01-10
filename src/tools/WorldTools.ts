@@ -3,6 +3,7 @@ import * as xmlConverter from 'xml-js'
 
 export function getWorldFromXml(xmlText) {
   function parseNode(node) {
+    let newObj = {}
     if (node.nodeType !== 1) return
     switch (node.nodeName) {
       case 'world':
@@ -31,28 +32,48 @@ export function getWorldFromXml(xmlText) {
         }
         break
       case 'svg':
-        let newSvg = {
-          type: 'svg',
-        }
-        //               console.log(node.parentNode.nodeName)
+        newObj['type'] = 'svg'
         for (var prop in node.attributes) {
           if (node.attributes.hasOwnProperty(prop)) {
             var propName = node.attributes[prop].name
             var propValue = node.attributes[prop].value
-            newSvg[propName] = propValue
+            newObj[propName] = propValue
           }
         }
         if (node.parentNode.nodeName == 'world') {
           if (!world.hasOwnProperty('objects')) {
             world['objects'] = []
           }
-          world['objects'].push(newSvg)
+          world['objects'].push(newObj)
         } else if (node.parentNode.nodeName == 'slide') {
           const lastSlideIndex = world['slides'].length - 1
           if (!world['slides'][lastSlideIndex].hasOwnProperty('objects')) {
             world['slides'][lastSlideIndex]['objects'] = []
           }
-          world['slides'][lastSlideIndex]['objects'].push(newSvg)
+          world['slides'][lastSlideIndex]['objects'].push(newObj)
+        }
+        break
+      case 'text':
+        newObj['type'] = 'text'
+        newObj['text'] = node.textContent
+        for (var prop in node.attributes) {
+          if (node.attributes.hasOwnProperty(prop)) {
+            var propName = node.attributes[prop].name
+            var propValue = node.attributes[prop].value
+            newObj[propName] = propValue
+          }
+        }
+        if (node.parentNode.nodeName == 'world') {
+          if (!world.hasOwnProperty('objects')) {
+            world['objects'] = []
+          }
+          world['objects'].push(newObj)
+        } else if (node.parentNode.nodeName == 'slide') {
+          const lastSlideIndex = world['slides'].length - 1
+          if (!world['slides'][lastSlideIndex].hasOwnProperty('objects')) {
+            world['slides'][lastSlideIndex]['objects'] = []
+          }
+          world['slides'][lastSlideIndex]['objects'].push(newObj)
         }
         break
       case 'slide':
@@ -93,6 +114,7 @@ export function getWorldFromXml(xmlText) {
           }
         }
         break
+
     }
 
     var nodes = node.childNodes

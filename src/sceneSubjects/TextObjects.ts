@@ -8,7 +8,7 @@ export class TextObjects {
   constructor(scene) {
     var loader = new FontLoader();
     const material = new MeshPhongMaterial({ color: 0xffffff, flatShading: true })
-    const text = "На радость Виталику 3"
+    const text = "На радость\n Виталику 3"
     loader.load('fonts/Fira Code Light_Regular.json', (font) => {
       const all = new Text(
         text,
