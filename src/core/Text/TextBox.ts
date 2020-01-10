@@ -1,19 +1,24 @@
-import { Object3D, Font, Material, TextBufferGeometry } from "three";
+import { Object3D, Material, TextBufferGeometry, Group, Font, Vector3 } from "three";
 import { TextParams } from "../../types";
+import { Text } from "./Text";
 
 export class TextBox extends Object3D {
   private words: Word[] = []
   private lines: string[][] = []
+  private mesh = new Group()
   constructor(
     private width: number,
     private justify: string, //TODO make enum instead string
     private text: string,
-    private font: Font,
+    private font,
     private params: TextParams,
     public material?: Material | Material[]
   ) {
     super()
-    console.log(font)
+    const data = font.data
+    console.log(data)
+    const scale = params.size / data.resolution;
+    const line_height = (font.data.boundingBox.yMax - font.data.boundingBox.yMin + font.data.underlineThickness) * scale;
     let s = text.trim()
     const words = s.replace(/\s{2,}/g, ' ').split(' ');
     words.unshift('Ш')
@@ -46,6 +51,18 @@ export class TextBox extends Object3D {
       }
     });
     console.log(this.lines)
+    let YPos = this.lines.length * line_height / 2.5
+    this.lines.forEach(line => {
+      const str = line.join(' ');
+      const l = new Text(str, <Font>font, params, material)
+      l.position.copy(new Vector3(
+        0, YPos, 0
+      ))
+      this.mesh.add(l)
+      YPos -= line_height
+    });
+
+    super.add(this.mesh)
 
   }
 }

@@ -14,14 +14,14 @@
     width="1000">
     <slides>
         <slide height="1080" picture="empty.png" width="1920">
-            <hotspot x="3500" y="-1000" z="5500" size="18"/>
+            <hotspot x="3500" y="-1000" z="5500" size="50"/>
             <text
                 x="0"
                 y="0"
                 z="0"
                 font="Fira Code Retina_Regular.json"
-                size="1"
-                thickness="0.05"
+                size="2"
+                thickness="0.5"
                 curveSegments="10"
                 bevelThickness="0.05"
                 bevelSize="0.05"
@@ -29,10 +29,10 @@
                 bevelSegments="10"
                 material="MeshToonMaterial"
                 color="0xff99ee"
-                paragraphWidth="22"
+                paragraphWidth="40"
                 justify="width"
                 >
-                ТЕЛЕРАДИОСЕТЬ   РОССИИ ИТОГИ РЕАЛИЗАЦИИ ФЕДЕРАЛЬНОЙ ЦЕЛЕВОЙ ПРОГРАММЫ РАЗВИТИЯ ТЕЛЕРАДИОВЕЩАНИЯ В РОССИЙСКОЙ ФЕДЕРАЦИИ
+                ТЕЛЕРАДИОСЕТЬ РОССИИ ИТОГИ РЕАЛИЗАЦИИ ФЕДЕРАЛЬНОЙ ЦЕЛЕВОЙ ПРОГРАММЫ РАЗВИТИЯ ТЕЛЕРАДИОВЕЩАНИЯ В РОССИЙСКОЙ ФЕДЕРАЦИИ
             </text>
             <animation duration="3500"/>
         </slide>
