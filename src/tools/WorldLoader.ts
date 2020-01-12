@@ -291,10 +291,8 @@ export class WorldLoader {
                                   bevelEnabled: object.bevelEnabled == 'true' ? true : false,
                                   bevelSegments: +object.bevelSegments,
                                 }
-                                const text = justifyText(object.text, object.paragraphWidth, object.justify)
                                 const material = createMaterial(object.material, { color: +object.color })
-                                // const mesh = new Text(text, <Font>font, params, material)
-                                const mesh = new TextBox(object.paragraphWidth, 'center', object.text, <Font>font, params, material)
+                                const mesh = new TextBox(object.paragraphWidth, object.justify, object.text, <Font>font, params, material)
                                 mesh.position.copy(new Vector3(+object.x, +object.y, +object.z))
                                 newSlide.objects.push(mesh)
                               })
