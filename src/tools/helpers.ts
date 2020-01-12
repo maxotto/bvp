@@ -18,12 +18,12 @@ export function createMaterial(materialClass, params) {
 }
 
 export function justifyText(str, len, mode?) {
-  const re = RegExp("(?:\\s|^)(.{1," + len + "})(?=\\s|$)", "g");
-  const res = [];
-  const finalResult = [];
+  const re = RegExp('(?:\\s|^)(.{1,' + len + '})(?=\\s|$)', 'g')
+  const res = []
+  const finalResult = []
   let m
   while ((m = re.exec(str)) !== null) {
-    res.push(m[1]);
+    res.push(m[1])
   }
   if (!mode) mode = 'width'
   switch (mode) {
@@ -33,19 +33,19 @@ export function justifyText(str, len, mode?) {
           while (res[i].length < len) {
             for (let j = 0; j < res[i].length - 1; j++) {
               if (res[i][j] == ' ') {
-                res[i] = res[i].substring(0, j) + " " + res[i].substring(j);
-                if (res[i].length == len) break;
-                while (res[i][j] == ' ') j++;
+                res[i] = res[i].substring(0, j) + ' ' + res[i].substring(j)
+                if (res[i].length == len) break
+                while (res[i][j] == ' ') j++
               }
             }
           }
         }
-        finalResult.push(res[i]);
+        finalResult.push(res[i])
       }
-      finalResult.push(res[res.length - 1]);
-      return finalResult.join('\n');
+      finalResult.push(res[res.length - 1])
+      return finalResult.join('\n')
     case 'left':
-      return res.join('\n');
+      return res.join('\n')
   }
 }
 
@@ -102,7 +102,7 @@ export function findGetParameters() {
   location.search
     .substr(1)
     .split('&')
-    .forEach(function (item) {
+    .forEach(function(item) {
       queryDict[item.split('=')[0]] = item.split('=')[1]
     })
   return queryDict
@@ -128,8 +128,8 @@ export function promisifyLoader(loader, onProgress) {
  * based on https://stackoverflow.com/questions/31413749/node-js-promise-all-and-foreach/41791149#41791149
  */
 export function forEachPromise(items, fn, context) {
-  return items.reduce(function (promise, item) {
-    return promise.then(function () {
+  return items.reduce(function(promise, item) {
+    return promise.then(function() {
       return fn(item, context)
     })
   }, Promise.resolve())

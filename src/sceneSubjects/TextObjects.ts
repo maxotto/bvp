@@ -6,10 +6,13 @@ export class TextObjects {
   private line: Text
   private text: Text
   constructor(scene) {
-    var loader = new FontLoader();
-    const material = new MeshPhongMaterial({ color: 0xffffff, flatShading: true })
-    const text = "На радость\n Виталику 3"
-    loader.load('fonts/Fira Code Light_Regular.json', (font) => {
+    var loader = new FontLoader()
+    const material = new MeshPhongMaterial({
+      color: 0xffffff,
+      flatShading: true,
+    })
+    const text = 'На радость\n Виталику 3'
+    loader.load('fonts/Fira Code Light_Regular.json', font => {
       const all = new Text(
         text,
         font,
@@ -25,12 +28,8 @@ export class TextObjects {
         material
       )
 
-      let startX = -1000;
-      all.position.copy(new Vector3(
-        startX + 1660,
-        -250,
-        1000
-      ))
+      let startX = -1000
+      all.position.copy(new Vector3(startX + 1660, -250, 1000))
 
       scene.add(all)
       this.text = all
@@ -45,18 +44,11 @@ export class TextObjects {
         bevelSegments: 100,
       })
 
-      line.position.copy(new Vector3(
-        startX + 1660,
-        0,
-        1000
-      ))
+      line.position.copy(new Vector3(startX + 1660, 0, 1000))
 
       scene.add(line)
       this.line = line
-
-    });
-
-
+    })
   }
 
   update(time) {

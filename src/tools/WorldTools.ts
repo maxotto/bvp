@@ -114,7 +114,6 @@ export function getWorldFromXml(xmlText) {
           }
         }
         break
-
     }
 
     var nodes = node.childNodes

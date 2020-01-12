@@ -1,6 +1,13 @@
-import { Object3D, Material, TextBufferGeometry, Group, Font, Vector3 } from "three";
-import { TextParams } from "../../types";
-import { Text } from "./Text";
+import {
+  Object3D,
+  Material,
+  TextBufferGeometry,
+  Group,
+  Font,
+  Vector3,
+} from 'three'
+import { TextParams } from '../../types'
+import { Text } from './Text'
 
 export class TextBox extends Object3D {
   private lines: string[][] = []
@@ -18,10 +25,13 @@ export class TextBox extends Object3D {
     super.add(this.makeTextBlock())
   }
 
-  private splitText(){
+  private splitText() {
     const words: Word[] = []
-    const w = this.text.trim().replace(/\s{2,}/g, ' ').split(' ');
-    w.unshift('W')  // use W to calculate SPACE geometry
+    const w = this.text
+      .trim()
+      .replace(/\s{2,}/g, ' ')
+      .split(' ')
+    w.unshift('W') // use W to calculate SPACE geometry
     w.forEach((word, i) => {
       const geometry = new TextBufferGeometry(word, this.params)
       geometry.center()
@@ -32,9 +42,9 @@ export class TextBox extends Object3D {
         width: width,
         height: height,
       })
-    });
+    })
 
-    let lineWidth = 0;
+    let lineWidth = 0
     this.lines.push([])
     const spaceWidth = words[0].width
     words.forEach((word, i) => {
@@ -48,35 +58,42 @@ export class TextBox extends Object3D {
         }
         this.lines[this.lines.length - 1].push(word.text)
       }
-    });
+    })
   }
 
-  private makeTextBlock(){
+  private makeTextBlock() {
     const mesh = new Group()
     const data = this.font.data
     const scale = this.params.size / data.resolution
-    const line_height = (data.boundingBox.yMax - data.boundingBox.yMin + data.underlineThickness) * scale
+    const line_height =
+      (data.boundingBox.yMax -
+        data.boundingBox.yMin +
+        data.underlineThickness) *
+      scale
 
-    switch(this.justify){
+    switch (this.justify) {
       default:
-        let YPos = this.lines.length * line_height / 2.5
+        let YPos = (this.lines.length * line_height) / 2.5
         this.lines.forEach(line => {
-          const l = new Text(line.join(' '), <Font>this.font, this.params, this.material)
-          l.position.copy(new Vector3(
-            0, YPos, 0
-          ))
+          const l = new Text(
+            line.join(' '),
+            <Font>this.font,
+            this.params,
+            this.material
+          )
+          l.position.copy(new Vector3(0, YPos, 0))
           mesh.add(l)
           YPos -= line_height
-        });
+        })
         break
     }
     return mesh
   }
-  
 }
 
-type Word = { //Word and it`s geometry
-  text: string,
-  width: number,
+type Word = {
+  //Word and it`s geometry
+  text: string
+  width: number
   height: number
 }

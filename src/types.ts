@@ -19,14 +19,14 @@ export type ScenarioData = {
 }
 
 export type TextParams = {
-  font?: Font,
-  size: number,
-  height: number,
-  curveSegments: number,
-  bevelThickness: number,
-  bevelSize: number,
-  bevelEnabled: boolean,
-  bevelSegments: number,
+  font?: Font
+  size: number
+  height: number
+  curveSegments: number
+  bevelThickness: number
+  bevelSize: number
+  bevelEnabled: boolean
+  bevelSegments: number
 }
 
 export type HotSpot = {
