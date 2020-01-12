@@ -10,7 +10,8 @@ import { TextParams } from '../../types'
 import { Text } from './Text'
 
 export class TextBox extends Object3D {
-  private lines: string[][] = []
+  private lines: Word[][] = []
+  private spaceWidth: number
 
   constructor(
     private width: number,
@@ -46,17 +47,17 @@ export class TextBox extends Object3D {
 
     let lineWidth = 0
     this.lines.push([])
-    const spaceWidth = words[0].width
+    this.spaceWidth = words[0].width
     words.forEach((word, i) => {
       if (i > 0) {
         lineWidth += word.width
         if (lineWidth < this.width) {
-          lineWidth += spaceWidth
+          lineWidth += this.spaceWidth
         } else {
           this.lines.push([])
           lineWidth = word.width
         }
-        this.lines[this.lines.length - 1].push(word.text)
+        this.lines[this.lines.length - 1].push(word)
       }
     })
   }
@@ -65,28 +66,69 @@ export class TextBox extends Object3D {
     const mesh = new Group()
     const data = this.font.data
     const scale = this.params.size / data.resolution
+    let YPos, l: Text | Group
     const line_height =
       (data.boundingBox.yMax -
         data.boundingBox.yMin +
         data.underlineThickness) *
       scale
 
-    switch (this.justify) {
-      default:
-        let YPos = (this.lines.length * line_height) / 2.5
-        this.lines.forEach(line => {
-          const l = new Text(
-            line.join(' '),
+    YPos = (this.lines.length * line_height) / 2.5
+    this.lines.forEach(line => {
+      const aLine = []
+      let lineWidth = 0
+      line.forEach(word => {
+        aLine.push(word.text)
+        lineWidth += word.width
+      })
+      if (this.justify != 'width') {
+        lineWidth += this.spaceWidth * (line.length - 1)
+        l = new Text(
+          aLine.join(' '),
+          <Font>this.font,
+          this.params,
+          this.material
+        )
+      } else {
+        l = new Group()
+        const wordsMeshes: Text[] = []
+        line.forEach(word => {
+          const w = new Text(
+            word.text,
             <Font>this.font,
             this.params,
             this.material
           )
-          l.position.copy(new Vector3(0, YPos, 0))
-          mesh.add(l)
-          YPos -= line_height
+          wordsMeshes.push(w)
         })
-        break
-    }
+        const spaceWidth = (this.width - lineWidth) / (line.length - 1)
+        let prevShiftX = 0
+        console.log(spaceWidth)
+        let XPos = -this.width / 2
+        wordsMeshes.forEach((mesh, i) => {
+          XPos += prevShiftX + line[i].width / 2 + spaceWidth * i
+          console.log(XPos)
+          mesh.position.copy(new Vector3(XPos, 0, 0))
+          prevShiftX = line[i].width / 2
+          l.add(mesh)
+        })
+      }
+      switch (this.justify) {
+        case 'left':
+          l.position.copy(new Vector3(lineWidth / 2 - this.width / 2, YPos, 0))
+          break
+        case 'right':
+          l.position.copy(new Vector3(-lineWidth / 2 + this.width / 2, YPos, 0))
+          break
+        case 'center':
+        case 'width':
+        default:
+          l.position.copy(new Vector3(0, YPos, 0))
+      }
+      mesh.add(l)
+      YPos -= line_height
+    })
+
     return mesh
   }
 }
