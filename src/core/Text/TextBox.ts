@@ -66,7 +66,7 @@ export class TextBox extends Object3D {
     const mesh = new Group()
     const data = this.font.data
     const scale = this.params.size / data.resolution
-    let YPos, l: Text | Group
+    let YPos, lineMesh: Text | Group
     const line_height =
       (data.boundingBox.yMax -
         data.boundingBox.yMin +
@@ -83,15 +83,16 @@ export class TextBox extends Object3D {
       })
       if (this.justify != 'width') {
         lineWidth += this.spaceWidth * (line.length - 1)
-        l = new Text(
+        lineMesh = new Text(
           aLine.join(' '),
           <Font>this.font,
           this.params,
           this.material
         )
       } else {
-        l = new Group()
+        lineMesh = new Group()
         const wordsMeshes: Text[] = []
+
         line.forEach(word => {
           const w = new Text(
             word.text,
@@ -101,31 +102,35 @@ export class TextBox extends Object3D {
           )
           wordsMeshes.push(w)
         })
+
         const spaceWidth = (this.width - lineWidth) / (line.length - 1)
         let prevShiftX = 0
-        console.log(spaceWidth)
         let XPos = -this.width / 2
+
         wordsMeshes.forEach((mesh, i) => {
           XPos += prevShiftX + line[i].width / 2 + spaceWidth * i
-          console.log(XPos)
           mesh.position.copy(new Vector3(XPos, 0, 0))
           prevShiftX = line[i].width / 2
-          l.add(mesh)
+          lineMesh.add(mesh)
         })
       }
       switch (this.justify) {
         case 'left':
-          l.position.copy(new Vector3(lineWidth / 2 - this.width / 2, YPos, 0))
+          lineMesh.position.copy(
+            new Vector3(lineWidth / 2 - this.width / 2, YPos, 0)
+          )
           break
         case 'right':
-          l.position.copy(new Vector3(-lineWidth / 2 + this.width / 2, YPos, 0))
+          lineMesh.position.copy(
+            new Vector3(-lineWidth / 2 + this.width / 2, YPos, 0)
+          )
           break
         case 'center':
         case 'width':
         default:
-          l.position.copy(new Vector3(0, YPos, 0))
+          lineMesh.position.copy(new Vector3(0, YPos, 0))
       }
-      mesh.add(l)
+      mesh.add(lineMesh)
       YPos -= line_height
     })
 
