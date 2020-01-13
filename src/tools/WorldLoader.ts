@@ -316,7 +316,19 @@ export class WorldLoader {
                                 newSlide.objects.push(mesh)
                               })
                           } else if (object.type == 'video') {
-                            const video = <HTMLVideoElement>document.getElementById(object.id)
+                            const video = <HTMLVideoElement>document.createElement("VIDEO");
+                            video.id = object.id
+                            video.loop = true
+                            video.crossOrigin = "anonymous"
+                            // video.playsinline = true
+                            if (video.canPlayType("video/mp4")) {
+                              video.setAttribute("src",
+                                'assets/' +
+                                context._scenarioFolder + object.src
+                              );
+                            }
+
+                            document.body.appendChild(video);
                             const texture = new THREE.VideoTexture(video)
                             const parameters = { color: 0xffffff, map: texture }
                             const geometry = new THREE.PlaneBufferGeometry(
@@ -328,7 +340,7 @@ export class WorldLoader {
                             newSlide.objects.push(mesh)
                             newSlide.videoHtmlElement = video
                             video.currentTime = 0;
-                            video.load();
+                            video.play();
                           }
                         },
                         this

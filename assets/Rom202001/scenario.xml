@@ -51,7 +51,7 @@
         </slide>
         <slide height="108" picture="empty.png" width="192">
             <hotspot radius="153" phi="0" theta="-1" size="1"/>
-            <video id="video"/>
+            <video id="video1" src="video1.mp4"/>
             <animation duration="2500"/>
         </slide>
         <slide height="108" picture="4.jpg" width="192">

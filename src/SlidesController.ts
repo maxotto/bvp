@@ -122,6 +122,12 @@ export class SlidesController {
       video.currentTime = 0;
       video.load();
     }
+    if (this.world.slides[finishSlideIndex].videoHtmlElement) {
+      const video = <HTMLVideoElement>this.world.slides[finishSlideIndex].videoHtmlElement
+      video.currentTime = 0;
+      video.load();
+      video.play()
+    }
     if (startSlideIndex != finishSlideIndex) {
       this.busy = true
       const duration = this.world.slides[finishSlideIndex].transitionDuration
@@ -218,10 +224,7 @@ export class SlidesController {
             this.world.slides[finishSlideIndex].cameraLookAt.z
           )
           this.busy = false
-          if (this.world.slides[finishSlideIndex].videoHtmlElement) {
-            const video = <HTMLVideoElement>this.world.slides[finishSlideIndex].videoHtmlElement
-            video.play()
-          }
+
         })
         .start()
     }
