@@ -72,6 +72,7 @@ export class WorldLoader {
     return promisifyLoader(new XmlLoader(manager), onProgress)
       .load('assets/' + this._scenarioFolder + 'scenario.xml')
       .then((scenarioData: ScenarioData) => {
+        console.log(scenarioData)
         this._width = +scenarioData.width
         this._height = +scenarioData.height
         this._steps = scenarioData.steps
@@ -314,6 +315,20 @@ export class WorldLoader {
                                 )
                                 newSlide.objects.push(mesh)
                               })
+                          } else if (object.type == 'video') {
+                            const video = <HTMLVideoElement>document.getElementById('video')
+                            const texture = new THREE.VideoTexture(video)
+                            const parameters = { color: 0xffffff, map: texture }
+                            const geometry = new THREE.PlaneBufferGeometry(
+                              slide.hotspot.size,
+                              slide.height / scale
+                            )
+                            const material = new THREE.MeshLambertMaterial(parameters)
+                            const mesh = new THREE.Mesh(geometry, material)
+                            newSlide.objects.push(mesh)
+                            newSlide.videoHtmlElement = video
+                            video.currentTime = 0;
+                            video.load();
                           }
                         },
                         this

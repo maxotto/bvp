@@ -13,9 +13,8 @@
     showControlPanel="true"
     width="1000">
     <slides>
-        <slide height="1080" picture="1.jpg" width="1920">
+        <slide height="1080" picture="empty.png" width="1920">
             <hotspot x="3500" y="-1000" z="5500" size="50"/>
-
             <animation duration="3500"/>
         </slide>
         <slide height="108" picture="empty.png" width="192">
@@ -50,8 +49,9 @@
                 А также рассмотрим вопрос обработки переноса абзацев в пределах блока и отступы.
             </text>
         </slide>
-        <slide height="108" picture="3.jpg" width="192">
+        <slide height="108" picture="empty.png" width="192">
             <hotspot radius="153" phi="0" theta="-1" size="1"/>
+            <video id="video"/>
             <animation duration="2500"/>
         </slide>
         <slide height="108" picture="4.jpg" width="192">
@@ -69,7 +69,7 @@
     </slides>
     <show>
         <step slide="0"/>
-        <step slide="4"/>
+        <step slide="1"/>
         <step slide="2"/>
         <step slide="3"/>
         <step slide="4"/>

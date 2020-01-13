@@ -76,6 +76,28 @@ export function getWorldFromXml(xmlText) {
           world['slides'][lastSlideIndex]['objects'].push(newObj)
         }
         break
+      case 'video':
+        newObj['type'] = 'video'
+        for (var prop in node.attributes) {
+          if (node.attributes.hasOwnProperty(prop)) {
+            var propName = node.attributes[prop].name
+            var propValue = node.attributes[prop].value
+            newObj[propName] = propValue
+          }
+        }
+        if (node.parentNode.nodeName == 'world') {
+          if (!world.hasOwnProperty('objects')) {
+            world['objects'] = []
+          }
+          world['objects'].push(newObj)
+        } else if (node.parentNode.nodeName == 'slide') {
+          const lastSlideIndex = world['slides'].length - 1
+          if (!world['slides'][lastSlideIndex].hasOwnProperty('objects')) {
+            world['slides'][lastSlideIndex]['objects'] = []
+          }
+          world['slides'][lastSlideIndex]['objects'].push(newObj)
+        }
+        break
       case 'slide':
         if (!world.hasOwnProperty('slides')) {
           world['slides'] = []

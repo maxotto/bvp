@@ -61,6 +61,7 @@ export type Slide = {
   cameraLookAt: THREE.Vector3
   distanceToCamera: number
   objects: any[]
+  videoHtmlElement?: HTMLVideoElement
 }
 
 export enum WorldMode {

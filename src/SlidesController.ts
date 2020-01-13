@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import TWEEN from '@tweenjs/tween.js'
 import { SignalList, ISignal } from 'strongly-typed-events'
 import { getPointsByCurve, calculateJump } from './tools/helpers'
-import { WorldMode, World, UserAction } from './types'
+import { WorldMode, World, UserAction, Slide } from './types'
 import { SlideEditor } from './SlideEditor'
 
 export class SlidesController {
@@ -116,6 +116,12 @@ export class SlidesController {
   }
 
   showNextSlide(startSlideIndex, finishSlideIndex) {
+    if (<HTMLVideoElement>this.world.slides[startSlideIndex].videoHtmlElement) {
+      const video = <HTMLVideoElement>this.world.slides[startSlideIndex].videoHtmlElement
+      video.pause()
+      video.currentTime = 0;
+      video.load();
+    }
     if (startSlideIndex != finishSlideIndex) {
       this.busy = true
       const duration = this.world.slides[finishSlideIndex].transitionDuration
@@ -212,6 +218,10 @@ export class SlidesController {
             this.world.slides[finishSlideIndex].cameraLookAt.z
           )
           this.busy = false
+          if (this.world.slides[finishSlideIndex].videoHtmlElement) {
+            const video = <HTMLVideoElement>this.world.slides[finishSlideIndex].videoHtmlElement
+            video.play()
+          }
         })
         .start()
     }

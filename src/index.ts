@@ -24,6 +24,8 @@ l.load().then(world => {
 function init() {
   var overlay = document.getElementById('overlay')
   overlay.remove()
+  const video = <any>document.getElementById('video');
+  // video.play();
 }
 
 function bindEventListeners() {
