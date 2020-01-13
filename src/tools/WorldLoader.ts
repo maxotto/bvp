@@ -316,7 +316,7 @@ export class WorldLoader {
                                 newSlide.objects.push(mesh)
                               })
                           } else if (object.type == 'video') {
-                            const video = <HTMLVideoElement>document.getElementById('video')
+                            const video = <HTMLVideoElement>document.getElementById(object.id)
                             const texture = new THREE.VideoTexture(video)
                             const parameters = { color: 0xffffff, map: texture }
                             const geometry = new THREE.PlaneBufferGeometry(
