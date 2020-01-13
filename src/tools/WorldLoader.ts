@@ -61,11 +61,11 @@ export class WorldLoader {
     const scope = this
     var manager = new THREE.LoadingManager()
     var slideNumber = 0
-    manager.onProgress = function(item, loaded, total) {}
+    manager.onProgress = function (item, loaded, total) { }
 
-    manager.onLoad = function() {}
+    manager.onLoad = function () { }
 
-    var onProgress = function(xhr) {
+    var onProgress = function (xhr) {
       if (xhr.lengthComputable) {
       }
     }
@@ -91,11 +91,11 @@ export class WorldLoader {
           .then((_texturePainting: THREE.Texture) => {
             var materialPainting = new THREE.MeshBasicMaterial(<
               THREE.MeshBasicMaterialParameters
-            >{
-              color: 0xffffff,
-              map: _texturePainting,
-              side: THREE.DoubleSide,
-            })
+              >{
+                color: 0xffffff,
+                map: _texturePainting,
+                side: THREE.DoubleSide,
+              })
 
             var geometry = new THREE.PlaneBufferGeometry(0.001, 0.001)
             var mesh = new THREE.Mesh(geometry, materialPainting)
@@ -178,12 +178,12 @@ export class WorldLoader {
                   .then((_texturePainting: THREE.Texture) => {
                     var materialPainting = new THREE.MeshBasicMaterial(<
                       THREE.MeshBasicMaterialParameters
-                    >{
-                      color: 0xffffff,
-                      map: _texturePainting,
-                      side: THREE.DoubleSide,
-                      transparent: true,
-                    })
+                      >{
+                        color: 0xffffff,
+                        map: _texturePainting,
+                        side: THREE.DoubleSide,
+                        transparent: true,
+                      })
                     if (
                       this.getWorldCoordinatesType() ==
                       WorldCoordinatesType.sphere
@@ -287,10 +287,10 @@ export class WorldLoader {
                                 const params = {
                                   font: <Font>font,
                                   size: +object.size,
-                                  height: +object.thickness,
+                                  height: (+object.thickness) / 100 * (+object.size),
                                   curveSegments: +object.curveSegments,
-                                  bevelThickness: +object.bevelThickness,
-                                  bevelSize: +object.bevelSize,
+                                  bevelThickness: (+object.bevelThickness) / 100 * (+object.size),
+                                  bevelSize: (+object.bevelSize) / 100 * (+object.size),
                                   bevelEnabled:
                                     object.bevelEnabled == 'true'
                                       ? true
