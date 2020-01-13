@@ -13,27 +13,9 @@
     showControlPanel="true"
     width="1000">
     <slides>
-        <slide height="1080" picture="empty.png" width="1920">
+        <slide height="1080" picture="1.jpg" width="1920">
             <hotspot x="3500" y="-1000" z="5500" size="50"/>
-            <text
-                x="0"
-                y="0"
-                z="0"
-                font="Fira Code Retina_Regular.json"
-                size="2"
-                thickness="0.5"
-                curveSegments="10"
-                bevelThickness="0.05"
-                bevelSize="0.05"
-                bevelEnabled="true"
-                bevelSegments="10"
-                material="MeshToonMaterial"
-                color="0xff99ee"
-                paragraphWidth="40"
-                justify="width"
-                >
-                ТЕЛЕРАДИОСЕТЬ РОССИИ ИТОГИ РЕАЛИЗАЦИИ ФЕДЕРАЛЬНОЙ ЦЕЛЕВОЙ ПРОГРАММЫ РАЗВИТИЯ ТЕЛЕРАДИОВЕЩАНИЯ В РОССИЙСКОЙ ФЕДЕРАЦИИ
-            </text>
+
             <animation duration="3500"/>
         </slide>
         <slide height="108" picture="empty.png" width="192">
@@ -44,9 +26,29 @@
             <hotspot x="500" y="250" z="270" size="1"/>
             <animation duration="3500"/>
         </slide>
-        <slide height="1507" picture="2.jpg" width="2261">
+        <slide height="108" picture="empty.png" width="192">
             <hotspot radius="150" phi="0" theta="0" size="10"/>
             <animation duration="2500"/>
+            <text
+                x="0"
+                y="0"
+                z="0"
+                font="droid_sans_regular.typeface.json"
+                size="0.4"
+                thickness="0.07"
+                curveSegments="10"
+                bevelThickness="0.05"
+                bevelSize="0.05"
+                bevelEnabled="true"
+                bevelSegments="10"
+                material="MeshStandardMaterial"
+                color="0x000000"
+                paragraphWidth="7"
+                justify="center"
+                >
+                Это просто текст для проверки правильности размещения блока в пределах слайда.
+                А также рассмотрим вопрос обработки переноса абзацев в пределах блока и отступы.
+            </text>
         </slide>
         <slide height="108" picture="3.jpg" width="192">
             <hotspot radius="153" phi="0" theta="-1" size="1"/>
@@ -67,7 +69,7 @@
     </slides>
     <show>
         <step slide="0"/>
-        <step slide="1"/>
+        <step slide="4"/>
         <step slide="2"/>
         <step slide="3"/>
         <step slide="4"/>
