@@ -42,3 +42,6 @@ yarn.lock
 
 # awesome-typescript
 .awcache
+
+# PhpStorm workplace
+.idea

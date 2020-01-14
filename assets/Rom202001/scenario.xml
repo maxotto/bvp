@@ -1,0 +1,83 @@
+﻿<?xml version="1.0"?>
+<world
+    panoramaPic="pano.jpg"
+    panoX="0"
+    panoY="0"
+    panoZ="400"
+    panoRadius="400"
+    cameraFov="45"
+    height="500"
+    mainBackgroundColor="0xff0000"
+    mainBackgroundPic="astronomy-3186755.jpg"
+    mainDuration="1500"
+    showControlPanel="true"
+    width="1000">
+    <slides>
+        <slide height="1080" picture="empty.png" width="1920">
+            <hotspot x="3500" y="-1000" z="5500" size="50"/>
+            <animation duration="3500"/>
+        </slide>
+        <slide height="108" picture="empty.png" width="192">
+            <hotspot x="500" y="250" z="1300" size="1"/>
+            <animation duration="3500"/>
+        </slide>
+        <slide height="108" picture="empty.png" width="192">
+            <hotspot x="500" y="250" z="270" size="1"/>
+            <animation duration="3500"/>
+        </slide>
+        <slide height="108" picture="empty.png" width="192">
+            <hotspot radius="150" phi="0" theta="0" size="10"/>
+            <animation duration="2500"/>
+            <text
+                x="0"
+                y="0"
+                z="0"
+                font="droid_sans_regular.typeface.json"
+                size="0.4"
+                thickness="10"
+                curveSegments="10"
+                bevelThickness="5"
+                bevelSize="5"
+                bevelEnabled="true"
+                bevelSegments="10"
+                material="MeshStandardMaterial"
+                color="0x000000"
+                paragraphWidth="7"
+                justify="center"
+                >
+                Это просто текст для проверки правильности размещения блока в пределах слайда.
+                А также рассмотрим вопрос обработки переноса абзацев в пределах блока и отступы.
+            </text>
+        </slide>
+        <slide height="108" picture="empty.png" width="192">
+            <hotspot radius="153" phi="0" theta="-1" size="1"/>
+            <video id="video1" src="video1.mp4"/>
+            <animation duration="2500"/>
+        </slide>
+        <slide height="108" picture="4.jpg" width="192">
+            <hotspot radius="156" phi="0" theta="0" size="1"/>
+            <animation duration="2500"/>
+        </slide>
+        <slide height="108" picture="5.jpg" width="192">
+            <hotspot radius="159" phi="0" theta="1" size="1"/>
+            <animation duration="2500"/>
+        </slide>
+        <slide height="108" picture="6.jpg" width="192">
+            <hotspot radius="162" phi="0" theta="2" size="1"/>
+            <animation duration="2500"/>
+        </slide>
+    </slides>
+    <show>
+        <step slide="0"/>
+        <step slide="1"/>
+        <step slide="2"/>
+        <step slide="3"/>
+        <step slide="4"/>
+        <step slide="5"/>
+        <step slide="6"/>
+        <step slide="7"/>
+        <step slide="8"/>
+        <step slide="3"/>
+    </show>
+    <objects/>
+</world>
