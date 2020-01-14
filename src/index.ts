@@ -4,6 +4,12 @@ import { WorldLoader } from './tools/WorldLoader'
 import { World, MouseEvents, KeyboardEvents, TouchEvents } from './types'
 import { findGetParameters } from './tools/helpers'
 
+
+var startButton = document.getElementById( 'startButton' );
+			startButton.addEventListener( 'click', () => {
+				init()
+			}, false )
+
 const canvas = <HTMLCanvasElement>document.getElementById('canvas')
 let sceneManager
 const getParams: any = findGetParameters()
@@ -12,20 +18,16 @@ if (!getParams.p) {
   getParams.p = 'Rom202001_1'
   // throw new Error("Something went wrong!");
 }
-const l = new WorldLoader(getParams.p)
-
-l.load().then(world => {
-  init()
-  sceneManager = new SceneManager(canvas, <World>world)
-  bindEventListeners()
-  render()
-})
 
 function init() {
-  var overlay = document.getElementById('overlay')
-  overlay.remove()
-  const video = <any>document.getElementById('video');
-  // video.play();
+  const l = new WorldLoader(getParams.p)
+  l.load().then(world => {
+    sceneManager = new SceneManager(canvas, <World>world)
+    bindEventListeners()
+    render()
+    var overlay = document.getElementById('overlay')
+    overlay.remove()
+  })
 }
 
 function bindEventListeners() {

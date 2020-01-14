@@ -112,6 +112,20 @@ export function getWorldFromXml(xmlText) {
         }
         world['slides'].push(newSlide)
         break
+
+      case 'font':
+        if (!world.hasOwnProperty('defaultFont')) {
+          world['defaultFont'] = {}
+        }
+        for (var prop in node.attributes) {
+          if (node.attributes.hasOwnProperty(prop)) {
+            var propName = node.attributes[prop].name
+            var propValue = node.attributes[prop].value
+            world['defaultFont'][propName] = propValue
+          }
+        }
+        break
+
       case 'hotspot':
         world['slides'][world['slides'].length - 1]['hotspot'] = {}
         for (var prop in node.attributes) {
@@ -124,6 +138,7 @@ export function getWorldFromXml(xmlText) {
           }
         }
         break
+
       case 'animation':
         world['slides'][world['slides'].length - 1]['animation'] = {}
         for (var prop in node.attributes) {

@@ -77,6 +77,7 @@ module.exports = {
     HTMLWebpackPluginConfig,
     BrowserSyncPluginConfig,
     ProgressBarPluginConfig,
-    new CopyPlugin([{ from: "assets", to: "assets" }])
+    new CopyPlugin([{ from: "assets", to: "assets" }]),
+    new CopyPlugin([{ from: "fonts", to: "fonts" }])
   ]
 };

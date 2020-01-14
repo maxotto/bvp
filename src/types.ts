@@ -17,6 +17,7 @@ export type ScenarioData = {
   panoZ: number
   panoRadius: number
   objects: []
+  defaultFont: any
 }
 
 export type TextParams = {

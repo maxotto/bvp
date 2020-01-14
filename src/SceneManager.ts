@@ -4,7 +4,6 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import { GeneralLights } from './sceneSubjects/GeneralLights'
 import { SceneSubjects } from './sceneSubjects/SceneSubjects'
-import { TextObjects } from './sceneSubjects/TextObjects'
 import { Panorama } from './sceneSubjects/panorama'
 
 import { SlidesController } from './SlidesController'

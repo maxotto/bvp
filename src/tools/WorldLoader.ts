@@ -72,6 +72,7 @@ export class WorldLoader {
     return promisifyLoader(new XmlLoader(manager), onProgress)
       .load('assets/' + this._scenarioFolder + 'scenario.xml')
       .then((scenarioData: ScenarioData) => {
+        console.log({ scenarioData })
         this._width = +scenarioData.width
         this._height = +scenarioData.height
         this._steps = scenarioData.steps
@@ -278,28 +279,38 @@ export class WorldLoader {
                                 newSlide.objects.push(mesh)
                               })
                           } else if (object.type == 'text') {
+                            const fontFile = object.font ? object.font : scenarioData.defaultFont.font
                             return promisifyLoader(
                               new FontLoader(manager),
                               onProgress
                             )
-                              .load('fonts/' + object.font)
+                              .load('fonts/' + fontFile)
                               .then(font => {
+                                const
+                                  defaultMaterial = scenarioData.defaultFont.material,
+                                  size = object.size ? +object.size : +scenarioData.defaultFont.size,
+                                  bevelEnabled = object.bevelEnabled ? object.bevelEnabled : scenarioData.defaultFont.bevelEnabled,
+                                  materialName = object.material ? object.material : defaultMaterial;
+
                                 const params = {
                                   font: <Font>font,
-                                  size: +object.size,
-                                  height: (+object.thickness) / 100 * (+object.size),
-                                  curveSegments: +object.curveSegments,
-                                  bevelThickness: (+object.bevelThickness) / 100 * (+object.size),
-                                  bevelSize: (+object.bevelSize) / 100 * (+object.size),
+                                  size: size,
+                                  height: object.thickness ? (+object.thickness) / 100 * size :
+                                    (+scenarioData.defaultFont.thickness) / 100 * size,
+                                  curveSegments: object.curveSegments ? +object.curveSegments : +scenarioData.defaultFont.curveSegments,
+                                  bevelThickness: object.bevelThickness ? (+object.bevelThickness) / 100 * size :
+                                    (+scenarioData.defaultFont.bevelThickness) / 100 * size,
+                                  bevelSize: object.bevelSize ? (+object.bevelSize) / 100 * size :
+                                    (+scenarioData.defaultFont.bevelSize) / 100 * size,
                                   bevelEnabled:
-                                    object.bevelEnabled == 'true'
+                                    bevelEnabled == 'true'
                                       ? true
                                       : false,
-                                  bevelSegments: +object.bevelSegments,
+                                  bevelSegments: object.bevelSegments ? +object.bevelSegments : +scenarioData.defaultFont.bevelSegments,
                                 }
                                 const material = createMaterial(
-                                  object.material,
-                                  { color: +object.color }
+                                  materialName,
+                                  { color: object.color ? +object.color : +scenarioData.defaultFont.color }
                                 )
                                 const mesh = new TextBox(
                                   object.paragraphWidth,
@@ -321,6 +332,8 @@ export class WorldLoader {
                             video.crossOrigin = "anonymous"
                             video.playsinline = true
                             if (video.canPlayType("video/mp4")) {
+                              const full = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '')
+                              console.log(full)
                               video.setAttribute("src",
                                 'assets/' +
                                 context._scenarioFolder + object.src
