@@ -9,7 +9,7 @@ let sceneManager
 const getParams: any = findGetParameters()
 if (!getParams.p) {
   // alert('Project name required');
-  getParams.p = 'Rom202001'
+  getParams.p = 'Rom202001_1'
   // throw new Error("Something went wrong!");
 }
 const l = new WorldLoader(getParams.p)

@@ -117,10 +117,10 @@ export class SlidesController {
 
   showNextSlide(startSlideIndex, finishSlideIndex) {
     if (<HTMLVideoElement>this.world.slides[startSlideIndex].videoHtmlElement) {
-      const video = <HTMLVideoElement>this.world.slides[startSlideIndex].videoHtmlElement
-      video.pause()
-      video.currentTime = 0;
-      video.load();
+      // const video = <HTMLVideoElement>this.world.slides[startSlideIndex].videoHtmlElement
+      // video.pause()
+      // video.currentTime = 0;
+      // video.load();
     }
     if (this.world.slides[finishSlideIndex].videoHtmlElement) {
       const video = <HTMLVideoElement>this.world.slides[finishSlideIndex].videoHtmlElement

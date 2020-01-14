@@ -72,7 +72,6 @@ export class WorldLoader {
     return promisifyLoader(new XmlLoader(manager), onProgress)
       .load('assets/' + this._scenarioFolder + 'scenario.xml')
       .then((scenarioData: ScenarioData) => {
-        console.log(scenarioData)
         this._width = +scenarioData.width
         this._height = +scenarioData.height
         this._steps = scenarioData.steps
@@ -103,7 +102,7 @@ export class WorldLoader {
             mesh.name = 'slide0Bg'
             const cameraState = getCameraState(
               new THREE.Vector3(0, 0, 0),
-              12000,
+              scenarioData.iniCameraZ ? scenarioData.iniCameraZ : 1000,
               0,
               this._cameraFov
             )
@@ -316,11 +315,11 @@ export class WorldLoader {
                                 newSlide.objects.push(mesh)
                               })
                           } else if (object.type == 'video') {
-                            const video = <HTMLVideoElement>document.createElement("VIDEO");
+                            const video = <any>document.createElement("VIDEO");
                             video.id = object.id
                             video.loop = true
                             video.crossOrigin = "anonymous"
-                            // video.playsinline = true
+                            video.playsinline = true
                             if (video.canPlayType("video/mp4")) {
                               video.setAttribute("src",
                                 'assets/' +

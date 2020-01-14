@@ -22,7 +22,6 @@ export class SceneManager {
   private stats: Stats
 
   constructor(private canvas: HTMLCanvasElement, private world: World) {
-    console.log(world)
     this.screenDimensions = {
       width: this.canvas.width,
       height: this.canvas.height,

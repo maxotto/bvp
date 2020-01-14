@@ -71,7 +71,6 @@ export class TextBox extends Object3D {
         height: height,
       })
     })
-    console.log(words)
     let lineWidth = 0
     lines.push([])
     words.forEach((word, i) => {

@@ -24,7 +24,7 @@ export class SceneSubjects {
       new THREE.MeshStandardMaterial({ flatShading: true })
     )
     this.mesh.position.set(-3000, 50, 120)
-    this.scene.add(this.mesh)
+    //this.scene.add(this.mesh)
 
     // TODO this.createGround();
     // this.createTiger();
@@ -169,11 +169,11 @@ export class SceneSubjects {
   }
 
   update(time) {
-    const z = Math.sin(time / 7) * 300
-    const y = Math.sin(time / 7) * 300 - 100
-    const x = Math.cos(time / 7) * 300
-    this.mesh.position.z = z
-    this.mesh.position.y = y
-    this.mesh.position.x = x
+    //const z = Math.sin(time / 7) * 300
+    //const y = Math.sin(time / 7) * 300 - 100
+    //const x = Math.cos(time / 7) * 300
+    //this.mesh.position.z = z
+    //this.mesh.position.y = y
+    //this.mesh.position.x = x
   }
 }

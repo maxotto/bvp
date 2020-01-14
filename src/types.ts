@@ -6,6 +6,7 @@ export type ScenarioData = {
   height: number
   slides: []
   steps: []
+  iniCameraZ?: number
   mainBackgroundPic: string
   mainBackgroundColor: number
   mainDuration: number
