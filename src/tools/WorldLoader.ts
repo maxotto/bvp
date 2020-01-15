@@ -7,21 +7,19 @@ import {
   getCameraState,
   createSphere,
   recalcFromSpherical,
-  justifyText,
-  createMaterial,
 } from './helpers'
+import {
+  createMaterial,
+} from './three_helpers'
 import * as THREE from 'three'
 
 import {
   ScenarioData,
   Slide,
   World,
-  SVG,
-  HotSpot,
   WorldCoordinatesType,
 } from '../types'
 import { EditableGroup } from '../core/EditableGroup'
-import { showSphere } from '../SlideEditor'
 import {
   Mesh,
   Vector3,

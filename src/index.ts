@@ -1,33 +1,37 @@
 import './style.css'
-import { SceneManager } from './SceneManager'
-import { WorldLoader } from './tools/WorldLoader'
+// import { SceneManager } from './SceneManager'
+// import { WorldLoader } from './tools/WorldLoader'
 import { World, MouseEvents, KeyboardEvents, TouchEvents } from './types'
 import { findGetParameters } from './tools/helpers'
 
 
-var startButton = document.getElementById( 'startButton' );
-			startButton.addEventListener( 'click', () => {
-				init()
-			}, false )
+var startButton = document.getElementById('startButton');
+startButton.addEventListener('click', () => {
+  init()
+}, false)
 
 const canvas = <HTMLCanvasElement>document.getElementById('canvas')
 let sceneManager
 const getParams: any = findGetParameters()
 if (!getParams.p) {
   // alert('Project name required');
-  getParams.p = 'Rom202001_1'
+  getParams.p = 'Adamov202001_01'
   // throw new Error("Something went wrong!");
 }
 
 function init() {
-  const l = new WorldLoader(getParams.p)
-  l.load().then(world => {
-    sceneManager = new SceneManager(canvas, <World>world)
-    bindEventListeners()
-    render()
-    var overlay = document.getElementById('overlay')
-    overlay.remove()
-  })
+  import(/* webpackChunkName: "WorldLoader" */ './tools/WorldLoader').then(m => {
+    const l = new m.WorldLoader(getParams.p)
+    l.load().then(world => {
+      import(/* webpackChunkName: "SceneManager" */ './SceneManager').then(m => {
+        sceneManager = new m.SceneManager(canvas, <World>world)
+        bindEventListeners()
+        render()
+      })
+    })
+  }
+
+  )
 }
 
 function bindEventListeners() {

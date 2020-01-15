@@ -31,7 +31,8 @@ module.exports = {
   entry: ["./src/index.ts"],
   output: {
     path: __dirname + "/dist",
-    filename: "index.js"
+    filename: "[name].bundle.js"
+    // chunkFilename: "[name].chunk.js"
   },
   module: {
     rules: [

@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+// import * as THREE from 'three'
 import {
   Vector3,
   SphereGeometry,
@@ -6,16 +6,13 @@ import {
   Mesh,
   Color,
   DoubleSide,
-  MeshPhysicalMaterial,
   Spherical,
+  Box3,
+  Group,
+  Math as M,
 } from 'three'
 import { Slide, World } from '../types'
 import { EditableGroup } from '../core/EditableGroup'
-
-export function createMaterial(materialClass, params) {
-  if (!materialClass) materialClass = 'MeshToonMaterial'
-  return new THREE[materialClass](params)
-}
 
 export function justifyText(str, len, mode?) {
   const re = RegExp('(?:\\s|^)(.{1,' + len + '})(?=\\s|$)', 'g')
@@ -55,7 +52,7 @@ export function calcCameraPosition(
   slideGroup: EditableGroup
 ) {
   const newCameraPos = slideGroup.position.clone()
-  const objectWorldPosition = new THREE.Vector3()
+  const objectWorldPosition = new Vector3()
   objectWorldPosition.setFromMatrixPosition(slide.background.matrixWorld)
   const directionVector = objectWorldPosition.sub(world.panoCenter) //Get vector from object to panorama center
   const unitDirectionVector = directionVector.normalize() // Convert to unit vector
@@ -71,8 +68,8 @@ export function recalcToSpherical(slide: Slide, panoCenter: Vector3) {
 
   return {
     radius: sphereCoordinates.radius,
-    phi: THREE.Math.radToDeg(sphereCoordinates.phi) - 90,
-    theta: THREE.Math.radToDeg(sphereCoordinates.theta),
+    phi: M.radToDeg(sphereCoordinates.phi) - 90,
+    theta: M.radToDeg(sphereCoordinates.theta),
   }
 }
 
@@ -84,8 +81,8 @@ export function recalcFromSpherical(
   worldWidth,
   worldHeight
 ) {
-  const _phi = THREE.Math.degToRad(-90 - phi)
-  const _theta = THREE.Math.degToRad(0 - theta)
+  const _phi = M.degToRad(-90 - phi)
+  const _theta = M.degToRad(0 - theta)
   let tmp = new Vector3().setFromSphericalCoords(radius, _phi, _theta)
   const newCoords = new Vector3(tmp.x, tmp.y, tmp.z)
     .add(panoCenter)
@@ -102,7 +99,7 @@ export function findGetParameters() {
   location.search
     .substr(1)
     .split('&')
-    .forEach(function(item) {
+    .forEach(function (item) {
       queryDict[item.split('=')[0]] = item.split('=')[1]
     })
   return queryDict
@@ -128,8 +125,8 @@ export function promisifyLoader(loader, onProgress) {
  * based on https://stackoverflow.com/questions/31413749/node-js-promise-all-and-foreach/41791149#41791149
  */
 export function forEachPromise(items, fn, context) {
-  return items.reduce(function(promise, item) {
-    return promise.then(function() {
+  return items.reduce(function (promise, item) {
+    return promise.then(function () {
       return fn(item, context)
     })
   }, Promise.resolve())
@@ -144,31 +141,24 @@ export function calculateJump(pointA, pointB) {
   return Math.max(jumpBySize, jumpByZ)
 }
 
-export function getPointsByCurve(curveFunctionName, ...curveFunctionArgs) {
-  let pointsNum = curveFunctionArgs.pop()
-  let line: any = new THREE[curveFunctionName](...curveFunctionArgs)
-  var points = line.getPoints(pointsNum)
-  return points
-}
-
-export function getGroupGeometry(mesh: THREE.Group) {
-  var center = new THREE.Vector3()
-  var size = new THREE.Vector3()
-  const box = new THREE.Box3()
+export function getGroupGeometry(mesh: Group) {
+  var center = new Vector3()
+  var size = new Vector3()
+  const box = new Box3()
   mesh.traverse(child => {
-    var bb = new THREE.Box3().setFromObject(child)
+    var bb = new Box3().setFromObject(child)
     if (bb.max.x < Infinity) {
       box.union(bb)
     }
   })
   box.getCenter(center)
   box.getSize(size)
-  var topLeftCorner = new THREE.Vector3(
+  var topLeftCorner = new Vector3(
     center.x - size.x / 2,
     -1 * (center.y + size.y / 2),
     0
   )
-  var delta = new THREE.Vector3(
+  var delta = new Vector3(
     mesh.position.x - center.x,
     mesh.position.y - center.y,
     mesh.position.z - center.z
@@ -191,8 +181,8 @@ export function getCameraState(
 ) {
   const distance =
     objectHeight / 2 / Math.tan(((cameraFov / 2) * Math.PI) / 180)
-  const cameraPosition = new THREE.Vector3(center.x, center.y, distance + iniZ)
-  const cameraLookAt = new THREE.Vector3(center.x, center.y, 0)
+  const cameraPosition = new Vector3(center.x, center.y, distance + iniZ)
+  const cameraLookAt = new Vector3(center.x, center.y, 0)
   return {
     distance: distance,
     cameraPosition: cameraPosition,

@@ -1,4 +1,4 @@
-import { Mesh, Vector3, Font } from 'three'
+import { Vector3, Font } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 export type ScenarioData = {

@@ -1,7 +1,8 @@
 import * as THREE from 'three'
 import TWEEN from '@tweenjs/tween.js'
 import { SignalList, ISignal } from 'strongly-typed-events'
-import { getPointsByCurve, calculateJump } from './tools/helpers'
+import { calculateJump } from './tools/helpers'
+import { getPointsByCurve } from './tools/three_helpers'
 import { WorldMode, World, UserAction, Slide } from './types'
 import { SlideEditor } from './SlideEditor'
 
