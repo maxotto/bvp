@@ -175,6 +175,9 @@ export class WorldLoader {
                     'assets/' + this._scenarioFolder + this._currentObjectName
                   )
                   .then((_texturePainting: THREE.Texture) => {
+                    const imgWidth = _texturePainting.image.width
+                    const imgHeight = _texturePainting.image.height
+                    console.log({ _texturePainting })
                     var materialPainting = new THREE.MeshBasicMaterial(<
                       THREE.MeshBasicMaterialParameters
                       >{
@@ -326,7 +329,7 @@ export class WorldLoader {
                           } else if (object.type == 'video') {
                             const video = <any>document.createElement("VIDEO");
                             video.id = object.id
-                            video.loop = true
+                            video.loop = false
                             video.crossOrigin = "anonymous"
                             video.playsinline = true
                             if (video.canPlayType("video/mp4")) {
