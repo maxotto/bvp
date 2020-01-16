@@ -6,7 +6,7 @@ export class Panorama {
     this.createPanorama()
   }
 
-  update(time) {}
+  update(time) { }
 
   createPanorama() {
     const geometry = new THREE.SphereBufferGeometry(
@@ -20,7 +20,8 @@ export class Panorama {
     const material = new THREE.MeshBasicMaterial({ map: texture })
     const mesh = new THREE.Mesh(geometry, material)
     mesh.position.copy(this.world.panoCenter)
-    mesh.rotation.y = -Math.PI / 2
+    mesh.rotation.y = -87 * (Math.PI / 180)
+    mesh.rotation.x = -10 * (Math.PI / 180)
     this.world.scene.add(mesh)
   }
 }
