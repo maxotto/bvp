@@ -6,6 +6,7 @@ const HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
   filename: "index.html",
   inject: "body"
 });
+const VueLoaderPlugin = require("vue-loader/lib/plugin");
 
 /* Configure BrowserSync */
 const BrowserSyncPlugin = require("browser-sync-webpack-plugin");
@@ -37,8 +38,12 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.ts$/,
-        use: "awesome-typescript-loader"
+        test: /\.tsx?$/,
+        loader: "ts-loader",
+        exclude: /node_modules/,
+        options: {
+          appendTsSuffixTo: [/\.vue$/]
+        }
       },
       {
         test: /\.css$/,
@@ -70,15 +75,25 @@ module.exports = {
             }
           }
         ]
+      },
+      {
+        test: /\.vue$/,
+        loader: "vue-loader"
       }
     ]
   },
-  resolve: { extensions: [".web.ts", ".web.js", ".ts", ".js"] },
+  resolve: {
+    extensions: [".web.ts", ".web.js", ".ts", ".js", ".vue"],
+    alias: {
+      vue$: "vue/dist/vue.esm.js"
+    }
+  },
   plugins: [
     HTMLWebpackPluginConfig,
     BrowserSyncPluginConfig,
     ProgressBarPluginConfig,
     new CopyPlugin([{ from: "assets", to: "assets" }]),
-    new CopyPlugin([{ from: "fonts", to: "fonts" }])
+    new CopyPlugin([{ from: "fonts", to: "fonts" }]),
+    new VueLoaderPlugin()
   ]
 };

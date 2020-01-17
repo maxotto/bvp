@@ -6,6 +6,9 @@ import { findGetParameters } from './tools/helpers'
 import { WorldLoader } from './tools/WorldLoader';
 import { SceneManager } from './SceneManager';
 
+import Vue from "vue"
+import HelloComponent from './app/components/HelloVue.vue'
+
 
 var startButton = document.getElementById('startButton');
 startButton.addEventListener('click', () => {
@@ -23,12 +26,25 @@ if (!getParams.p) {
 
 function init() {
   const l = new WorldLoader(getParams.p)
+  let v = new Vue({
+    el: "#app",
+    template: `
+    <div>
+        Name: <input v-model="name" type="text">
+        <hello-component :name="name" :initialEnthusiasm="5" />
+    </div>
+    `,
+    data: { name: "World" },
+    components: {
+      HelloComponent
+    }
+  });
+  var overlay = document.getElementById('overlay')
+  overlay.remove()
   l.load().then(world => {
-    sceneManager = new SceneManager(canvas, <World>world)
-    bindEventListeners()
-    render()
-    var overlay = document.getElementById('overlay')
-    overlay.remove()
+    //sceneManager = new SceneManager(canvas, <World>world)
+    //bindEventListeners()
+    //render()
   })
 }
 
