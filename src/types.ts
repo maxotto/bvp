@@ -96,6 +96,10 @@ export type World = {
   panoRadius: number
   mode: WorldMode
   draggables: any[]
+  vue: {
+    app: Vue,
+    container: HTMLDivElement
+  }
 }
 
 export enum UserAction {

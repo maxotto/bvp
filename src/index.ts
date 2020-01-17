@@ -1,6 +1,4 @@
 import './style.css'
-// import { SceneManager } from './SceneManager'
-// import { WorldLoader } from './tools/WorldLoader'
 import { World, MouseEvents, KeyboardEvents, TouchEvents } from './types'
 import { findGetParameters } from './tools/helpers'
 import { WorldLoader } from './tools/WorldLoader';
@@ -26,25 +24,29 @@ if (!getParams.p) {
 
 function init() {
   const l = new WorldLoader(getParams.p)
-  let v = new Vue({
+  let vue = new Vue({
     el: "#app",
-    template: `
-    <div>
+    template: `<div id = 'vueApp'>
         Name: <input v-model="name" type="text">
         <hello-component :name="name" :initialEnthusiasm="5" />
-    </div>
-    `,
+    </div>`,
     data: { name: "World" },
     components: {
       HelloComponent
     }
   });
-  var overlay = document.getElementById('overlay')
-  overlay.remove()
-  l.load().then(world => {
-    //sceneManager = new SceneManager(canvas, <World>world)
-    //bindEventListeners()
-    //render()
+  l.load().then((world: World) => {
+    var appDiv = <HTMLDivElement>document.getElementById('vueApp')
+    appDiv.style.display = 'none'
+    world.vue = {
+      app: vue,
+      container: appDiv
+    }
+    sceneManager = new SceneManager(canvas, <World>world)
+    var overlay = document.getElementById('overlay')
+    overlay.remove()
+    bindEventListeners()
+    render()
   })
 }
 
