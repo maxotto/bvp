@@ -1,13 +1,23 @@
-import * as THREE from 'three'
 import { World } from '../types'
 import {
   calcCameraPosition,
-  createSphere,
   getGroupGeometry,
 } from '../tools/helpers'
-import { EditableGroup, EditableGroupState } from '../core/EditableGroup'
+import { EditableGroup } from '../core/EditableGroup'
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader'
-import { Color, Group, Vector3 } from 'three'
+import {
+  Group,
+  Mesh,
+  IcosahedronBufferGeometry,
+  MeshStandardMaterial,
+  MeshBasicMaterial,
+  Color,
+  ShapeBufferGeometry,
+  PlaneBufferGeometry,
+  CanvasTexture,
+  DoubleSide,
+  RepeatWrapping
+} from 'three'
 
 export class SceneSubjects {
   private scene
@@ -19,9 +29,9 @@ export class SceneSubjects {
     this.scene = scene
     this.world = world
 
-    this.mesh = new THREE.Mesh(
-      new THREE.IcosahedronBufferGeometry(this.radius, 2),
-      new THREE.MeshStandardMaterial({ flatShading: true })
+    this.mesh = new Mesh(
+      new IcosahedronBufferGeometry(this.radius, 2),
+      new MeshStandardMaterial({ flatShading: true })
     )
     this.mesh.position.set(-3000, 50, 120)
     this.scene.add(this.mesh)
@@ -71,7 +81,7 @@ export class SceneSubjects {
     var loader = new SVGLoader()
     loader.load('/assets/NTerebilenko/tiger.svg', (data: any) => {
       var paths = data.paths
-      var group = new THREE.Group()
+      var group = new Group()
       group.scale.multiplyScalar(0.25)
       group.position.x = -70
       group.position.y = 70
@@ -80,29 +90,29 @@ export class SceneSubjects {
         var path = paths[i]
         var fillColor = path.userData.style.fill
         if (fillColor !== undefined && fillColor !== 'none') {
-          var material = new THREE.MeshBasicMaterial({
-            color: new THREE.Color().setStyle(fillColor),
+          var material = new MeshBasicMaterial({
+            color: new Color().setStyle(fillColor),
             opacity: path.userData.style.fillOpacity,
             transparent: path.userData.style.fillOpacity < 1,
-            side: THREE.DoubleSide,
+            side: DoubleSide,
             depthWrite: false,
             wireframe: false,
           })
           var shapes = path.toShapes(true)
           for (var j = 0; j < shapes.length; j++) {
             var shape = shapes[j]
-            var geometry = new THREE.ShapeBufferGeometry(shape)
-            var mesh = new THREE.Mesh(geometry, material)
+            var geometry = new ShapeBufferGeometry(shape)
+            var mesh = new Mesh(geometry, material)
             group.add(mesh)
           }
         }
         var strokeColor = path.userData.style.stroke
         if (strokeColor !== undefined && strokeColor !== 'none') {
-          var material = new THREE.MeshBasicMaterial({
-            color: new THREE.Color().setStyle(strokeColor),
+          var material = new MeshBasicMaterial({
+            color: new Color().setStyle(strokeColor),
             opacity: path.userData.style.strokeOpacity,
             transparent: path.userData.style.strokeOpacity < 1,
-            side: THREE.DoubleSide,
+            side: DoubleSide,
             depthWrite: false,
             wireframe: false,
           })
@@ -115,7 +125,7 @@ export class SceneSubjects {
               1
             )
             if (geometry) {
-              var mesh = new THREE.Mesh(geometry, material)
+              var mesh = new Mesh(geometry, material)
               group.add(mesh)
             }
           }
@@ -127,15 +137,15 @@ export class SceneSubjects {
 
   createFrame() {
     var frameBorder = 50
-    var frameGeometry = new THREE.PlaneBufferGeometry(
+    var frameGeometry = new PlaneBufferGeometry(
       this.world.width + frameBorder,
       this.world.height + frameBorder
     )
-    var meshFrame = new THREE.Mesh(
+    var meshFrame = new Mesh(
       frameGeometry,
-      new THREE.MeshBasicMaterial({
+      new MeshBasicMaterial({
         color: +this.world.mainBackgroundColor,
-        side: THREE.DoubleSide,
+        side: DoubleSide,
       })
     )
     meshFrame.position.z = -50.0
@@ -151,16 +161,16 @@ export class SceneSubjects {
     context.fillStyle = '#444'
     context.fillRect(0, 0, 64, 64)
     context.fillRect(64, 64, 64, 64)
-    var textureCanvas = new THREE.CanvasTexture(imageCanvas)
+    var textureCanvas = new CanvasTexture(imageCanvas)
     textureCanvas.repeat.set(1000, 1000)
-    textureCanvas.wrapS = THREE.RepeatWrapping
-    textureCanvas.wrapT = THREE.RepeatWrapping
-    var materialCanvas = new THREE.MeshBasicMaterial({
+    textureCanvas.wrapS = RepeatWrapping
+    textureCanvas.wrapT = RepeatWrapping
+    var materialCanvas = new MeshBasicMaterial({
       map: textureCanvas,
-      side: THREE.DoubleSide,
+      side: DoubleSide,
     })
-    var geometry = new THREE.PlaneBufferGeometry(100, 100)
-    var meshCanvas = new THREE.Mesh(geometry, materialCanvas)
+    var geometry = new PlaneBufferGeometry(100, 100)
+    var meshCanvas = new Mesh(geometry, materialCanvas)
     meshCanvas.rotation.x = -Math.PI / 2
     meshCanvas.scale.set(500, 500, 500)
     var floorHeight = (-1 * this.world.height) / 2

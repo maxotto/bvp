@@ -8,10 +8,10 @@ import {
   createSphere,
   recalcFromSpherical,
 } from './helpers'
+
 import {
   createMaterial,
 } from './three_helpers'
-import * as THREE from 'three'
 
 import {
   ScenarioData,
@@ -19,7 +19,9 @@ import {
   World,
   WorldCoordinatesType,
 } from '../types'
+
 import { EditableGroup } from '../core/EditableGroup'
+
 import {
   Mesh,
   Vector3,
@@ -39,9 +41,9 @@ import {
   Group,
   ShapeBufferGeometry,
   Shape,
+  DoubleSide,
 } from 'three'
 
-import { Text } from '../core/Text/Text'
 import { TextBox } from '../core/Text/TextBox'
 
 export class WorldLoader {
@@ -107,7 +109,7 @@ export class WorldLoader {
               >{
                 color: 0xffffff,
                 map: _texturePainting,
-                side: THREE.DoubleSide,
+                side: DoubleSide,
               })
 
             var geometry = new PlaneBufferGeometry(0.001, 0.001)
@@ -202,7 +204,7 @@ export class WorldLoader {
                       >{
                         color: 0xffffff,
                         map: _texturePainting,
-                        side: THREE.DoubleSide,
+                        side: DoubleSide,
                         transparent: true,
                       })
                     if (
@@ -366,7 +368,7 @@ export class WorldLoader {
                             const parameters = {
                               color: 0xffffff,
                               map: texture,
-                              side: THREE.DoubleSide
+                              side: DoubleSide
                             }
                             const geometry = new PlaneBufferGeometry(
                               slide.hotspot.size,
@@ -434,7 +436,7 @@ export class WorldLoader {
             color: new Color().setStyle(fillColor),
             opacity: path.userData.style.fillOpacity,
             transparent: path.userData.style.fillOpacity < 1,
-            side: THREE.DoubleSide,
+            side: DoubleSide,
             depthWrite: false,
             wireframe: false,
           })
@@ -453,7 +455,7 @@ export class WorldLoader {
             color: new Color().setStyle(strokeColor),
             opacity: path.userData.style.strokeOpacity,
             transparent: path.userData.style.strokeOpacity < 1,
-            side: THREE.DoubleSide,
+            side: DoubleSide,
             depthWrite: false,
             wireframe: false,
           })
@@ -466,7 +468,7 @@ export class WorldLoader {
               1
             )
             if (geometry) {
-              var mesh = new THREE.Mesh(geometry, material)
+              var mesh = new Mesh(geometry, material)
               mesh.renderOrder = z
               group.add(mesh)
             }

@@ -15,9 +15,8 @@ import {
   Box3,
 } from 'three'
 
-import * as THREE from 'three'
 import { EditableGroupState } from '../core/EditableGroup'
-var DragControls = function(_objects, _camera, _domElement) {
+var DragControls = function (_objects, _camera, _domElement) {
   if (_objects instanceof Camera) {
     console.warn(
       'THREE.DragControls: Constructor now expects ( objects, camera, domElement )'
@@ -251,31 +250,31 @@ var DragControls = function(_objects, _camera, _domElement) {
   this.deactivate = deactivate
   this.dispose = dispose
 
-  this.setSlide = function(slide) {
+  this.setSlide = function (slide) {
     this._slide = slide
   }
 
   // Backward compatibility
 
-  this.setObjects = function() {
+  this.setObjects = function () {
     console.error('THREE.DragControls: setObjects() has been removed.')
   }
 
-  this.on = function(type, listener) {
+  this.on = function (type, listener) {
     console.warn(
       'THREE.DragControls: on() has been deprecated. Use addEventListener() instead.'
     )
     scope.addEventListener(type, listener)
   }
 
-  this.off = function(type, listener) {
+  this.off = function (type, listener) {
     console.warn(
       'THREE.DragControls: off() has been deprecated. Use removeEventListener() instead.'
     )
     scope.removeEventListener(type, listener)
   }
 
-  this.notify = function(type) {
+  this.notify = function (type) {
     console.error(
       'THREE.DragControls: notify() has been deprecated. Use dispatchEvent() instead.'
     )

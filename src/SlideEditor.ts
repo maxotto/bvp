@@ -1,6 +1,4 @@
-import * as THREE from 'three'
 import { Slide, WorldCoordinatesType, WorldMode } from './types'
-// import { DragControls } from './tools/MyDragControls';
 import { DragControls } from './core/DragControls'
 import {
   calcCameraPosition,
@@ -8,7 +6,7 @@ import {
   recalcToSpherical,
 } from './tools/helpers'
 import { EditableGroup } from './core/EditableGroup'
-import { Spherical, Vector2, Vector3 } from 'three'
+import { Vector3, SphereGeometry, DoubleSide, MeshPhongMaterial, Mesh } from 'three'
 
 export class SlideEditor {
   private dragControls
@@ -38,7 +36,7 @@ export class SlideEditor {
             const userData = event.object.userData
             const slideIndex = userData.parentSlide
             const slide = <Slide>this.parent.world.slides[slideIndex]
-            const center = new THREE.Vector3(
+            const center = new Vector3(
               event.object.position.x,
               event.object.position.y,
               event.object.position.z
@@ -66,7 +64,7 @@ export class SlideEditor {
             const userData = event.object.userData
             const slideIndex = userData.parentSlide
             const slide = <Slide>this.parent.world.slides[slideIndex]
-            const center = new THREE.Vector3(
+            const center = new Vector3(
               event.object.position.x,
               event.object.position.y,
               event.object.position.z
@@ -190,14 +188,14 @@ export class SlideEditor {
 }
 
 export function showSphere(scene, position, size, color, texture?) {
-  var g = new THREE.SphereGeometry(size, 32, 32)
+  var g = new SphereGeometry(size, 32, 32)
   var maretialConf = { color: color }
   if (texture) {
     maretialConf['map'] = texture
-    maretialConf['side'] = THREE.DoubleSide
+    maretialConf['side'] = DoubleSide
   }
-  var material = new THREE.MeshPhongMaterial(maretialConf)
-  var sphere = new THREE.Mesh(g, material)
+  var material = new MeshPhongMaterial(maretialConf)
+  var sphere = new Mesh(g, material)
   sphere.position.x = position.x
   sphere.position.y = position.y
   sphere.position.z = position.z

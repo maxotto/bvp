@@ -25,6 +25,7 @@
     "prettier": "^1.19.1",
     "progress-bar-webpack-plugin": "latest",
     "style-loader": "latest",
+    "tslib": "^1.10.0",
     "typescript": "latest",
     "webpack": "latest",
     "webpack-cli": "latest",

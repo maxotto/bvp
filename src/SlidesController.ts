@@ -1,10 +1,10 @@
-import * as THREE from 'three'
 import TWEEN from '@tweenjs/tween.js'
 import { SignalList, ISignal } from 'strongly-typed-events'
 import { calculateJump } from './tools/helpers'
 import { getPointsByCurve } from './tools/three_helpers'
 import { WorldMode, World, UserAction, Slide } from './types'
 import { SlideEditor } from './SlideEditor'
+import { Vector3, LineBasicMaterial } from 'three'
 
 export class SlidesController {
   private _signals = new SignalList()
@@ -109,7 +109,7 @@ export class SlidesController {
       this.world.slides[slideIndex].cameraPosition.y,
       this.world.slides[slideIndex].cameraPosition.z
     )
-    this.world.orbitControl.target = new THREE.Vector3(
+    this.world.orbitControl.target = new Vector3(
       this.world.slides[slideIndex].cameraLookAt.x,
       this.world.slides[slideIndex].cameraLookAt.y,
       this.world.slides[slideIndex].cameraLookAt.z
@@ -132,23 +132,23 @@ export class SlidesController {
     if (startSlideIndex != finishSlideIndex) {
       this.busy = true
       const duration = this.world.slides[finishSlideIndex].transitionDuration
-      const startPoint = new THREE.Vector3(
+      const startPoint = new Vector3(
         this.world.slides[startSlideIndex].cameraPosition.x,
         this.world.slides[startSlideIndex].cameraPosition.y,
         this.world.slides[startSlideIndex].cameraPosition.z
       )
-      const finishPoint = new THREE.Vector3(
+      const finishPoint = new Vector3(
         this.world.slides[finishSlideIndex].cameraPosition.x,
         this.world.slides[finishSlideIndex].cameraPosition.y,
         this.world.slides[finishSlideIndex].cameraPosition.z
       )
 
-      const startLookAt = new THREE.Vector3(
+      const startLookAt = new Vector3(
         this.world.slides[startSlideIndex].cameraLookAt.x,
         this.world.slides[startSlideIndex].cameraLookAt.y,
         this.world.slides[startSlideIndex].cameraLookAt.z
       )
-      const finishLookAt = new THREE.Vector3(
+      const finishLookAt = new Vector3(
         this.world.slides[finishSlideIndex].cameraLookAt.x,
         this.world.slides[finishSlideIndex].cameraLookAt.y,
         this.world.slides[finishSlideIndex].cameraLookAt.z
@@ -160,13 +160,13 @@ export class SlidesController {
           this.world.slides[finishSlideIndex]
         )
       }
-      const middlePoint = new THREE.Vector3(
+      const middlePoint = new Vector3(
         startPoint.x - (startPoint.x - finishPoint.x) / 2,
         startPoint.y - (startPoint.y - finishPoint.y) / 2,
         startPoint.z - (startPoint.z - finishPoint.z) / 2 + jump
       )
 
-      const lookAtMiddlePoint = new THREE.Vector3(
+      const lookAtMiddlePoint = new Vector3(
         startLookAt.x - (startLookAt.x - finishLookAt.x) / 2,
         startLookAt.y - (startLookAt.y - finishLookAt.y) / 2,
         startLookAt.z - (startLookAt.z - finishLookAt.z) / 2
@@ -191,7 +191,6 @@ export class SlidesController {
       )
       const from = { index: 0 }
       const to = { index: pNums }
-      var material = new THREE.LineBasicMaterial({ color: 0x0000ff })
       this.world.orbitControl.target = startLookAt
       new TWEEN.Tween(from)
         .to(to, duration)
@@ -207,7 +206,7 @@ export class SlidesController {
           if (lookAtZ > points[pointNum].z) {
             lookAtZ = points[pointNum].z + 10
           }
-          this.world.orbitControl.target = new THREE.Vector3(
+          this.world.orbitControl.target = new Vector3(
             lookAtPoints[pointNum].x,
             lookAtPoints[pointNum].y,
             lookAtZ
@@ -219,7 +218,7 @@ export class SlidesController {
             finishPoint.y,
             finishPoint.z
           )
-          this.world.orbitControl.target = new THREE.Vector3(
+          this.world.orbitControl.target = new Vector3(
             this.world.slides[finishSlideIndex].cameraLookAt.x,
             this.world.slides[finishSlideIndex].cameraLookAt.y,
             this.world.slides[finishSlideIndex].cameraLookAt.z
