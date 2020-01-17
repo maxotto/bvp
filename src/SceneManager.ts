@@ -10,6 +10,7 @@ import { MyDataControls } from './tools/datGui'
 import { WorldMode, World, WorldCoordinatesType } from './types'
 import * as Stats from 'stats.js'
 import { Vector3, Scene, Color, WebGLRenderer, PerspectiveCamera, Clock } from 'three'
+import { SlidesController } from './SlidesController'
 
 export class SceneManager {
   private clock = new Clock()
@@ -37,17 +38,15 @@ export class SceneManager {
     this.world.orbitControl.screenSpacePanning = true
     this.world.orbitControl.target = new Vector3(0, 0, 0)
     this.world.orbitControl.update()
+    this.slidesController = new SlidesController(this.world)
+    this.slidesController.onSwitchToEditorMode.subscribe(a => {
+      this.changeMode(WorldMode.editor)
+    })
+    this.slidesController.onSwitchToShowMode.subscribe(a => {
+      this.changeMode(WorldMode.show)
+    })
+    this.ready = true
     import(/* webpackChunkName: "SlidesController" */ './SlidesController').then(m => {
-      this.slidesController = new m.SlidesController(this.world)
-      this.slidesController.onSwitchToEditorMode.subscribe(a => {
-        this.changeMode(WorldMode.editor)
-      })
-      this.slidesController.onSwitchToShowMode.subscribe(a => {
-        this.changeMode(WorldMode.show)
-      })
-      this.ready = true
-      var overlay = document.getElementById('overlay')
-      overlay.remove()
     })
     this.myControls = new MyDataControls(this.world)
     this.changeMode(WorldMode.show)

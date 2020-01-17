@@ -3,6 +3,8 @@ import './style.css'
 // import { WorldLoader } from './tools/WorldLoader'
 import { World, MouseEvents, KeyboardEvents, TouchEvents } from './types'
 import { findGetParameters } from './tools/helpers'
+import { WorldLoader } from './tools/WorldLoader';
+import { SceneManager } from './SceneManager';
 
 
 var startButton = document.getElementById('startButton');
@@ -20,18 +22,14 @@ if (!getParams.p) {
 }
 
 function init() {
-  import(/* webpackChunkName: "WorldLoader" */ './tools/WorldLoader').then(m => {
-    const l = new m.WorldLoader(getParams.p)
-    l.load().then(world => {
-      import(/* webpackChunkName: "SceneManager" */ './SceneManager').then(m => {
-        sceneManager = new m.SceneManager(canvas, <World>world)
-        bindEventListeners()
-        render()
-      })
-    })
-  }
-
-  )
+  const l = new WorldLoader(getParams.p)
+  l.load().then(world => {
+    sceneManager = new SceneManager(canvas, <World>world)
+    bindEventListeners()
+    render()
+    var overlay = document.getElementById('overlay')
+    overlay.remove()
+  })
 }
 
 function bindEventListeners() {
