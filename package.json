@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@tweenjs/tween.js": "latest",
+    "buefy": "^0.8.9",
     "controlkit": "latest",
     "dat.gui": "^0.7.6",
     "file-saver": "^2.0.2",

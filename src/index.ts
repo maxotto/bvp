@@ -5,15 +5,17 @@ import { WorldLoader } from './tools/WorldLoader';
 import { SceneManager } from './SceneManager';
 
 import Vue from "vue"
-import HelloComponent from './app/components/HelloVue.vue'
+import AppComponent from './app/App.vue'
+import Buefy from 'buefy'
+import 'buefy/dist/buefy.css'
 
+Vue.use(Buefy)
 
 var startButton = document.getElementById('startButton');
 startButton.addEventListener('click', () => {
   init()
 }, false)
 
-const canvas = <HTMLCanvasElement>document.getElementById('canvas')
 let sceneManager
 const getParams: any = findGetParameters()
 if (!getParams.p) {
@@ -24,24 +26,32 @@ if (!getParams.p) {
 
 function init() {
   const l = new WorldLoader(getParams.p)
-  let vue = new Vue({
-    el: "#app",
-    template: `<div id = 'vueApp'>
-        Name: <input v-model="name" type="text">
-        <hello-component :name="name" :initialEnthusiasm="5" />
-    </div>`,
-    data: { name: "World" },
-    components: {
-      HelloComponent
-    }
-  });
   l.load().then((world: World) => {
+    const vue = new Vue({
+      el: "#app",
+      template: `<div>
+      <div id = 'vueApp'>
+          <app-component :name="name" :world="world"/>
+      </div>
+      <div class="main" id="main">
+      <canvas id="canvas"></canvas>
+      </div>
+      </div>`,
+      data: {
+        world: world,
+        name: "World"
+      },
+      components: {
+        AppComponent
+      }
+    });
     var appDiv = <HTMLDivElement>document.getElementById('vueApp')
-    appDiv.style.display = 'none'
+    // appDiv.style.display = 'none'
     world.vue = {
       app: vue,
       container: appDiv
     }
+    const canvas = <HTMLCanvasElement>document.getElementById('canvas')
     sceneManager = new SceneManager(canvas, <World>world)
     var overlay = document.getElementById('overlay')
     overlay.remove()
@@ -84,6 +94,7 @@ function onTouchEvent(event) {
 }
 
 function resizeCanvas() {
+  const canvas = <HTMLCanvasElement>document.getElementById('canvas')
   canvas.style.width = '100%'
   canvas.style.height = '100%'
 
