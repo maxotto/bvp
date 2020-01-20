@@ -1,8 +1,8 @@
-import './style.css'
-import { World, MouseEvents, KeyboardEvents, TouchEvents } from './types'
-import { findGetParameters } from './tools/helpers'
-import { WorldLoader } from './tools/WorldLoader';
-import { SceneManager } from './SceneManager';
+import './bvp_lib/style.css'
+import { World, MouseEvents, KeyboardEvents, TouchEvents } from './bvp_lib/types'
+import { findGetParameters } from './bvp_lib/tools/helpers'
+import { WorldLoader } from './bvp_lib/tools/WorldLoader';
+import { SceneManager } from './bvp_lib/SceneManager';
 
 import Vue from "vue"
 import AppComponent from './app/App.vue'
