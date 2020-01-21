@@ -4,7 +4,7 @@ import { WorldLoader } from './tools/WorldLoader';
 import { SceneManager } from './SceneManager';
 
 let sceneManager
-export function start() {
+export function start(onLoadHandler) {
   const getParams: any = findGetParameters()
   if (!getParams.p) {
     // alert('Project name required');
@@ -12,11 +12,12 @@ export function start() {
     // throw new Error("Something went wrong!");
   }
   const l = new WorldLoader(getParams.p)
-  return l.load().then((world: World) => {
+  return l.load(onLoadHandler).then((world: World) => {
     const canvas = <HTMLCanvasElement>document.getElementById('canvas')
     sceneManager = new SceneManager(canvas, <World>world)
     bindEventListeners()
     render()
+    return world
   })
 }
 

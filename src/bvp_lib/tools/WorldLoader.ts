@@ -67,13 +67,13 @@ export class WorldLoader {
   constructor(scenarioFolder: string) {
     this._scenarioFolder = scenarioFolder + '/'
   }
-  public load() {
+  public load(onLoad: Function) {
     const scope = this
     var manager = new LoadingManager()
     var slideNumber = 0
-    const counter = <HTMLCanvasElement>document.getElementById('loaded_count')
+
     manager.onProgress = function (item, loaded, total) {
-      counter.innerText = total.toString()
+      onLoad(total)
     }
 
     manager.onLoad = function () { }
