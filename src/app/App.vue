@@ -2,8 +2,13 @@
   <div>
     <div id="overlay">
       <div>
-        <button id="startButton" @click="createWorld">Старт</button>
-        <p id="loaded_count">_</p>
+        <b-button
+          type="is-primary"
+          @click="createWorld"
+          :disabled="loading"
+          :loading="loading"
+        >Старт</b-button>
+        <p id="loaded_count">0</p>
       </div>
     </div>
     <div class="main" id="main">
@@ -13,7 +18,6 @@
 </template>
 
 <script lang="ts">
-import "./style.css";
 import Vue from "vue";
 import { start } from "../bvp_lib/start";
 import { World } from "../bvp_lib/types";
@@ -21,11 +25,13 @@ import { World } from "../bvp_lib/types";
 export default Vue.extend({
   data() {
     return {
-      world: null as World
+      world: null as World,
+      loading: false
     };
   },
   methods: {
     createWorld() {
+      this.loading = true;
       start(this.onLoadHandler).then(world => {
         document.getElementById("overlay").remove();
         this.world = world;
@@ -41,4 +47,44 @@ export default Vue.extend({
 });
 </script>
 
-<style></style>
+<style>
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1 0 auto;
+  background-color: rgb(0, 0, 0);
+}
+
+#overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  background-color: #000000;
+  z-index: 1;
+}
+
+#overlay > div {
+  text-align: center;
+}
+
+#overlay > div > p {
+  color: #777777;
+  font-size: 12px;
+}
+</style>
