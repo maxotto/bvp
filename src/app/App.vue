@@ -21,6 +21,9 @@
 import Vue from "vue";
 import { start } from "../bvp_lib/start";
 import { World } from "../bvp_lib/types";
+import "buefy/dist/buefy.css";
+import BButton from "buefy";
+Vue.use(BButton);
 
 export default Vue.extend({
   data() {

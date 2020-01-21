@@ -1,7 +1,5 @@
 import { World, MouseEvents, KeyboardEvents, TouchEvents } from './types'
 import { findGetParameters } from './/tools/helpers'
-import { WorldLoader } from './tools/WorldLoader';
-import { SceneManager } from './SceneManager';
 
 let sceneManager
 export function start(onLoadHandler?: Function) {

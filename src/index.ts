@@ -1,9 +1,6 @@
 import Vue from "vue"
-import App from './app/App.vue'
-import Buefy from 'buefy'
-import 'buefy/dist/buefy.css'
 
-Vue.use(Buefy)
+const App = () => import('./app/App.vue')
 
 new Vue({
   render: h => h(App),
