@@ -35,6 +35,7 @@ export default Vue.extend({
       start(this.onLoadHandler).then(world => {
         document.getElementById("overlay").remove();
         this.world = world;
+        this.loading = false;
       });
     },
 
@@ -84,7 +85,7 @@ body {
 }
 
 #overlay > div > p {
-  color: #777777;
+  color: #ffffff;
   font-size: 12px;
 }
 </style>
