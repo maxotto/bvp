@@ -11,12 +11,16 @@ export function start(onLoadHandler?: Function) {
     getParams.p = 'Adamov202001_01'
     // throw new Error("Something went wrong!");
   }
-  const l = new WorldLoader(getParams.p)
-  return l.load(onLoadHandler).then((world: World) => {
-    sceneManager = new SceneManager(<HTMLCanvasElement>document.getElementById('canvas'), <World>world)
-    bindEventListeners()
-    render()
-    return world
+  return import(/* webpackChunkName: "WorldLoader" */'./tools/WorldLoader').then(m => {
+    const wLib = new m.WorldLoader(getParams.p)
+    return wLib.load(onLoadHandler).then((world: World) => {
+      const sLib = import(/* webpackChunkName: "WorldLoader" */'./SceneManager').then(m => {
+        sceneManager = new m.SceneManager(<HTMLCanvasElement>document.getElementById('canvas'), <World>world)
+        bindEventListeners()
+        render()
+        return world
+      })
+    })
   })
 }
 
