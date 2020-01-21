@@ -1,65 +1,39 @@
 <template>
   <div>
-    <div>
-      I am Vue App from
-      <i>/src/app/App.vue!</i>
+    <div id="overlay">
+      <div>
+        <button id="startButton" @click="createWorld">Старт</button>
+        <p id="loaded_count">-</p>
+      </div>
     </div>
-    <p>{{ name }}</p>
-    <p>{{ world.panoRadius }}</p>
-    <b-button type="is-link">Click Me</b-button>
-    <section>
-      <button class="button is-medium is-primary" @click="alert">
-        Launch alert (default)
-      </button>
-      <button class="button is-medium is-primary" @click="alertCustom">
-        Launch alert (custom)
-      </button>
-      <button class="button is-medium is-danger" @click="alertCustomError">
-        Launch alert (custom)
-      </button>
-    </section>
+    <div class="main" id="main">
+      <canvas id="canvas"></canvas>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
+import "./style.css";
 import Vue from "vue";
+import { start } from "../bvp_lib/start";
 
 export default Vue.extend({
-  props: ["world", "name"],
   data() {
     return {
+      world: { panoRadius: 400 },
+      name: "BVP",
       text: "My text"
     };
   },
   methods: {
-    alert() {
-      this.$buefy.dialog.alert("Everything looks fine!");
-    },
-    alertCustom() {
-      this.$buefy.dialog.alert({
-        title: "Title Alert",
-        message: "I have a title, a custom button and <b>HTML</b>!",
-        confirmText: "Cool!"
-      });
-    },
-    alertCustomError() {
-      this.$buefy.dialog.alert({
-        title: "Error",
-        message:
-          "Something's not good but I have a custom <b>icon</b> and <b>type</b>",
-        type: "is-danger",
-        hasIcon: true,
-        icon: "times-circle",
-        iconPack: "fa",
-        ariaRole: "alertdialog",
-        ariaModal: true
+    createWorld() {
+      start().then(() => {
+        document.getElementById("overlay").remove();
       });
     }
   },
   computed: {},
-  created() {
-    console.log("App created");
-  }
+  created() {}
 });
 </script>
 
