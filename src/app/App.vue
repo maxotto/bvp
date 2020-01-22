@@ -13,6 +13,7 @@
     </div>
     <div class="main" id="main">
       <canvas id="canvas"></canvas>
+      <side-bars></side-bars>
     </div>
   </div>
 </template>
@@ -23,6 +24,8 @@ import { start } from "../bvp_lib/start";
 import { World } from "../bvp_lib/types";
 import "buefy/dist/buefy.css";
 import BButton from "buefy";
+import SideBars from "./components/side-bars.vue";
+
 Vue.use(BButton);
 
 export default Vue.extend({
@@ -31,6 +34,9 @@ export default Vue.extend({
       world: null as World,
       loading: false
     };
+  },
+  components: {
+    SideBars
   },
   methods: {
     createWorld() {
@@ -80,7 +86,7 @@ body {
   justify-content: center;
   opacity: 1;
   background-color: #000000;
-  z-index: 1;
+  z-index: 0;
 }
 
 #overlay > div {
