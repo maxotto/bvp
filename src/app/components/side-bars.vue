@@ -58,7 +58,7 @@ export default class SideBars extends Vue {
   background: rgba(1, 1, 1, 0.04);
   position: absolute;
   top: 0px;
-  left: -90px;
+  left: -80px;
   z-index: 2;
   width: 100px;
   height: 100%;
@@ -74,20 +74,20 @@ export default class SideBars extends Vue {
 }
 
 #bottomsidebar {
-  /* background: rgba(248, 3, 175, 0.01); */
+  background: rgba(0, 0, 0, 0.003);
   position: absolute;
-  bottom: 0px;
+  bottom: -80px;
   left: 0px;
   z-index: 2;
   width: 100%;
-  height: 15px;
-  transition-property: height, background;
+  height: 100px;
+  transition-property: bottom, background;
   transition-duration: 0.3s;
   transition-timing-function: ease-in, ease, linear;
 }
 
 #bottomsidebar:hover {
-  height: 100px;
-  background: rgba(103, 240, 164, 0.3);
+  bottom: 0px;
+  background: rgba(100, 100, 100, 0.3);
 }
 </style>
