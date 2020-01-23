@@ -7,7 +7,8 @@
           @click="createWorld"
           :disabled="loading"
           :loading="loading"
-        >Старт</b-button>
+          >Старт</b-button
+        >
         <p id="loaded_count">0</p>
       </div>
     </div>
@@ -22,11 +23,7 @@
 import Vue from "vue";
 import { start } from "../bvp_lib/start";
 import { World } from "../bvp_lib/types";
-import "buefy/dist/buefy.css";
-import BButton from "buefy";
 import SideBars from "./components/side-bars.vue";
-
-Vue.use(BButton);
 
 export default Vue.extend({
   data() {

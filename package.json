@@ -20,6 +20,7 @@
     "copy-webpack-plugin": "latest",
     "css-loader": "latest",
     "extract-text-webpack-plugin": "latest",
+    "file-loader": "^5.0.2",
     "html-webpack-plugin": "latest",
     "json-loader": "latest",
     "prettier": "^1.19.1",
@@ -36,6 +37,7 @@
     "write-file-webpack-plugin": "latest"
   },
   "dependencies": {
+    "@mdi/font": "^4.8.95",
     "@tweenjs/tween.js": "latest",
     "buefy": "^0.8.9",
     "controlkit": "latest",

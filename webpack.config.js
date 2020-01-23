@@ -64,6 +64,10 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.(woff|woff2|ttf|eot)$/,
+        use: "file-loader?name=fonts/[name].[ext]!static"
+      },
+      {
         test: /\.tsx?$/,
         loader: "ts-loader",
         exclude: /node_modules/,

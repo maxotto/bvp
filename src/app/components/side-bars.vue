@@ -1,25 +1,39 @@
 <template>
   <div>
-    <div id="leftsidebartoggler" @mousemove="leftmousemove"></div>
-    <div id="leftsidebar"></div>
-    <div id="bottomsidebartoggler"></div>
-    <div id="bottomsidebar"></div>
+    <div id="leftsidebar" @mousemove="leftmousemove">
+      <div class="block">
+        <div>
+          <b-icon icon="account" size="is-large" type="is-success"></b-icon>
+        </div>
+        <div>
+          <b-icon icon="home" size="is-large" type="is-info"></b-icon>
+        </div>
+        <div>
+          <b-icon
+            icon="view-dashboard"
+            size="is-large"
+            type="is-primary"
+          ></b-icon>
+        </div>
+      </div>
+    </div>
+    <div id="bottomsidebar" @mousemove="bottommousemove"></div>
   </div>
 </template>
+
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 
 @Component
 export default class SideBars extends Vue {
-  openLeftSideBar: boolean = false;
   created() {
     // alert("sidebars created");
   }
   leftmousemove(event) {
-    if (!this.openLeftSideBar) {
-      this.openLeftSideBar = true;
-    }
-    console.log(event);
+    console.log("leftmousemove", event);
+  }
+  bottommousemove(event) {
+    console.log("bottommousemove", event);
   }
   @Watch("openLeftSideBar") onLeftSideBarToggle(
     value: boolean,
@@ -33,45 +47,47 @@ export default class SideBars extends Vue {
   }
 }
 </script>
-<style>
-#leftsidebartoggler {
-  background-color: rgb(194, 245, 194);
-  position: absolute;
-  top: 0px;
-  left: 0px;
 
-  z-index: 2;
-  width: 10px;
-  height: 100%;
+<style>
+.block {
 }
 #leftsidebar {
-  background-color: rgb(228, 150, 4);
+  display: flex;
+  align-items: top;
+  justify-content: center;
+  background: rgba(1, 1, 1, 0.04);
   position: absolute;
   top: 0px;
-  left: -100px;
-
-  z-index: 0;
+  left: -90px;
+  z-index: 2;
   width: 100px;
   height: 100%;
+  transition-property: left, background;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in, ease, linear;
 }
-#bottomsidebartoggler {
-  background: rgba(103, 240, 164, 0.5);
+
+#leftsidebar:hover {
+  width: 100px;
+  left: 0px;
+  background: rgba(198, 245, 145, 0.3);
+}
+
+#bottomsidebar {
+  /* background: rgba(248, 3, 175, 0.01); */
   position: absolute;
   bottom: 0px;
   left: 0px;
-
   z-index: 2;
   width: 100%;
-  height: 10px;
+  height: 15px;
+  transition-property: height, background;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in, ease, linear;
 }
-#bottomsidebar {
-  background: rgba(241, 245, 1, 0.5);
-  position: absolute;
-  bottom: -100px;
-  left: 0px;
 
-  z-index: 0;
-  width: 100%;
+#bottomsidebar:hover {
   height: 100px;
+  background: rgba(103, 240, 164, 0.3);
 }
 </style>
