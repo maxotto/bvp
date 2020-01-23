@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="leftsidebar" @mousemove="leftmousemove">
+    <div id="leftsidebar">
       <div class="block">
         <div>
           <b-icon icon="account" size="is-large" type="is-success"></b-icon>
@@ -9,47 +9,49 @@
           <b-icon icon="home" size="is-large" type="is-info"></b-icon>
         </div>
         <div>
-          <b-icon
-            icon="view-dashboard"
-            size="is-large"
-            type="is-primary"
-          ></b-icon>
+          <b-icon icon="view-dashboard" size="is-large" type="is-primary"></b-icon>
         </div>
       </div>
     </div>
-    <div id="bottomsidebar" @mousemove="bottommousemove"></div>
+    <div id="bottomsidebar">
+      <div class="buttonspace" @click="slideNavigate('first')">
+        <b-icon icon="arrow-collapse-left" size="is-large" type="is-success"></b-icon>
+      </div>
+      <div class="buttonspace" @click="slideNavigate('prev')">
+        <b-icon icon="arrow-left" size="is-large" type="is-success"></b-icon>
+      </div>
+      <div class="buttonspace" @click="slideNavigate('next')">
+        <b-icon icon="arrow-right" size="is-large" type="is-success"></b-icon>
+      </div>
+      <div class="buttonspace" @click="slideNavigate('last')">
+        <b-icon icon="arrow-collapse-right" size="is-large" type="is-success"></b-icon>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+//TODO refactor this with @Component decorator
+import Vue from "vue";
 
-@Component
-export default class SideBars extends Vue {
-  created() {
-    // alert("sidebars created");
-  }
-  leftmousemove(event) {
-    console.log("leftmousemove", event);
-  }
-  bottommousemove(event) {
-    console.log("bottommousemove", event);
-  }
-  @Watch("openLeftSideBar") onLeftSideBarToggle(
-    value: boolean,
-    oldValue: boolean
-  ) {
-    console.log({ value }, { oldValue });
-    if (value) {
-      const el = <HTMLElement>document.getElementById("leftsidebar");
-      el.style.left = "0px";
+export default Vue.extend({
+  methods: {
+    slideNavigate(command) {
+      console.log(command);
+      console.log(this.$bvp);
     }
   }
-}
+});
 </script>
 
 <style>
-.block {
+.buttonspace {
+  width: 150px;
+  display: flex;
+  justify-content: center;
+  background: rgba(139, 220, 245, 0.4);
+  margin: 5px;
+  border-radius: 24px;
 }
 #leftsidebar {
   display: flex;
@@ -58,7 +60,7 @@ export default class SideBars extends Vue {
   background: rgba(1, 1, 1, 0.04);
   position: absolute;
   top: 0px;
-  left: -80px;
+  left: -75px;
   z-index: 2;
   width: 100px;
   height: 100%;
@@ -74,6 +76,9 @@ export default class SideBars extends Vue {
 }
 
 #bottomsidebar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: rgba(0, 0, 0, 0.003);
   position: absolute;
   bottom: -80px;

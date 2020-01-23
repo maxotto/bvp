@@ -7,28 +7,21 @@
           @click="createWorld"
           :disabled="loading"
           :loading="loading"
-          >Старт</b-button
-        >
+        >Старт</b-button>
         <p id="loaded_count">0</p>
       </div>
     </div>
-    <div class="main" id="main">
-      <canvas id="canvas"></canvas>
-      <side-bars></side-bars>
-    </div>
+    <side-bars></side-bars>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { start } from "../bvp_lib/start";
-import { World } from "../bvp_lib/types";
 import SideBars from "./components/side-bars.vue";
-
+//TODO refactor this with @Component decorator
 export default Vue.extend({
   data() {
     return {
-      world: null as World,
       loading: false
     };
   },
@@ -38,9 +31,9 @@ export default Vue.extend({
   methods: {
     createWorld() {
       this.loading = true;
-      start(this.onLoadHandler).then(world => {
+      this.$bvp.start(this.onLoadHandler).then(sceneManager => {
         document.getElementById("overlay").remove();
-        this.world = world;
+        console.log(this.$bvp);
         this.loading = false;
       });
     },
