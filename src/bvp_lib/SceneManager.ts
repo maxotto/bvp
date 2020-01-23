@@ -17,7 +17,7 @@ export class SceneManager {
   private screenDimensions
   private myControls
   public sceneSubjects
-  private slidesController
+  public slidesController
   private stats: Stats
   private ready = false
 

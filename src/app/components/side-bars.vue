@@ -33,12 +33,15 @@
 <script lang="ts">
 //TODO refactor this with @Component decorator
 import Vue from "vue";
+import { SceneManager } from '../../bvp_lib/SceneManager';
 
 export default Vue.extend({
   methods: {
     slideNavigate(command) {
       console.log(command);
       console.log(this.$bvp);
+      const sm = <SceneManager>this.$bvp.sceneManager
+      sm.slidesController.navigate(command)
     }
   }
 });

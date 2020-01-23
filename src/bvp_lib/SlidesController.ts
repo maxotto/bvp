@@ -8,7 +8,7 @@ import { Vector3, LineBasicMaterial } from 'three'
 
 export class SlidesController {
   private _signals = new SignalList()
-  private busy = false
+  public busy = false
   private step = 0
   private slideEditor
   constructor(private world) {
@@ -42,9 +42,36 @@ export class SlidesController {
     this.slideEditor.onTouchEvent(event)
   }
 
+  navigate(command){
+    let action: UserAction, start, finish
+    action = UserAction.navigate
+    switch (command) {
+      case 'next':
+        start = this.step
+        finish = this.step + 1
+        break
+      case 'prev':
+        start = this.step
+        finish = this.step - 1
+        break
+      case 'last':
+        start = this.step
+        finish = this.world.steps.length - 1
+        break
+      case 'first':
+        start = this.step
+        finish = 0
+        break
+    }    
+    if (finish >= 0 && finish <= this.world.steps.length - 1) {
+      this.step = finish
+      this.showNextSlideByStep(start, finish)
+    }
+  }
+
   onKeyboardEvent(event) {
     this.slideEditor.onKeyboardEvent(event)
-    var action: UserAction, start, finish
+    let action: UserAction, start, finish
     if (!this.busy && event.type === 'keydown') {
       var alt = event.altKey ? 'Alt-' : ''
       var ctrl = event.ctrlKey ? 'Ctrl-' : ''
