@@ -63,26 +63,18 @@ export class SlidesController {
         break
     }
 
-    if (start === finish) return Promise.resolve({
-      steps: this.world.steps,
-      current: this.step
-    })
+    if (start === finish) return Promise.resolve(this.step)
 
     if (finish >= 0 && finish <= this.world.steps.length - 1) {
       this.step = finish
       return new Promise((resolve, reject) => {
         this.showNextSlideByStep(start, finish, () => {
-          resolve({
-            steps: this.world.steps,
-            current: this.step
-          })
+          resolve(this.step)
         })
       })
     }
-    return Promise.resolve({
-      steps: this.world.steps,
-      current: this.step
-    })
+
+    return Promise.resolve(this.step)
   }
 
   onKeyboardEvent(event) {

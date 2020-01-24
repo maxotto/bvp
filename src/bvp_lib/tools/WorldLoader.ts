@@ -85,8 +85,6 @@ export class WorldLoader {
     return promisifyLoader(new XmlLoader(manager), onProgress)
       .load('assets/' + this._scenarioFolder + 'scenario.xml')
       .then((scenarioData: ScenarioData) => {
-        console.log(scenarioData)
-        console.log({ scenarioData })
         this._width = +scenarioData.width
         this._height = +scenarioData.height
         this._steps = scenarioData.steps
@@ -356,7 +354,6 @@ export class WorldLoader {
                             video.playsinline = true
                             if (video.canPlayType("video/mp4")) {
                               const full = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '')
-                              console.log(full)
                               video.setAttribute("src",
                                 'assets/' +
                                 context._scenarioFolder + object.src

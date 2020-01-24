@@ -34,7 +34,6 @@ export default Vue.extend({
       this.loading = true;
       this.$bvp.start(this.onLoadHandler).then(sceneManager => {
         document.getElementById("overlay").remove();
-        console.log(this.$bvp);
         this.loading = false;
         this.allowSlideControl = true;
       });

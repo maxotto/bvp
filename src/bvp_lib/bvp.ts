@@ -55,11 +55,11 @@ export default class bvp {
   private resizeCanvas() {
     this.canvas.style.width = '100%'
     this.canvas.style.height = '100%'
-
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
 
-    this.sceneManager.onWindowResize()
+    if (this.sceneManager)
+      this.sceneManager.onWindowResize()
   }
 
   private render = () => {

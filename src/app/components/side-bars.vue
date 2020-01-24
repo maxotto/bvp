@@ -1,17 +1,7 @@
 <template>
   <div>
     <div id="leftsidebar">
-      <div class="block">
-        <div>
-          <b-icon icon="account" size="is-small" type="is-success"></b-icon>
-        </div>
-        <div>
-          <b-icon icon="home" size="is-small" type="is-info"></b-icon>
-        </div>
-        <div>
-          <b-icon icon="view-dashboard" size="is-small" type="is-primary"></b-icon>
-        </div>
-      </div>
+      <NavBar :sceneManager="sceneManager" :inMove="inMove" @navigateTo="slideNavigate"></NavBar>
     </div>
     <div id="bottomsidebar">
       <div id="buttons-container">
@@ -59,11 +49,17 @@
 //TODO refactor this with @Component decorator
 import Vue from "vue";
 import { SceneManager } from "../../bvp_lib/SceneManager";
+import NavBar from "./nav-bar.vue";
 
 export default Vue.extend({
+  components: {
+    NavBar
+  },
   props: ["allowSlideControl"],
   data() {
     return {
+      sceneManager: <SceneManager>null,
+      steps: [],
       inMove: false,
       buttonstate: {
         first: false,
@@ -73,22 +69,27 @@ export default Vue.extend({
       }
     };
   },
+  watch: {
+    allowSlideControl: function(val) {
+      if (val) {
+        this.sceneManager = <SceneManager>this.$bvp.sceneManager;
+        this.steps = this.sceneManager.world.steps;
+      }
+    }
+  },
   methods: {
     slideNavigate(command) {
       this.inMove = true;
-      const sm = <SceneManager>this.$bvp.sceneManager;
-      sm.slidesController.navigate(command).then(state => {
-        console.log("movement done", { state });
-        const length = state.steps.length;
-        console.log({ length });
-        if (state.current === 0) {
+      this.sceneManager.slidesController.navigate(command).then(current => {
+        const length = this.steps.length;
+        if (current === 0) {
           this.buttonstate = {
             first: false,
             prev: false,
             next: true,
             last: true
           };
-        } else if (state.current === length - 1) {
+        } else if (current === length - 1) {
           this.buttonstate = {
             first: true,
             prev: true,
@@ -104,9 +105,6 @@ export default Vue.extend({
           };
         }
         this.inMove = false;
-        console.log(this.allowSlideControl);
-        console.log(this.inMove);
-        console.log(this.buttonstate);
       });
     }
   },
