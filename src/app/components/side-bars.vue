@@ -14,41 +14,43 @@
       </div>
     </div>
     <div id="bottomsidebar">
-      <b-button
-        type="is-success"
-        outlined
-        size="is-small"
-        icon-left="arrow-collapse-left"
-        :disabled="inMove || !allowSlideControl || !buttonstate['first']"
-        @click="slideNavigate('first')"
-      ></b-button>
-      <div class="spacer"></div>
-      <b-button
-        type="is-success"
-        outlined
-        size="is-small"
-        icon-left="arrow-left"
-        :disabled="inMove || !allowSlideControl || !buttonstate['prev']"
-        @click="slideNavigate('prev')"
-      ></b-button>
-      <div class="spacer"></div>
-      <b-button
-        type="is-success"
-        outlined
-        size="is-small"
-        icon-left="arrow-right"
-        :disabled="inMove || !allowSlideControl || !buttonstate['next']"
-        @click="slideNavigate('next')"
-      ></b-button>
-      <div class="spacer"></div>
-      <b-button
-        type="is-success"
-        outlined
-        size="is-small"
-        icon-left="arrow-collapse-right"
-        :disabled="inMove || !allowSlideControl || !buttonstate['last']"
-        @click="slideNavigate('last')"
-      ></b-button>
+      <div id="buttons-container">
+        <b-button
+          type="is-success"
+          outlined
+          size="is-small"
+          icon-left="arrow-collapse-left"
+          :disabled="inMove || !allowSlideControl || !buttonstate['first']"
+          @click="slideNavigate('first')"
+        ></b-button>
+        <div class="spacer"></div>
+        <b-button
+          type="is-success"
+          outlined
+          size="is-small"
+          icon-left="arrow-left"
+          :disabled="inMove || !allowSlideControl || !buttonstate['prev']"
+          @click="slideNavigate('prev')"
+        ></b-button>
+        <div class="spacer"></div>
+        <b-button
+          type="is-success"
+          outlined
+          size="is-small"
+          icon-left="arrow-right"
+          :disabled="inMove || !allowSlideControl || !buttonstate['next']"
+          @click="slideNavigate('next')"
+        ></b-button>
+        <div class="spacer"></div>
+        <b-button
+          type="is-success"
+          outlined
+          size="is-small"
+          icon-left="arrow-collapse-right"
+          :disabled="inMove || !allowSlideControl || !buttonstate['last']"
+          @click="slideNavigate('last')"
+        ></b-button>
+      </div>
     </div>
   </div>
 </template>
@@ -102,6 +104,8 @@ export default Vue.extend({
           };
         }
         this.inMove = false;
+        console.log(this.allowSlideControl);
+        console.log(this.inMove);
         console.log(this.buttonstate);
       });
     }
@@ -147,13 +151,20 @@ export default Vue.extend({
   z-index: 2;
   width: 100%;
   height: 50px;
-  transition-property: bottom, background;
+  transition-property: bottom;
   transition-duration: 0.3s;
-  transition-timing-function: ease-in, ease;
+  transition-timing-function: ease-in;
 }
 
 #bottomsidebar:hover {
   bottom: 0px;
+}
+#buttons-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  height: 50px;
   background: rgba(32, 32, 32, 0.7);
 }
 </style>
