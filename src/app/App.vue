@@ -11,7 +11,7 @@
         <p id="loaded_count">0</p>
       </div>
     </div>
-    <side-bars></side-bars>
+    <side-bars :allowSlideControl="allowSlideControl"></side-bars>
   </div>
 </template>
 
@@ -22,6 +22,7 @@ import SideBars from "./components/side-bars.vue";
 export default Vue.extend({
   data() {
     return {
+      allowSlideControl: false,
       loading: false
     };
   },
@@ -35,6 +36,7 @@ export default Vue.extend({
         document.getElementById("overlay").remove();
         console.log(this.$bvp);
         this.loading = false;
+        this.allowSlideControl = true;
       });
     },
 

@@ -42,9 +42,9 @@ export class SlidesController {
     this.slideEditor.onTouchEvent(event)
   }
 
-  navigate(command){
-    let action: UserAction, start, finish
-    action = UserAction.navigate
+  navigate(command) {
+    let start: number, finish: number
+
     switch (command) {
       case 'next':
         start = this.step
@@ -62,11 +62,28 @@ export class SlidesController {
         start = this.step
         finish = 0
         break
-    }    
+    }
+
+    if (start === finish) return Promise.resolve({
+      steps: this.world.steps,
+      current: this.step
+    })
+
     if (finish >= 0 && finish <= this.world.steps.length - 1) {
       this.step = finish
-      this.showNextSlideByStep(start, finish)
+      return new Promise((resolve, reject) => {
+        this.showNextSlideByStep(start, finish, () => {
+          resolve({
+            steps: this.world.steps,
+            current: this.step
+          })
+        })
+      })
     }
+    return Promise.resolve({
+      steps: this.world.steps,
+      current: this.step
+    })
   }
 
   onKeyboardEvent(event) {
@@ -141,7 +158,7 @@ export class SlidesController {
     )
   }
 
-  showNextSlide(startSlideIndex, finishSlideIndex) {
+  showNextSlide(startSlideIndex: number, finishSlideIndex: number, cb?: Function) {
     if (<HTMLVideoElement>this.world.slides[startSlideIndex].videoHtmlElement) {
       // const video = <HTMLVideoElement>this.world.slides[startSlideIndex].videoHtmlElement
       // video.pause()
@@ -249,15 +266,18 @@ export class SlidesController {
             this.world.slides[finishSlideIndex].cameraLookAt.z
           )
           this.busy = false
+          if (cb && typeof cb === 'function') {
+            cb()
+          }
 
         })
         .start()
     }
   }
 
-  showNextSlideByStep(startStep, finishStep) {
+  showNextSlideByStep(startStep: number, finishStep: number, cb?: Function) {
     let startSlideIndex = +this.world.steps[startStep]['slide']
     let finishSlideIndex = +this.world.steps[finishStep]['slide']
-    this.showNextSlide(startSlideIndex, finishSlideIndex)
+    this.showNextSlide(startSlideIndex, finishSlideIndex, cb)
   }
 }
