@@ -44,23 +44,22 @@ export class SlidesController {
 
   navigate(command) {
     let start: number, finish: number
-
+    start = this.step
     switch (command) {
       case 'next':
-        start = this.step
         finish = this.step + 1
         break
       case 'prev':
-        start = this.step
         finish = this.step - 1
         break
       case 'last':
-        start = this.step
         finish = this.world.steps.length - 1
         break
       case 'first':
-        start = this.step
         finish = 0
+        break
+      default:
+        finish = +command
         break
     }
 
