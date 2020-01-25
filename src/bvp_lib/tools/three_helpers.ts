@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { World } from '../types'
 
 export function createMaterial(materialClass, params) {
   if (!materialClass) materialClass = 'MeshToonMaterial'
@@ -10,4 +11,8 @@ export function getPointsByCurve(curveFunctionName, ...curveFunctionArgs) {
   let line: any = new THREE[curveFunctionName](...curveFunctionArgs)
   var points = line.getPoints(pointsNum)
   return points
+}
+
+export function createSnapshot(world: World, slideNumber: number) {
+  return 'Snapshot' + slideNumber
 }
