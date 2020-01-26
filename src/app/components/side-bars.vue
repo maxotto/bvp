@@ -123,17 +123,16 @@ export default Vue.extend({
   background: rgba(1, 1, 1, 0.04);
   position: absolute;
   top: 0px;
-  left: -75px;
+  left: -180px;
   z-index: 2;
-  width: 100px;
+  width: 190px;
   height: 100%;
   transition-property: left, background;
   transition-duration: 0.3s;
-  transition-timing-function: ease-in, ease, linear;
+  transition-timing-function: ease-in, ease;
 }
 
 #leftsidebar:hover {
-  width: 100px;
   left: 0px;
   background: rgba(198, 245, 145, 0.3);
 }

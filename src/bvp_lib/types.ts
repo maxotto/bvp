@@ -64,6 +64,7 @@ export type Slide = {
   distanceToCamera: number
   objects: any[]
   videoHtmlElement?: HTMLVideoElement
+  snapshot: any //TODO change ANY type for something reasonable
 }
 
 export enum WorldMode {

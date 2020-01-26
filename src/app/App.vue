@@ -11,6 +11,7 @@
         <p id="loaded_count">0</p>
       </div>
     </div>
+    <div id="overlayInner"></div>
     <side-bars :allowSlideControl="allowSlideControl"></side-bars>
   </div>
 </template>

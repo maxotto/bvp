@@ -10,7 +10,7 @@ import {
 } from './helpers'
 
 import {
-  createMaterial,
+  createMaterial, createSnapshot,
 } from './three_helpers'
 
 import {
@@ -172,6 +172,7 @@ export class WorldLoader {
               p = Promise.resolve(true)
             }
             return p.then(() => {
+              newSlide.snapshot = createSnapshot(newSlide)
               this._outSlides.push(newSlide)
             })
           })
@@ -385,6 +386,7 @@ export class WorldLoader {
                       p = Promise.resolve()
                     }
                     return p.then(() => {
+                      newSlide.snapshot = createSnapshot(newSlide)
                       this._outSlides.push(newSlide)
                     })
                   })
