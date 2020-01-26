@@ -3,7 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import { GeneralLights } from './sceneSubjects/GeneralLights'
 import { SceneSubjects } from './sceneSubjects/SceneSubjects'
-import { Panorama } from './sceneSubjects/panorama'
+import { Panorama } from './sceneSubjects/Panorama'
 
 import { MyDataControls } from './tools/datGui'
 
