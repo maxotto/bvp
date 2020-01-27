@@ -6,7 +6,7 @@ Vue.use(Buefy);
 import { BvpPlugin } from "./bvp_lib/vuePlugin";
 Vue.use(BvpPlugin, {
   //TODO set not fixed project
-  project: "Demo",
+  project: "DemoFlat",
   canvas: <HTMLCanvasElement>document.getElementById("canvas")
 });
 

@@ -1,6 +1,6 @@
 import * as THREE from 'three'
-import { World, Slide } from '../types'
-import { Camera, Scene, WebGLRenderer, PerspectiveCamera, Vector3 } from 'three'
+import { Slide } from '../types'
+import { Scene, WebGLRenderer, PerspectiveCamera, PointLight } from 'three'
 
 export function createMaterial(materialClass, params) {
   if (!materialClass) materialClass = 'MeshToonMaterial'
@@ -21,25 +21,30 @@ export function createSnapshot(slide: Slide) {
   const fov = 45
   const size = 150
   let renderer, scene, camera, mesh
-  return init()
+  // const overlay = <HTMLDivElement>document.getElementById('overlayInner')
+  renderer = new WebGLRenderer({
+    antialias: true,
+    //preserveDrawingBuffer: true
+  })
+  renderer.setSize(size, size / slide.width * slide.height);
+  // overlay.appendChild(renderer.domElement)
 
-  function init() {
-    // const overlay = <HTMLDivElement>document.getElementById('overlayInner')
-    renderer = new WebGLRenderer({
-      antialias: true,
-      //preserveDrawingBuffer: true
-    })
-    renderer.setSize(size, size / slide.width * slide.height);
-    // overlay.appendChild(renderer.domElement)
+  camera = new PerspectiveCamera(fov, slide.width / slide.height, 1, 1000)
+  scene = new Scene()
+  let light = new PointLight('#ffffff', 1)
+  light.position.set(0, 0, 1500)
+  scene.add(light)
+  if (slide.background) scene.add(slide.background)
+  slide.objects.forEach(element => {
+    scene.add(element)
+  });
+  camera.position.z = slide.distanceToCamera
+  renderer.render(scene, camera);
 
-    camera = new PerspectiveCamera(fov, slide.width / slide.height, 1, 1000)
-    scene = new Scene()
-    if (slide.background) scene.add(slide.background)
-    slide.objects.forEach(element => {
-      scene.add(element)
-    });
-    camera.position.z = slide.distanceToCamera
-    renderer.render(scene, camera);
-    return renderer.domElement.toDataURL();
-  }
+  const pic = renderer.domElement.toDataURL()
+  renderer = null
+  scene = null
+  camera = null
+  light = null
+  return pic
 }

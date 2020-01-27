@@ -63,6 +63,7 @@ export class WorldLoader {
   private _panoCenter: Vector3
   private _cameraFov: number
   private _currentObjectName
+  private _type: WorldCoordinatesType
 
   constructor(scenarioFolder: string) {
     this._scenarioFolder = scenarioFolder + '/'
@@ -104,6 +105,7 @@ export class WorldLoader {
         this._cameraFov = +scenarioData.cameraFov
         this._currentObjectName = scenarioData.mainBackgroundPic
         this._panoCenter = new Vector3(this._panoX, this._panoY, this._panoZ)
+        this._type = this.getWorldCoordinatesType()
         return promisifyLoader(new TextureLoader(manager), onProgress)
           .load('assets/' + this._scenarioFolder + this._currentObjectName)
           .then((_texturePainting: THREE.Texture) => {
@@ -114,8 +116,12 @@ export class WorldLoader {
                 map: _texturePainting,
                 side: DoubleSide,
               })
-
-            var geometry = new PlaneBufferGeometry(0.001, 0.001)
+            let geometry
+            if (this._type === WorldCoordinatesType.sphere) {
+              geometry = new PlaneBufferGeometry(0.001, 0.001)
+            } else {
+              geometry = new PlaneBufferGeometry(this._width, this._height)
+            }
             var mesh = new Mesh(geometry, materialPainting)
             mesh.name = 'slide0Bg'
             const cameraState = getCameraState(
@@ -405,7 +411,7 @@ export class WorldLoader {
       })
       .then(() => {
         return Promise.resolve(<World>{
-          type: this.getWorldCoordinatesType(),
+          type: this._type,
           width: this._width,
           height: this._height,
           slides: this._outSlides,
