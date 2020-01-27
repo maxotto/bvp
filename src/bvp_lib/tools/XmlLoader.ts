@@ -18,11 +18,9 @@ XmlLoader.prototype = {
       function (text) {
         onLoad(getWorldFromXml(text))
       },
-      function (u) {
-        // console.log({ u });
-      },
-      function (e) {
-        // console.log({ e });
+      onProgress,
+      (loadObject) => {
+        onError(loadObject.target)
       }
     )
   },

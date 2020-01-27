@@ -6,7 +6,6 @@ export default class bvp {
   private scope
   constructor(private project: string, private canvas: HTMLCanvasElement) {
     this.scope = this
-    console.log('BVP constructor', { project })
   }
 
   public start(onLoadHandler?: Function) {

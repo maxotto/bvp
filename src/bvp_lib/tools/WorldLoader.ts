@@ -78,10 +78,15 @@ export class WorldLoader {
 
     manager.onLoad = function () { }
 
-    var onProgress = function (xhr) {
+    const onProgress = function (xhr) {
       if (xhr.lengthComputable) {
       }
     }
+
+    manager.onError = (url) => {
+      console.log('Thre was an error loading ' + url);
+    }
+
     return promisifyLoader(new XmlLoader(manager), onProgress)
       .load('assets/' + this._scenarioFolder + 'scenario.xml')
       .then((scenarioData: ScenarioData) => {
@@ -413,9 +418,6 @@ export class WorldLoader {
           panoRadius: this._panoRadius,
           draggables: [],
         })
-      })
-      .catch(e => {
-        console.log(e)
       })
 
     function loadSVG(data, x, y, z, scale, parentSlide = 0) {

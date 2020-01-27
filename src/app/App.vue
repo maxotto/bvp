@@ -33,11 +33,19 @@ export default Vue.extend({
   methods: {
     createWorld() {
       this.loading = true;
-      this.$bvp.start(this.onLoadHandler).then(sceneManager => {
-        document.getElementById("overlay").remove();
-        this.loading = false;
-        this.allowSlideControl = true;
-      });
+      this.$bvp
+        .start(this.onLoadHandler)
+        .then(sceneManager => {
+          document.getElementById("overlay").remove();
+          this.loading = false;
+          this.allowSlideControl = true;
+        })
+        .catch(e => {
+          console.log({ e });
+          this.loading = false;
+          document.getElementById("loaded_count").textContent =
+            `There was an error. File: ` + e.responseURL + " - " + e.statusText;
+        });
     },
 
     onLoadHandler(total: number) {

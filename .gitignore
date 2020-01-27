@@ -47,3 +47,5 @@ yarn.lock
 
 # PhpStorm workplace
 .idea
+
+projects_lib
