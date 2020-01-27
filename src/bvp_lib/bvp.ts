@@ -1,20 +1,22 @@
 import { SceneManager } from './SceneManager';
 import { TouchEvents, KeyboardEvents, MouseEvents, World } from './types';
 import { WorldLoader } from './tools/WorldLoader';
+let scope
 export default class bvp {
   public sceneManager: SceneManager = null
   private scope
   constructor(private project: string, private canvas: HTMLCanvasElement) {
-    this.scope = this
+    scope = this
   }
 
   public start(onLoadHandler?: Function) {
     const wLib = new WorldLoader(this.project)
     return wLib.load(onLoadHandler)
       .then((world: World) => {
-        this.sceneManager = new SceneManager(<HTMLCanvasElement>document.getElementById('canvas'), <World>world)
-        this.bindEventListeners()
-        this.render()
+        console.log({ world })
+        scope.sceneManager = new SceneManager(<HTMLCanvasElement>document.getElementById('canvas'), <World>world)
+        scope.bindEventListeners()
+        scope.render()
       })
   }
 
@@ -56,9 +58,7 @@ export default class bvp {
     this.canvas.style.height = '100%'
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
-
-    if (this.sceneManager)
-      this.sceneManager.onWindowResize()
+    scope.sceneManager.onWindowResize()
   }
 
   private render = () => {

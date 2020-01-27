@@ -1,4 +1,4 @@
-import { World } from '../types'
+import { World, WorldCoordinatesType } from '../types'
 import {
   calcCameraPosition,
   getGroupGeometry,
@@ -36,14 +36,19 @@ export class SceneSubjects {
     this.mesh.position.set(-3000, 50, 120)
     this.scene.add(this.mesh)
 
-    // TODO this.createGround();
+    if (world.type === WorldCoordinatesType.vector) {
+      this.createGround(world.width);
+    }
     // this.createTiger();
 
     world.slides.forEach((slide, index) => {
       let slideGroup
       if (index === 0) {
-        // TODO this.createFrame();
-        this.scene.background = slide.texture
+        if (world.type === WorldCoordinatesType.vector) {
+          this.createFrame();
+        } else {
+          this.scene.background = slide.texture
+        }
         // console.log(slide.background);
         slideGroup = new Group()
       } else {
@@ -136,31 +141,32 @@ export class SceneSubjects {
   }
 
   createFrame() {
-    var frameBorder = 50
-    var frameGeometry = new PlaneBufferGeometry(
+    const frameBorder = this.world.width * 0.05
+    const frameGeometry = new PlaneBufferGeometry(
       this.world.width + frameBorder,
       this.world.height + frameBorder
     )
-    var meshFrame = new Mesh(
+    const meshFrame = new Mesh(
       frameGeometry,
       new MeshBasicMaterial({
         color: +this.world.mainBackgroundColor,
         side: DoubleSide,
       })
     )
-    meshFrame.position.z = -50.0
+    meshFrame.position.z = -frameBorder
     this.scene.add(meshFrame)
   }
 
-  createGround() {
+  createGround(scale) {
+    const size = 128
     var imageCanvas = document.createElement('canvas')
     var context = imageCanvas.getContext('2d')
-    imageCanvas.width = imageCanvas.height = 128
+    imageCanvas.width = imageCanvas.height = size
     context.fillStyle = '#000'
-    context.fillRect(0, 0, 128, 128)
+    context.fillRect(0, 0, size, size)
     context.fillStyle = '#444'
-    context.fillRect(0, 0, 64, 64)
-    context.fillRect(64, 64, 64, 64)
+    context.fillRect(0, 0, size / 2, size / 2)
+    context.fillRect(size / 2, size / 2, size / 2, size / 2)
     var textureCanvas = new CanvasTexture(imageCanvas)
     textureCanvas.repeat.set(1000, 1000)
     textureCanvas.wrapS = RepeatWrapping
@@ -172,7 +178,7 @@ export class SceneSubjects {
     var geometry = new PlaneBufferGeometry(100, 100)
     var meshCanvas = new Mesh(geometry, materialCanvas)
     meshCanvas.rotation.x = -Math.PI / 2
-    meshCanvas.scale.set(500, 500, 500)
+    meshCanvas.scale.set(scale, scale, scale)
     var floorHeight = (-1 * this.world.height) / 2
     meshCanvas.position.y = floorHeight
     this.scene.add(meshCanvas)
