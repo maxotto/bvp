@@ -6,7 +6,13 @@ import {
   recalcToSpherical,
 } from './tools/helpers'
 import { EditableGroup } from './core/EditableGroup'
-import { Vector3, SphereGeometry, DoubleSide, MeshPhongMaterial, Mesh } from 'three'
+import {
+  Vector3,
+  SphereGeometry,
+  DoubleSide,
+  MeshPhongMaterial,
+  Mesh,
+} from 'three'
 
 export class SlideEditor {
   private dragControls

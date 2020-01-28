@@ -129,9 +129,11 @@ module.exports = {
     new CopyPlugin([{ from: "fonts", to: "fonts" }]),
     new CopyPlugin([{ from: "static", to: "" }]),
     new VueLoaderPlugin(),
+    /*
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
       skipWaiting: true
     })
+     */
   ]
 };

@@ -14,7 +14,6 @@ export function getPointsByCurve(curveFunctionName, ...curveFunctionArgs) {
   return points
 }
 
-
 let count = 0
 export function createSnapshot(slide: Slide) {
   count++
@@ -26,7 +25,7 @@ export function createSnapshot(slide: Slide) {
     antialias: true,
     //preserveDrawingBuffer: true
   })
-  renderer.setSize(size, size / slide.width * slide.height);
+  renderer.setSize(size, (size / slide.width) * slide.height)
   // overlay.appendChild(renderer.domElement)
 
   camera = new PerspectiveCamera(fov, slide.width / slide.height, 1, 1000)
@@ -37,9 +36,9 @@ export function createSnapshot(slide: Slide) {
   if (slide.background) scene.add(slide.background)
   slide.objects.forEach(element => {
     scene.add(element)
-  });
+  })
   camera.position.z = slide.distanceToCamera
-  renderer.render(scene, camera);
+  renderer.render(scene, camera)
 
   const pic = renderer.domElement.toDataURL()
   renderer = null

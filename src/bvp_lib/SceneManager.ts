@@ -9,7 +9,14 @@ import { MyDataControls } from './tools/datGui'
 
 import { WorldMode, World, WorldCoordinatesType } from './types'
 import * as Stats from 'stats.js'
-import { Vector3, Scene, Color, WebGLRenderer, PerspectiveCamera, Clock } from 'three'
+import {
+  Vector3,
+  Scene,
+  Color,
+  WebGLRenderer,
+  PerspectiveCamera,
+  Clock,
+} from 'three'
 import { SlidesController } from './SlidesController'
 
 export class SceneManager {
@@ -46,8 +53,9 @@ export class SceneManager {
       this.changeMode(WorldMode.show)
     })
     this.ready = true
-    import(/* webpackChunkName: "SlidesController" */ './SlidesController').then(m => {
-    })
+    import(
+      /* webpackChunkName: "SlidesController" */ './SlidesController'
+    ).then(m => {})
     this.myControls = new MyDataControls(this.world)
     this.changeMode(WorldMode.show)
   }
@@ -63,18 +71,15 @@ export class SceneManager {
   }
 
   onKeyboardEvent(event) {
-    if (this.ready)
-      this.slidesController.onKeyboardEvent(event)
+    if (this.ready) this.slidesController.onKeyboardEvent(event)
   }
 
   onMouseEvent(event) {
-    if (this.ready)
-      this.slidesController.onMouseEvent(event)
+    if (this.ready) this.slidesController.onMouseEvent(event)
   }
 
   onTouchEvent(event) {
-    if (this.ready)
-      this.slidesController.onTouchEvent(event)
+    if (this.ready) this.slidesController.onTouchEvent(event)
   }
 
   buildScene() {

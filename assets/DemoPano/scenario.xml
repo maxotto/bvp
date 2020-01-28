@@ -1,0 +1,69 @@
+﻿<?xml version="1.0"?>
+<world
+    panoramaPic="panorama1.jpg"
+    panoX="0"
+    panoY="0"
+    panoZ="400"
+    panoRadius="400"
+    panoIniPhi = "0"
+    panoIniTheta = "0"
+    cameraFov="45"
+    height="19.32"
+    mainBackgroundColor="0x006600"
+    mainBackgroundPic="bg.jpg"
+    mainDuration="1500"
+    showControlPanel="true"
+    width="25.76"
+    iniCameraZ="1800">
+    <font
+        x="0"
+        y="0"
+        z="0"
+        font="droid_sans_regular.typeface.json"
+        size="1"
+        thickness="1"
+        curveSegments="4"
+        bevelThickness="1"
+        bevelSize="1"
+        bevelEnabled="true"
+        bevelSegments="10"
+        material="MeshBasicMaterial"
+        color="0xFF00FF"
+        paragraphWidth="10"
+        justify="center"/>
+    <slides>
+        <slide height="1151" picture="empty.png" width="2048">
+            <hotspot radius="10" phi="0" theta="0" size="0.1"/>
+            <animation duration="4500"/>
+        </slide>
+
+        <slide height="34.56" picture="empty.png" width="51.84">
+            <hotspot radius="150" phi="10" theta="25" size="40"/>
+            <animation duration="3500"/>
+            <text
+                x="0"
+                y="0.55"
+                z="0.01"
+                size="4"
+                color="0x88FF88"
+                paragraphWidth="35"
+                justify="center"
+                material="MeshStandardMaterial"
+                bevelEnabled="true"
+                bevelSize="7"
+                thickness="10"
+                bevelThickness="7"
+                >
+                Panorama
+                World
+                Demo
+            </text>
+        </slide>
+    </slides>
+    <show>
+        <step slide="0"/>
+        <step slide="1"/>
+        <step slide="2"/>
+    </show>
+    <objects/>
+</world>

@@ -32,14 +32,12 @@ export class TextBox extends Object3D {
 
   private splitText() {
     // find paragraphs
-    const text = this.text
-      .trim()
-      .replace(/ {2,}/g, ' ')
+    const text = this.text.trim().replace(/ {2,}/g, ' ')
 
     let paragraphTxt = ''
 
     for (var i = 0; i < text.length; i++) {
-      const charCode = text.charCodeAt(i);
+      const charCode = text.charCodeAt(i)
       if (charCode == 10) {
         if (i != 0) {
           this.splitParagraph(paragraphTxt)
@@ -76,7 +74,7 @@ export class TextBox extends Object3D {
     words.forEach((word, i) => {
       if (i > 0) {
         lineWidth += word.width
-        const longWord = (word.width > this.width)
+        const longWord = word.width > this.width
         if (longWord) {
           lines[lines.length - 1].push(word)
         } else {
@@ -98,8 +96,11 @@ export class TextBox extends Object3D {
     const testStr = 'W W'
     const allG = new TextBufferGeometry(testStr, this.params).center()
     const wG = new TextBufferGeometry('W', this.params).center()
-    return (allG.boundingBox.max.x - allG.boundingBox.min.x) - (wG.boundingBox.max.x - wG.boundingBox.min.x) * 2
-
+    return (
+      allG.boundingBox.max.x -
+      allG.boundingBox.min.x -
+      (wG.boundingBox.max.x - wG.boundingBox.min.x) * 2
+    )
   }
 
   private makeTextBlock() {
@@ -117,12 +118,11 @@ export class TextBox extends Object3D {
     let linesCount = 0
     this.paragraphs.forEach(lines => {
       linesCount += lines.length
-    });
+    })
     YPos = (linesCount * line_height) / 2.5
 
     this.paragraphs.forEach(lines => {
       lines.forEach((line, lineIndex) => {
-
         const aLine = []
         let lineWidth: number
         line.forEach(word => {
@@ -136,8 +136,9 @@ export class TextBox extends Object3D {
             this.material
           )
           lineMesh.geometry.center()
-          lineWidth = lineMesh.geometry.boundingBox.max.x - lineMesh.geometry.boundingBox.min.x
-
+          lineWidth =
+            lineMesh.geometry.boundingBox.max.x -
+            lineMesh.geometry.boundingBox.min.x
         } else {
           const spacedLine = []
           line.forEach((word, i) => {
@@ -149,7 +150,7 @@ export class TextBox extends Object3D {
           let testWidth = 0
           // TODO расмотреть случай, если в линии всего одно слово
           if (lineIndex < lines.length - 1) {
-            // for every line in paagraph, except the last line, we do adjustment 
+            // for every line in paagraph, except the last line, we do adjustment
             // to adjust at the first step we add spaces between words
             // then we remove some spaces between words
             // finally we scale text mesh to precise adjustment
@@ -163,13 +164,16 @@ export class TextBox extends Object3D {
               )
             } else {
               do {
-                const g = new TextBufferGeometry(spacedLine.join(''), this.params).center()
+                const g = new TextBufferGeometry(
+                  spacedLine.join(''),
+                  this.params
+                ).center()
                 testWidth = g.boundingBox.max.x - g.boundingBox.min.x
                 spacedLine.forEach((w, j) => {
                   if (j % 2 != 0) {
                     spacedLine[j] += ' '
                   }
-                });
+                })
               } while (testWidth < this.width)
               // make step back
               testWidth = 0
@@ -177,13 +181,16 @@ export class TextBox extends Object3D {
               spacedLine.forEach((w, j) => {
                 if (j % 2 != 0 && !stop) {
                   spacedLine[j] = spacedLine[j].substring(1)
-                  const g = new TextBufferGeometry(spacedLine.join(''), this.params).center()
+                  const g = new TextBufferGeometry(
+                    spacedLine.join(''),
+                    this.params
+                  ).center()
                   testWidth = g.boundingBox.max.x - g.boundingBox.min.x
                   if (testWidth <= this.width) {
                     stop = true
                   }
                 }
-              });
+              })
 
               lineMesh = new Text(
                 spacedLine.join(''),
@@ -195,7 +202,6 @@ export class TextBox extends Object3D {
               testWidth = g.boundingBox.max.x - g.boundingBox.min.x
               const scale = testWidth / this.width
               lineMesh.scale.setX(1 / scale)
-
             }
           } else {
             // last line goes as is, with one space between words
@@ -208,8 +214,9 @@ export class TextBox extends Object3D {
             )
           }
           lineMesh.geometry.center()
-          lineWidth = lineMesh.geometry.boundingBox.max.x - lineMesh.geometry.boundingBox.min.x
-
+          lineWidth =
+            lineMesh.geometry.boundingBox.max.x -
+            lineMesh.geometry.boundingBox.min.x
         }
         switch (this.justify) {
           case 'left':
@@ -225,7 +232,8 @@ export class TextBox extends Object3D {
           case 'width':
             if (lineIndex < lines.length - 1) {
               lineMesh.position.copy(new Vector3(0, YPos, 0))
-            } else { // last line should be justified left
+            } else {
+              // last line should be justified left
               lineMesh.position.copy(
                 new Vector3(lineWidth / 2 - this.width / 2, YPos, 0)
               )
@@ -239,7 +247,6 @@ export class TextBox extends Object3D {
         YPos -= line_height
       })
     })
-
 
     return mesh
   }
