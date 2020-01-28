@@ -10,7 +10,7 @@ const config = {
   localRoot: __dirname + "/" + settings.localRoot,
   remoteRoot: settings.remoteRoot,
   include: ["*", "**/*"],
-  deleteRemote: false,
+  deleteRemote: true, // !! Be very careful
   forcePasv: true
 };
 
