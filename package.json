@@ -21,6 +21,7 @@
     "css-loader": "latest",
     "extract-text-webpack-plugin": "latest",
     "file-loader": "^5.0.2",
+    "ftp-deploy": "^2.3.6",
     "html-webpack-plugin": "latest",
     "json-loader": "latest",
     "prettier": "^1.19.1",

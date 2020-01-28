@@ -1,0 +1,10 @@
+export default () => { 
+  return {
+    host: 'myHost.me',
+    port: 22,
+    username: 'UserName',
+    password: 'MyPassWord',
+    localRoot: "dist",
+    remoteRoot: "bvp"
+  }
+}
