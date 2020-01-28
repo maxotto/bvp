@@ -7,7 +7,7 @@ SWInit()
 Vue.use(Buefy)
 import { BvpPlugin } from './bvp_lib/vuePlugin'
 import { findGetParameters } from './bvp_lib/tools/helpers'
-let project:string = 'DemoFlat'
+let project: string = 'DemoFlat'
 const getParams = <any>findGetParameters()
 if (getParams.p) project = getParams.p
 Vue.use(BvpPlugin, {
