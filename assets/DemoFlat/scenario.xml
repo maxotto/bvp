@@ -1,0 +1,227 @@
+﻿<?xml version="1.0"?>
+<world
+    cameraFov="45"
+    height="19.32"
+    mainBackgroundColor="0x006600"
+    mainBackgroundPic="bg.jpg"
+    mainDuration="1500"
+    showControlPanel="true"
+    width="25.76"
+    iniCameraZ="40">
+    <font
+        x="0"
+        y="0"
+        z="0"
+        font="droid_sans_regular.typeface.json"
+        size="1"
+        thickness="1"
+        curveSegments="4"
+        bevelThickness="1"
+        bevelSize="1"
+        bevelEnabled="true"
+        bevelSegments="10"
+        material="MeshBasicMaterial"
+        color="0xFF00FF"
+        paragraphWidth="10"
+        justify="center"/>
+    <slides>
+        <slide height="34.56" picture="empty.png" width="51.84">
+            <hotspot x="2" y="12" z="15" size="10"/>
+            <animation duration="3500"/>
+            <text
+                x="0"
+                y="0.55"
+                z="0.01"
+                size="0.65"
+                color="0x88FF88"
+                paragraphWidth="1.9"
+                justify="center"
+                material="MeshStandardMaterial"
+                bevelEnabled="true"
+                bevelSize="7"
+                thickness="10"
+                bevelThickness="7"
+                >
+                Flat
+                World
+                Demo
+            </text>
+        </slide>
+        <slide height="34.56" picture="1.jpg" width="51.84">
+            <hotspot x="10" y="10" z="0.5" size="2"/>
+            <animation duration="3500"/>
+            <text
+                x="0"
+                y="0.55"
+                z="0.01"
+                size="0.05"
+                bevelEnabled="false"
+                color="0xEEEEEE"
+                paragraphWidth="1.9"
+                justify="left"
+                >
+                1.jpg - the cat of my neighbours
+            </text>
+        </slide>
+        <slide height="34.56" picture="empty.png" width="51.84">
+            <hotspot x="11" y="5" z="2" size="2"/>
+            <animation duration="3500"/>
+            <text
+                x="0"
+                y="0.44"
+                z="0.01"
+                size="0.1"
+                bevelEnabled="true"
+                color="0xEE0000"
+                paragraphWidth="1.9"
+                justify="center"
+                material="MeshStandardMaterial"
+                >
+                Text only slide
+            </text>
+            <text
+                x="0.4"
+                y="0"
+                z="0.03"
+                size="0.04"
+                color="0xEE00FF"
+                paragraphWidth="1.9"
+                justify="left"
+                material="MeshStandardMaterial"
+                font="Fira Code Medium_Regular.json"
+                bevelEnabled="true"
+                bevelSize="7"
+                thickness="10"
+                bevelThickness="7"
+                >
+                bevelEnabled="true"
+                color="0xEE00FF"
+                paragraphWidth="1.9"
+                justify="left"
+                material="MeshStandardMaterial"
+                bevelSize="7"
+                font="Fira Code Medium_Regular.json"
+                thickness="10"
+                bevelThickness="7"
+            </text>
+        </slide>
+        <slide height="1151" picture="empty.png" width="2048">
+            <hotspot x="6" y="8" z="1" size="4"/>
+            <video id="video0" src="1.mp4"/>
+            <animation duration="3500"/>
+            <text
+                x="0"
+                y="0.75"
+                z="0.5"
+                size="0.1"
+                bevelEnabled="true"
+                color="0xEEEEEE"
+                paragraphWidth="2.9"
+                justify="left"
+                material="MeshStandardMaterial"
+                >
+                1.mp4 - hedgehog
+            </text>
+        </slide>
+        <slide height="34.56" picture="2.jpg" width="51.84">
+            <hotspot x="8" y="6" z="1" size="2"/>
+            <animation duration="3500"/>
+            <text
+                x="0"
+                y="0.55"
+                z="0.01"
+                size="0.05"
+                bevelEnabled="false"
+                color="0xEEEEEE"
+                paragraphWidth="1.9"
+                justify="left"
+                >
+                2.jpg - blossoming pine
+            </text>
+        </slide>
+        <slide height="34.56" picture="3.jpg" width="51.84">
+            <hotspot x="12" y="6" z="3" size="2"/>
+            <animation duration="3500"/>
+            <text
+                x="0"
+                y="0.55"
+                z="0.01"
+                size="0.05"
+                bevelEnabled="false"
+                color="0xEEEEEE"
+                paragraphWidth="1.9"
+                justify="left"
+                >
+                3.jpg - Zhoozhah
+            </text>
+        </slide>
+        <slide height="34.56" picture="4.jpg" width="51.84">
+            <hotspot x="8" y="5" z="3" size="2"/>
+            <animation duration="3500"/>
+            <text
+                x="0"
+                y="0.55"
+                z="0.01"
+                size="0.05"
+                bevelEnabled="false"
+                color="0xEEEEEE"
+                paragraphWidth="1.9"
+                justify="left"
+                >
+                4.jpg - hedgehog
+            </text>
+        </slide>
+        <slide height="34.56" picture="5.jpg" width="51.84">
+            <hotspot x="14" y="8" z="4" size="2"/>
+            <animation duration="3500"/>
+            <text
+                x="0"
+                y="0.45"
+                z="0.2"
+                size="0.05"
+                bevelEnabled="true"
+                color="0x000066"
+                paragraphWidth="1.9"
+                justify="left"
+                material="MeshStandardMaterial"
+                bevelSize="7"
+                font="Fira Code Medium_Regular.json"
+                thickness="10"
+                bevelThickness="7"
+                >
+                5.jpg - unknown cat from Kostroma
+            </text>
+
+        </slide>
+        <slide height="34.56" picture="6.jpg" width="51.84">
+            <hotspot x="3" y="3" z="6" size="5"/>
+            <animation duration="3500"/>
+            <text
+                x="0"
+                y="1.55"
+                z="0.01"
+                size="0.05"
+                bevelEnabled="false"
+                color="0xEEEEEE"
+                paragraphWidth="4.9"
+                justify="left"
+                >
+                6.jpg - unknown cat from Kostroma
+            </text>
+
+        </slide>
+    </slides>
+    <show>
+        <step slide="0"/>
+        <step slide="1"/>
+        <step slide="2"/>
+        <step slide="3"/>
+        <step slide="4"/>
+        <step slide="5"/>
+        <step slide="6"/>
+        <step slide="7"/>
+        <step slide="8"/>
+        <step slide="9"/>
+    </show>
+    <objects/>
+</world>
