@@ -3,7 +3,7 @@
     cameraFov="45"
     height="19.32"
     mainBackgroundColor="0x006600"
-    mainBackgroundPic="bg.JPG"
+    mainBackgroundPic="bg.jpg"
     mainDuration="1500"
     showControlPanel="true"
     width="25.76"

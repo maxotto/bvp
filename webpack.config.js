@@ -8,6 +8,9 @@ const HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
 });
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
 
+//PWA
+const WorkboxPlugin = require("workbox-webpack-plugin");
+
 /* Configure BrowserSync */
 const BrowserSyncPlugin = require("browser-sync-webpack-plugin");
 const BrowserSyncPluginConfig = new BrowserSyncPlugin(
@@ -124,6 +127,11 @@ module.exports = {
     ProgressBarPluginConfig,
     new CopyPlugin([{ from: "assets", to: "assets" }]),
     new CopyPlugin([{ from: "fonts", to: "fonts" }]),
-    new VueLoaderPlugin()
+    new CopyPlugin([{ from: "static", to: "" }]),
+    new VueLoaderPlugin(),
+    new WorkboxPlugin.GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true
+    })
   ]
 };
