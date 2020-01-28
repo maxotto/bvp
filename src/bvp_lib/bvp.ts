@@ -1,6 +1,6 @@
-import { SceneManager } from './SceneManager';
-import { TouchEvents, KeyboardEvents, MouseEvents, World } from './types';
-import { WorldLoader } from './tools/WorldLoader';
+import { SceneManager } from './SceneManager'
+import { TouchEvents, KeyboardEvents, MouseEvents, World } from './types'
+import { WorldLoader } from './tools/WorldLoader'
 let scope
 export default class bvp {
   public sceneManager: SceneManager = null
@@ -11,13 +11,15 @@ export default class bvp {
 
   public start(onLoadHandler?: Function) {
     const wLib = new WorldLoader(this.project)
-    return wLib.load(onLoadHandler)
-      .then((world: World) => {
-        console.log({ world })
-        scope.sceneManager = new SceneManager(<HTMLCanvasElement>document.getElementById('canvas'), <World>world)
-        scope.bindEventListeners()
-        scope.render()
-      })
+    return wLib.load(onLoadHandler).then((world: World) => {
+      console.log({ world })
+      scope.sceneManager = new SceneManager(
+        <HTMLCanvasElement>document.getElementById('canvas'),
+        <World>world
+      )
+      scope.bindEventListeners()
+      scope.render()
+    })
   }
 
   private bindEventListeners() {
@@ -41,15 +43,15 @@ export default class bvp {
     this.resizeCanvas()
   }
 
-  private onMouseEvent = (event) => {
+  private onMouseEvent = event => {
     this.sceneManager.onMouseEvent(event)
   }
 
-  private onKeyboardEvent = (event) => {
+  private onKeyboardEvent = event => {
     this.sceneManager.onKeyboardEvent(event)
   }
 
-  private onTouchEvent = (event) => {
+  private onTouchEvent = event => {
     this.sceneManager.onTouchEvent(event)
   }
 
@@ -65,6 +67,4 @@ export default class bvp {
     requestAnimationFrame(this.render)
     this.sceneManager.update()
   }
-
-
 }

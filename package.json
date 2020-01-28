@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --inline --open --https",
-    "build": "rimraf dist && webpack -p",
+    "build": "rimraf dist && webpack -p --env=prod",
     "pretty": "prettier --print-width 80 --no-semi --single-quote --trailing-comma es5 --write \"src/**/*.{ts,js,css,html}\"",
     "deploy": "node deploy.js"
   },
@@ -21,6 +21,7 @@
     "css-loader": "latest",
     "extract-text-webpack-plugin": "latest",
     "file-loader": "^5.0.2",
+    "ftp-deploy": "^2.3.6",
     "html-webpack-plugin": "latest",
     "json-loader": "latest",
     "prettier": "^1.19.1",

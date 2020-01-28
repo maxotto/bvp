@@ -1,12 +1,17 @@
 import { World } from '../types'
-import { SphereBufferGeometry, TextureLoader, MeshBasicMaterial, Mesh } from 'three'
+import {
+  SphereBufferGeometry,
+  TextureLoader,
+  MeshBasicMaterial,
+  Mesh,
+} from 'three'
 
 export class Panorama {
   constructor(private world: World, private segments: number = 32) {
     this.createPanorama()
   }
 
-  update(time) { }
+  update(time) {}
 
   createPanorama() {
     const geometry = new SphereBufferGeometry(
@@ -20,8 +25,8 @@ export class Panorama {
     const material = new MeshBasicMaterial({ map: texture })
     const mesh = new Mesh(geometry, material)
     mesh.position.copy(this.world.panoCenter)
-    mesh.rotation.y = -87 * (Math.PI / 180)
-    mesh.rotation.x = -10 * (Math.PI / 180)
+    mesh.rotation.y = -this.world.panoIniPhi * (Math.PI / 180)
+    mesh.rotation.x = this.world.panoIniTheta * (Math.PI / 180)
     this.world.scene.add(mesh)
   }
 }

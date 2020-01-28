@@ -16,6 +16,8 @@ export type ScenarioData = {
   panoY: number
   panoZ: number
   panoRadius: number
+  panoIniPhi: number
+  panoIniTheta: number
   objects: []
   defaultFont: any
 }
@@ -95,10 +97,12 @@ export type World = {
   panoramaPic: string
   panoCenter: Vector3
   panoRadius: number
+  panoIniTheta: number
+  panoIniPhi: number
   mode: WorldMode
   draggables: any[]
   vue: {
-    app: Vue,
+    app: Vue
     container: HTMLDivElement
   }
 }

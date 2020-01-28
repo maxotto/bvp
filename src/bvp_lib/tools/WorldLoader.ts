@@ -9,16 +9,9 @@ import {
   recalcFromSpherical,
 } from './helpers'
 
-import {
-  createMaterial, createSnapshot,
-} from './three_helpers'
+import { createMaterial, createSnapshot } from './three_helpers'
 
-import {
-  ScenarioData,
-  Slide,
-  World,
-  WorldCoordinatesType,
-} from '../types'
+import { ScenarioData, Slide, World, WorldCoordinatesType } from '../types'
 
 import { EditableGroup } from '../core/EditableGroup'
 
@@ -59,6 +52,8 @@ export class WorldLoader {
   private _panoX: number
   private _panoY: number
   private _panoZ: number
+  private _panoIniTheta: number
+  private _panoIniPhi: number
   private _panoRadius: number
   private _panoCenter: Vector3
   private _cameraFov: number
@@ -73,19 +68,19 @@ export class WorldLoader {
     var manager = new LoadingManager()
     var slideNumber = 0
 
-    manager.onProgress = function (item, loaded, total) {
+    manager.onProgress = function(item, loaded, total) {
       if (onLoad) onLoad(total)
     }
 
-    manager.onLoad = function () { }
+    manager.onLoad = function() {}
 
-    const onProgress = function (xhr) {
+    const onProgress = function(xhr) {
       if (xhr.lengthComputable) {
       }
     }
 
-    manager.onError = (url) => {
-      console.log('Thre was an error loading ' + url);
+    manager.onError = url => {
+      console.log('Thre was an error loading ' + url)
     }
 
     return promisifyLoader(new XmlLoader(manager), onProgress)
@@ -101,6 +96,8 @@ export class WorldLoader {
         this._panoY = +scenarioData.panoY
         this._panoZ = +scenarioData.panoZ
         this._panoRadius = +scenarioData.panoRadius
+        this._panoIniPhi = +scenarioData.panoIniPhi
+        this._panoIniTheta = +scenarioData.panoIniTheta
         this._mainSlideDuration = +scenarioData.mainDuration
         this._cameraFov = +scenarioData.cameraFov
         this._currentObjectName = scenarioData.mainBackgroundPic
@@ -111,11 +108,11 @@ export class WorldLoader {
           .then((_texturePainting: THREE.Texture) => {
             var materialPainting = new MeshBasicMaterial(<
               THREE.MeshBasicMaterialParameters
-              >{
-                color: 0xffffff,
-                map: _texturePainting,
-                side: DoubleSide,
-              })
+            >{
+              color: 0xffffff,
+              map: _texturePainting,
+              side: DoubleSide,
+            })
             let geometry
             if (this._type === WorldCoordinatesType.sphere) {
               geometry = new PlaneBufferGeometry(0.001, 0.001)
@@ -137,11 +134,7 @@ export class WorldLoader {
               texture: _texturePainting,
               hotspot: null,
               picture: this._currentObjectName,
-              position: new Vector3(
-                -this._width / 2,
-                this._height / 2,
-                0
-              ),
+              position: new Vector3(-this._width / 2, this._height / 2, 0),
               objects: <any>scenarioData.objects,
               transitionDuration: +scenarioData.mainDuration,
               scale: 1,
@@ -193,10 +186,7 @@ export class WorldLoader {
               (slide, context) => {
                 ++slideNumber
                 this._currentObjectName = slide.picture
-                return promisifyLoader(
-                  new TextureLoader(manager),
-                  onProgress
-                )
+                return promisifyLoader(new TextureLoader(manager), onProgress)
                   .load(
                     'assets/' + this._scenarioFolder + this._currentObjectName
                   )
@@ -211,12 +201,12 @@ export class WorldLoader {
                     }
                     var materialPainting = new MeshBasicMaterial(<
                       THREE.MeshBasicMaterialParameters
-                      >{
-                        color: 0xffffff,
-                        map: _texturePainting,
-                        side: DoubleSide,
-                        transparent: true,
-                      })
+                    >{
+                      color: 0xffffff,
+                      map: _texturePainting,
+                      side: DoubleSide,
+                      transparent: true,
+                    })
                     if (
                       this.getWorldCoordinatesType() ==
                       WorldCoordinatesType.sphere
@@ -312,39 +302,60 @@ export class WorldLoader {
                                 newSlide.objects.push(mesh)
                               })
                           } else if (object.type == 'text') {
-                            const fontFile = object.font ? object.font : scenarioData.defaultFont.font
+                            const fontFile = object.font
+                              ? object.font
+                              : scenarioData.defaultFont.font
                             return promisifyLoader(
                               new FontLoader(manager),
                               onProgress
                             )
                               .load('fonts/' + fontFile)
                               .then(font => {
-                                const
-                                  defaultMaterial = scenarioData.defaultFont.material,
-                                  size = object.size ? +object.size : +scenarioData.defaultFont.size,
-                                  bevelEnabled = object.bevelEnabled ? object.bevelEnabled : scenarioData.defaultFont.bevelEnabled,
-                                  materialName = object.material ? object.material : defaultMaterial;
+                                const defaultMaterial =
+                                    scenarioData.defaultFont.material,
+                                  size = object.size
+                                    ? +object.size
+                                    : +scenarioData.defaultFont.size,
+                                  bevelEnabled = object.bevelEnabled
+                                    ? object.bevelEnabled
+                                    : scenarioData.defaultFont.bevelEnabled,
+                                  materialName = object.material
+                                    ? object.material
+                                    : defaultMaterial
 
                                 const params = {
                                   font: <Font>font,
                                   size: size,
-                                  height: object.thickness ? (+object.thickness) / 100 * size :
-                                    (+scenarioData.defaultFont.thickness) / 100 * size,
-                                  curveSegments: object.curveSegments ? +object.curveSegments : +scenarioData.defaultFont.curveSegments,
-                                  bevelThickness: object.bevelThickness ? (+object.bevelThickness) / 100 * size :
-                                    (+scenarioData.defaultFont.bevelThickness) / 100 * size,
-                                  bevelSize: object.bevelSize ? (+object.bevelSize) / 100 * size :
-                                    (+scenarioData.defaultFont.bevelSize) / 100 * size,
+                                  height: object.thickness
+                                    ? (+object.thickness / 100) * size
+                                    : (+scenarioData.defaultFont.thickness /
+                                        100) *
+                                      size,
+                                  curveSegments: object.curveSegments
+                                    ? +object.curveSegments
+                                    : +scenarioData.defaultFont.curveSegments,
+                                  bevelThickness: object.bevelThickness
+                                    ? (+object.bevelThickness / 100) * size
+                                    : (+scenarioData.defaultFont
+                                        .bevelThickness /
+                                        100) *
+                                      size,
+                                  bevelSize: object.bevelSize
+                                    ? (+object.bevelSize / 100) * size
+                                    : (+scenarioData.defaultFont.bevelSize /
+                                        100) *
+                                      size,
                                   bevelEnabled:
-                                    bevelEnabled == 'true'
-                                      ? true
-                                      : false,
-                                  bevelSegments: object.bevelSegments ? +object.bevelSegments : +scenarioData.defaultFont.bevelSegments,
+                                    bevelEnabled == 'true' ? true : false,
+                                  bevelSegments: object.bevelSegments
+                                    ? +object.bevelSegments
+                                    : +scenarioData.defaultFont.bevelSegments,
                                 }
-                                const material = createMaterial(
-                                  materialName,
-                                  { color: object.color ? +object.color : +scenarioData.defaultFont.color }
-                                )
+                                const material = createMaterial(materialName, {
+                                  color: object.color
+                                    ? +object.color
+                                    : +scenarioData.defaultFont.color,
+                                })
                                 const mesh = new TextBox(
                                   object.paragraphWidth,
                                   object.justify,
@@ -359,25 +370,29 @@ export class WorldLoader {
                                 newSlide.objects.push(mesh)
                               })
                           } else if (object.type == 'video') {
-                            const video = <any>document.createElement("VIDEO");
+                            const video = <any>document.createElement('VIDEO')
                             video.id = object.id
                             video.loop = false
-                            video.crossOrigin = "anonymous"
+                            video.crossOrigin = 'anonymous'
                             video.playsinline = true
-                            if (video.canPlayType("video/mp4")) {
-                              const full = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '')
-                              video.setAttribute("src",
-                                'assets/' +
-                                context._scenarioFolder + object.src
-                              );
+                            if (video.canPlayType('video/mp4')) {
+                              const full =
+                                location.protocol +
+                                '//' +
+                                location.hostname +
+                                (location.port ? ':' + location.port : '')
+                              video.setAttribute(
+                                'src',
+                                'assets/' + context._scenarioFolder + object.src
+                              )
                             }
 
-                            document.body.appendChild(video);
+                            document.body.appendChild(video)
                             const texture = new VideoTexture(video)
                             const parameters = {
                               color: 0xffffff,
                               map: texture,
-                              side: DoubleSide
+                              side: DoubleSide,
                             }
                             const geometry = new PlaneBufferGeometry(
                               slide.hotspot.size,
@@ -387,8 +402,8 @@ export class WorldLoader {
                             const mesh = new Mesh(geometry, material)
                             newSlide.objects.push(mesh)
                             newSlide.videoHtmlElement = video
-                            video.currentTime = 0;
-                            video.play();
+                            video.currentTime = 0
+                            video.play()
                           }
                         },
                         this
@@ -422,6 +437,8 @@ export class WorldLoader {
           panoramaPic: 'assets/' + this._scenarioFolder + this._panoramaPic,
           panoCenter: this._panoCenter,
           panoRadius: this._panoRadius,
+          panoIniTheta: this._panoIniTheta,
+          panoIniPhi: this._panoIniPhi,
           draggables: [],
         })
       })
@@ -571,7 +588,12 @@ export class WorldLoader {
     return result
   }
 
-  private recalcFromSpherical(slide: Slide, panoCenter, context, toCenter?: boolean) {
+  private recalcFromSpherical(
+    slide: Slide,
+    panoCenter,
+    context,
+    toCenter?: boolean
+  ) {
     const pos = recalcFromSpherical(
       slide.hotspot.radius,
       slide.hotspot.phi,

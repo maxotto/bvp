@@ -149,7 +149,11 @@ export class SlidesController {
     )
   }
 
-  showNextSlide(startSlideIndex: number, finishSlideIndex: number, cb?: Function) {
+  showNextSlide(
+    startSlideIndex: number,
+    finishSlideIndex: number,
+    cb?: Function
+  ) {
     if (<HTMLVideoElement>this.world.slides[startSlideIndex].videoHtmlElement) {
       // const video = <HTMLVideoElement>this.world.slides[startSlideIndex].videoHtmlElement
       // video.pause()
@@ -157,9 +161,11 @@ export class SlidesController {
       // video.load();
     }
     if (this.world.slides[finishSlideIndex].videoHtmlElement) {
-      const video = <HTMLVideoElement>this.world.slides[finishSlideIndex].videoHtmlElement
-      video.currentTime = 0;
-      video.load();
+      const video = <HTMLVideoElement>(
+        this.world.slides[finishSlideIndex].videoHtmlElement
+      )
+      video.currentTime = 0
+      video.load()
       video.play()
     }
     if (startSlideIndex != finishSlideIndex) {
@@ -260,7 +266,6 @@ export class SlidesController {
           if (cb && typeof cb === 'function') {
             cb()
           }
-
         })
         .start()
     }

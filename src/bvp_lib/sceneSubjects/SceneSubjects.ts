@@ -1,8 +1,5 @@
 import { World, WorldCoordinatesType } from '../types'
-import {
-  calcCameraPosition,
-  getGroupGeometry,
-} from '../tools/helpers'
+import { calcCameraPosition, getGroupGeometry } from '../tools/helpers'
 import { EditableGroup } from '../core/EditableGroup'
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader'
 import {
@@ -16,7 +13,7 @@ import {
   PlaneBufferGeometry,
   CanvasTexture,
   DoubleSide,
-  RepeatWrapping
+  RepeatWrapping,
 } from 'three'
 
 export class SceneSubjects {
@@ -37,7 +34,7 @@ export class SceneSubjects {
     this.scene.add(this.mesh)
 
     if (world.type === WorldCoordinatesType.vector) {
-      this.createGround(world.width);
+      this.createGround(world.width)
     }
     // this.createTiger();
 
@@ -45,7 +42,7 @@ export class SceneSubjects {
       let slideGroup
       if (index === 0) {
         if (world.type === WorldCoordinatesType.vector) {
-          this.createFrame();
+          this.createFrame()
         } else {
           this.scene.background = slide.texture
         }
