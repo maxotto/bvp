@@ -1,4 +1,15 @@
 /* Configure HTMLWebpack plugin */
+// Import all app configs
+const appConfig = require("./build/app.js");
+const appConfigDev = require("./build/dev.js");
+const appConfigProduction = require("./build/prod.js");
+const argv = require("yargs").argv;
+const _ = require("lodash");
+const ENV = argv.env || "dev";
+const settings = composeConfig(ENV);
+settings.env = ENV;
+console.log("WEBPACK started with this settings:", settings);
+
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
@@ -7,9 +18,6 @@ const HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
   inject: "body"
 });
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
-
-//PWA
-const WorkboxPlugin = require("workbox-webpack-plugin");
 
 /* Configure BrowserSync */
 const BrowserSyncPlugin = require("browser-sync-webpack-plugin");
@@ -27,11 +35,36 @@ const BrowserSyncPluginConfig = new BrowserSyncPlugin(
 /* Configure ProgressBar */
 const ProgressBarPlugin = require("progress-bar-webpack-plugin");
 const ProgressBarPluginConfig = new ProgressBarPlugin();
+const plugins = [
+  HTMLWebpackPluginConfig,
+  BrowserSyncPluginConfig,
+  ProgressBarPluginConfig,
+  new CopyPlugin([{ from: "assets", to: "assets" }]),
+  new CopyPlugin([{ from: "fonts", to: "fonts" }]),
+  new CopyPlugin([{ from: "static", to: "" }]),
+  new VueLoaderPlugin()
+  /*
+    new WorkboxPlugin.GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true
+    })
+     */
+];
+if (ENV === "prod") {
+  //PWA
+  const WorkboxPlugin = require("workbox-webpack-plugin");
+  plugins.push(
+    new WorkboxPlugin.GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true
+    })
+  );
+}
 
 /* Export configuration */
 module.exports = {
-  mode: "development",
-  devtool: "source-map",
+  mode: settings.mode,
+  devtool: settings.devtool,
   entry: {
     main: "./src/index.ts"
   },
@@ -43,6 +76,7 @@ module.exports = {
   // got from here https://medium.com/hackernoon/the-100-correct-way-to-split-your-chunks-with-webpack-f8a9df5b7758
   optimization: {
     runtimeChunk: "single",
+    minimize: true,
     splitChunks: {
       chunks: "all",
       maxInitialRequests: Infinity,
@@ -121,19 +155,15 @@ module.exports = {
       vue$: "vue/dist/vue.esm.js"
     }
   },
-  plugins: [
-    HTMLWebpackPluginConfig,
-    BrowserSyncPluginConfig,
-    ProgressBarPluginConfig,
-    new CopyPlugin([{ from: "assets", to: "assets" }]),
-    new CopyPlugin([{ from: "fonts", to: "fonts" }]),
-    new CopyPlugin([{ from: "static", to: "" }]),
-    new VueLoaderPlugin(),
-    /*
-    new WorkboxPlugin.GenerateSW({
-      clientsClaim: true,
-      skipWaiting: true
-    })
-     */
-  ]
+  plugins: plugins
 };
+
+function composeConfig(env) {
+  if (env === "dev") {
+    return _.merge({}, appConfig, appConfigDev);
+  }
+
+  if (env === "prod") {
+    return _.merge({}, appConfig, appConfigProduction);
+  }
+}
