@@ -5,6 +5,7 @@ export default () => {
     username: 'UserName',
     password: 'MyPassWord',
     localRoot: "dist",
-    remoteRoot: "bvp"
+    remoteRoot: "bvp",
+    deleteRemote: true // !! Be very careful
   }
 }
