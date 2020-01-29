@@ -45,7 +45,8 @@ Projects are stored in _./assets_ folder. Now there are two demo projects:
 * DemoFlat
 * DemoPano 
 
-By default App runs DemoFlat project. To select another project use URL parameter by example:
+By default App runs DemoFlat project. To select another project use URL `p` parameter by example:
+
 `https://example.com/index.html?p=DemoPano`
 
 ## Objects supported
