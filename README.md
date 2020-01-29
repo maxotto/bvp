@@ -5,11 +5,12 @@
 This browser JS application shows presentations, slide by slide, with an effect of flying over a plane or inside a 3D panorama.
 
 * Inspired by Prezi (https://prezi.com/)
+* Vue.js application
 * Uses THREE JS lib (https://threejs.org/) under the hood.
 * Configuration: stored in XML file yet.
 * PWA: enabled for production mode.
 * Written on Typescript 
-* Webpack as building tool
+* Webpack 4 for build
 
 ## Install
 
