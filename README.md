@@ -40,7 +40,7 @@ npm run build
 
 Other available commands you can find in _package.json_ file, in the _scripts_ section.
 
-## Params
+## Projects && URL params
 Projects are stored in _./assets_ folder. Now there are two demo projects:
 * DemoFlat
 * DemoPano 
