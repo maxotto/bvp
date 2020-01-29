@@ -6,6 +6,7 @@ This browser JS application shows presentations, slide by slide, with an effect 
 
 * Inspired by Prezi (https://prezi.com/)
 * Vue.js application
+* Buefy.js as UI
 * Uses THREE JS lib (https://threejs.org/) under the hood.
 * Configuration: stored in XML file yet.
 * PWA: enabled for production mode.
