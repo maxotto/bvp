@@ -50,7 +50,7 @@ By default App runs DemoFlat project. To select another project use URL `p` para
 `https://example.com/index.html?p=DemoPano`
 
 ## Objects supported
-* Pictures as a background of a slide. it is obligatory element yet but it could be transparent PNG image.
+* Pictures as a background of a slide. It is obligatory element yet but it could be transparent PNG image.
 * Text objects. Based on this ThreeJs example https://threejs.org/examples/#webgl_geometry_text. Text lives inside paragraph, each paragraph has width and could be aligned `'center'`, `'left'`, `'right'`, `'width'`.
 * Video in MP4 format. Pay attention, now my big file 1.mp4 does not exist in this repo yet. You should use your file to run this examples or exclude appropriate `<video>` tag from _scenario.xml_.  
 
