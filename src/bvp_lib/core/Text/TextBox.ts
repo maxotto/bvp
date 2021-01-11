@@ -6,11 +6,11 @@ import {
   Font,
   Vector3,
   Color,
-  PathActions,
 } from 'three'
 import { TextParams } from '../../types'
 import { Text } from './Text'
 import { createSphere } from '../../tools/helpers'
+import { TextGeometryParameters } from 'three'
 
 export class TextBox extends Object3D {
   private paragraphs: Paragraph[] = []
@@ -21,7 +21,7 @@ export class TextBox extends Object3D {
     private justify: string, //TODO make enum instead string
     private text: string,
     private font,
-    private params: TextParams,
+    private params: TextGeometryParameters,
     public material?: Material | Material[]
   ) {
     super()
