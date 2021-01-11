@@ -8,7 +8,7 @@ import {
   Spherical,
   Box3,
   Group,
-  Math as M,
+  MathUtils as M,
 } from 'three'
 import { Slide, World } from '../types'
 import { EditableGroup } from '../core/EditableGroup'
@@ -98,7 +98,7 @@ export function findGetParameters() {
   location.search
     .substr(1)
     .split('&')
-    .forEach(function(item) {
+    .forEach(function (item) {
       queryDict[item.split('=')[0]] = item.split('=')[1]
     })
   return queryDict
@@ -124,8 +124,8 @@ export function promisifyLoader(loader, onProgress) {
  * based on https://stackoverflow.com/questions/31413749/node-js-promise-all-and-foreach/41791149#41791149
  */
 export function forEachPromise(items, fn, context) {
-  return items.reduce(function(promise, item) {
-    return promise.then(function() {
+  return items.reduce(function (promise, item) {
+    return promise.then(function () {
       return fn(item, context)
     })
   }, Promise.resolve())

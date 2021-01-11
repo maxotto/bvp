@@ -1,3 +1,4 @@
+import { TextGeometryParameters } from 'three'
 import {
   Material,
   Font,
@@ -18,7 +19,7 @@ export class Text extends Object3D {
   constructor(
     private text: string,
     private font: Font,
-    private params: TextParams,
+    private params: TextGeometryParameters,
     public material?: Material | Material[]
   ) {
     super()

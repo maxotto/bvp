@@ -15,7 +15,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 const HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
   template: __dirname + "/src/index.html",
   filename: "index.html",
-  inject: "body"
+  inject: "body",
 });
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
 
@@ -25,10 +25,10 @@ const BrowserSyncPluginConfig = new BrowserSyncPlugin(
   {
     host: "localhost",
     port: 3000,
-    proxy: "http://localhost:8080/"
+    proxy: "http://localhost:8080/",
   },
   (config = {
-    reload: false
+    reload: false,
   })
 );
 
@@ -39,10 +39,19 @@ const plugins = [
   HTMLWebpackPluginConfig,
   BrowserSyncPluginConfig,
   ProgressBarPluginConfig,
-  new CopyPlugin([{ from: "assets", to: "assets" }]),
+  new CopyPlugin({
+    patterns: [
+      { from: "assets", to: "assets" },
+      { from: "fonts", to: "fonts" },
+      { from: "static", to: "" },
+    ],
+  }),
+  /*
   new CopyPlugin([{ from: "fonts", to: "fonts" }]),
   new CopyPlugin([{ from: "static", to: "" }]),
-  new VueLoaderPlugin()
+  */
+
+  new VueLoaderPlugin(),
   /*
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
@@ -56,7 +65,7 @@ if (ENV === "prod") {
   plugins.push(
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
-      skipWaiting: true
+      skipWaiting: true,
     })
   );
 }
@@ -66,11 +75,11 @@ module.exports = {
   mode: settings.mode,
   devtool: settings.devtool,
   entry: {
-    main: "./src/index.ts"
+    main: "./src/index.ts",
   },
   output: {
     path: __dirname + "/dist",
-    filename: "[name]_[contenthash].bundle.js"
+    filename: "[name]_[contenthash].bundle.js",
     // chunkFilename: "[name].chunk.js"
   },
   // got from here https://medium.com/hackernoon/the-100-correct-way-to-split-your-chunks-with-webpack-f8a9df5b7758
@@ -93,24 +102,24 @@ module.exports = {
 
             // npm package names are URL-safe, but some servers don't like @ symbols
             return `npm.${packageName.replace("@", "")}`;
-          }
-        }
-      }
-    }
+          },
+        },
+      },
+    },
   },
   module: {
     rules: [
       {
         test: /\.(woff|woff2|ttf|eot)$/,
-        use: "file-loader?name=fonts/[name].[ext]!static"
+        use: "file-loader?name=fonts/[name].[ext]!static",
       },
       {
         test: /\.tsx?$/,
         loader: "ts-loader",
         exclude: /node_modules/,
         options: {
-          appendTsSuffixTo: [/\.vue$/]
-        }
+          appendTsSuffixTo: [/\.vue$/],
+        },
       },
       {
         test: /\.css$/,
@@ -118,10 +127,10 @@ module.exports = {
         use: [
           {
             loader: "style-loader",
-            options: { injectType: "singletonStyleTag" }
+            options: { injectType: "singletonStyleTag" },
           },
-          { loader: "css-loader" }
-        ]
+          { loader: "css-loader" },
+        ],
       },
       {
         test: /\.css$/,
@@ -129,7 +138,7 @@ module.exports = {
         use: [
           {
             loader: "style-loader",
-            options: { injectType: "singletonStyleTag" }
+            options: { injectType: "singletonStyleTag" },
           },
           {
             loader: "css-loader",
@@ -137,25 +146,28 @@ module.exports = {
               modules: {
                 mode: "local",
                 localIdentName: "[local]",
-                hashPrefix: "my-custom-hash"
-              }
-            }
-          }
-        ]
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.vue$/,
-        loader: "vue-loader"
-      }
-    ]
+        loader: "vue-loader",
+      },
+    ],
   },
   resolve: {
+    fallback: {
+      "stream": require.resolve("stream-browserify"),
+      "buffer": require.resolve("buffer"),
+    },
     extensions: [".web.ts", ".web.js", ".ts", ".js", ".vue"],
     alias: {
-      vue$: "vue/dist/vue.esm.js"
-    }
+      vue$: "vue/dist/vue.esm.js",
+    },
   },
-  plugins: plugins
+  plugins: plugins,
 };
 
 function composeConfig(env) {

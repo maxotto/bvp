@@ -9,9 +9,10 @@ import {
   Float32BufferAttribute,
 } from 'three'
 import { TextParams } from '../../types'
+import { TextGeometryParameters } from 'three'
 
 export class LineText extends Text {
-  constructor(text: string, font: Font, params: TextParams) {
+  constructor(text: string, font: Font, params: TextGeometryParameters) {
     super(text, font, params)
     const uniforms = {
       amplitude: { value: 5.0 },
