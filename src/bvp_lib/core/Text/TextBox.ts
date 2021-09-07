@@ -1,18 +1,10 @@
-import {
-  Object3D,
-  Material,
-  TextBufferGeometry,
-  Group,
-  Font,
-  Vector3,
-  Color,
-  PathActions,
-} from 'three'
+import * as THREE from 'three';
 import { TextParams } from '../../types'
 import { Text } from './Text'
 import { createSphere } from '../../tools/helpers'
+import { TextGeometryParameters } from 'three';
 
-export class TextBox extends Object3D {
+export class TextBox extends THREE.Object3D {
   private paragraphs: Paragraph[] = []
   private spaceWidth: number
 
@@ -21,8 +13,8 @@ export class TextBox extends Object3D {
     private justify: string, //TODO make enum instead string
     private text: string,
     private font,
-    private params: TextParams,
-    public material?: Material | Material[]
+    private params: TextGeometryParameters,
+    public material?: THREE.Material | THREE.Material[]
   ) {
     super()
     this.spaceWidth = this.calculateSpaceWidth()
@@ -59,7 +51,7 @@ export class TextBox extends Object3D {
       .split(' ')
     w.unshift('.') // use W to calculate SPACE geometry
     w.forEach((word, i) => {
-      const geometry = new TextBufferGeometry(word, this.params)
+      const geometry = new THREE.TextBufferGeometry(word, this.params)
       geometry.center()
       const width = geometry.boundingBox.max.x - geometry.boundingBox.min.x
       const height = geometry.boundingBox.max.y - geometry.boundingBox.min.y
@@ -94,8 +86,8 @@ export class TextBox extends Object3D {
 
   private calculateSpaceWidth() {
     const testStr = 'W W'
-    const allG = new TextBufferGeometry(testStr, this.params).center()
-    const wG = new TextBufferGeometry('W', this.params).center()
+    const allG = new THREE.TextBufferGeometry(testStr, this.params).center()
+    const wG = new THREE.TextBufferGeometry('W', this.params).center()
     return (
       allG.boundingBox.max.x -
       allG.boundingBox.min.x -
@@ -104,7 +96,7 @@ export class TextBox extends Object3D {
   }
 
   private makeTextBlock() {
-    const mesh = new Group()
+    const mesh = new THREE.Group()
     const data = this.font.data
     const scale = this.params.size / data.resolution
     let YPos, lineMesh: Text
@@ -131,7 +123,7 @@ export class TextBox extends Object3D {
         if (this.justify != 'width') {
           lineMesh = new Text(
             aLine.join(' '),
-            <Font>this.font,
+            <THREE.Font>this.font,
             this.params,
             this.material
           )
@@ -158,13 +150,13 @@ export class TextBox extends Object3D {
               console.log(line)
               lineMesh = new Text(
                 line[0].text,
-                <Font>this.font,
+                <THREE.Font>this.font,
                 this.params,
                 this.material
               )
             } else {
               do {
-                const g = new TextBufferGeometry(
+                const g = new THREE.TextBufferGeometry(
                   spacedLine.join(''),
                   this.params
                 ).center()
@@ -181,7 +173,7 @@ export class TextBox extends Object3D {
               spacedLine.forEach((w, j) => {
                 if (j % 2 != 0 && !stop) {
                   spacedLine[j] = spacedLine[j].substring(1)
-                  const g = new TextBufferGeometry(
+                  const g = new THREE.TextBufferGeometry(
                     spacedLine.join(''),
                     this.params
                   ).center()
@@ -194,7 +186,7 @@ export class TextBox extends Object3D {
 
               lineMesh = new Text(
                 spacedLine.join(''),
-                <Font>this.font,
+                <THREE.Font>this.font,
                 this.params,
                 this.material
               )
@@ -208,7 +200,7 @@ export class TextBox extends Object3D {
             // we will position it to the left edge later
             lineMesh = new Text(
               spacedLine.join(''),
-              <Font>this.font,
+              <THREE.Font>this.font,
               this.params,
               this.material
             )
@@ -221,27 +213,27 @@ export class TextBox extends Object3D {
         switch (this.justify) {
           case 'left':
             lineMesh.position.copy(
-              new Vector3(lineWidth / 2 - this.width / 2, YPos, 0)
+              new THREE.Vector3(lineWidth / 2 - this.width / 2, YPos, 0)
             )
             break
           case 'right':
             lineMesh.position.copy(
-              new Vector3(-lineWidth / 2 + this.width / 2, YPos, 0)
+              new THREE.Vector3(-lineWidth / 2 + this.width / 2, YPos, 0)
             )
             break
           case 'width':
             if (lineIndex < lines.length - 1) {
-              lineMesh.position.copy(new Vector3(0, YPos, 0))
+              lineMesh.position.copy(new THREE.Vector3(0, YPos, 0))
             } else {
               // last line should be justified left
               lineMesh.position.copy(
-                new Vector3(lineWidth / 2 - this.width / 2, YPos, 0)
+                new THREE.Vector3(lineWidth / 2 - this.width / 2, YPos, 0)
               )
             }
             break
           case 'center':
           default:
-            lineMesh.position.copy(new Vector3(0, YPos, 0))
+            lineMesh.position.copy(new THREE.Vector3(0, YPos, 0))
         }
         mesh.add(lineMesh)
         YPos -= line_height

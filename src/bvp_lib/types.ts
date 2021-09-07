@@ -1,4 +1,5 @@
-import { Vector3, Font } from 'three'
+import * as THREE from 'three';
+// import { Vector3, Font } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 export type ScenarioData = {
@@ -23,7 +24,7 @@ export type ScenarioData = {
 }
 
 export type TextParams = {
-  font?: Font
+  font?: THREE.Font
   size: number
   height: number
   curveSegments: number
@@ -56,7 +57,7 @@ export type Slide = {
   height: number
   picture: string
   hotspot: HotSpot
-  texture: THREE.Texture
+  texture?: THREE.Texture
   background: THREE.Mesh
   position: THREE.Vector3
   transitionDuration: number
@@ -66,7 +67,7 @@ export type Slide = {
   distanceToCamera: number
   objects: any[]
   videoHtmlElement?: HTMLVideoElement
-  snapshot: any //TODO change ANY type for something reasonable
+  snapshot?: any //TODO change ANY type for something reasonable
 }
 
 export enum WorldMode {
@@ -95,7 +96,7 @@ export type World = {
   mainBackgroundColor: number
   mainBackgroundPic: string
   panoramaPic: string
-  panoCenter: Vector3
+  panoCenter: THREE.Vector3
   panoRadius: number
   panoIniTheta: number
   panoIniPhi: number

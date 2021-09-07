@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --inline --open --https",
+    "start": "webpack serve --open --https",
     "build": "rimraf dist && webpack -p --env=prod",
     "pretty": "prettier --print-width 80 --no-semi --single-quote --trailing-comma es5 --write \"src/**/*.{ts,js,css,html}\"",
     "deploy": "node deploy.js"
@@ -14,6 +14,7 @@
   "author": "Andrey Mikhailichenko",
   "license": "MIT",
   "devDependencies": {
+    "@types/three": "^0.131.0",
     "awesome-typescript-loader": "latest",
     "browser-sync": "latest",
     "browser-sync-webpack-plugin": "latest",
@@ -40,14 +41,16 @@
   },
   "dependencies": {
     "@mdi/font": "^4.8.95",
-    "@tweenjs/tween.js": "latest",
+    "@tweenjs/tween.js": "^16.7",
     "buefy": "^0.8.9",
+    "buffer": "^6.0.3",
     "controlkit": "latest",
     "dat.gui": "^0.7.6",
     "file-saver": "^2.0.2",
     "stats.js": "^0.17.0",
+    "stream-browserify": "^3.0.0",
     "strongly-typed-events": "^1.6.3",
-    "three": "latest",
+    "three": "^0.132.2",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.2",
     "vue-property-decorator": "^8.3.0",
