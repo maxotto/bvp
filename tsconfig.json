@@ -1,5 +1,11 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "stream": [
+        "node_modules/stream-browserify"
+      ]
+    },
     "target": "esnext",
     "importHelpers": true,
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -9,14 +15,13 @@
     "emitDecoratorMetadata": true,
     "preserveConstEnums": true,
     "suppressImplicitAnyIndexErrors": true,
-    "outDir": "./lib/"
   },
   "awesomeTypescriptLoaderOptions": {
     "useWebpackText": true,
     "forkChecker": true,
     "useCache": true
   },
-  "exclude": ["node_modules", "lib"],
+  "exclude": ["node_modules"],
   "compileOnSave": true,
   "buildOnSave": false,
   "atom": {

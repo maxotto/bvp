@@ -39,9 +39,13 @@ const plugins = [
   HTMLWebpackPluginConfig,
   BrowserSyncPluginConfig,
   ProgressBarPluginConfig,
-  new CopyPlugin([{ from: "assets", to: "assets" }]),
-  new CopyPlugin([{ from: "fonts", to: "fonts" }]),
-  new CopyPlugin([{ from: "static", to: "" }]),
+  new CopyPlugin({
+    patterns:[
+      { from: "assets", to: "assets" },
+      { from: "fonts", to: "fonts" },
+      { from: "static", to: "" }
+    ]
+  }),
   new VueLoaderPlugin()
   /*
     new WorkboxPlugin.GenerateSW({
@@ -120,7 +124,9 @@ module.exports = {
             loader: "style-loader",
             options: { injectType: "singletonStyleTag" }
           },
-          { loader: "css-loader" }
+          {
+            loader: "css-loader"
+          }
         ]
       },
       {
@@ -133,13 +139,7 @@ module.exports = {
           },
           {
             loader: "css-loader",
-            options: {
-              modules: {
-                mode: "local",
-                localIdentName: "[local]",
-                hashPrefix: "my-custom-hash"
-              }
-            }
+            options: {}
           }
         ]
       },
@@ -153,6 +153,10 @@ module.exports = {
     extensions: [".web.ts", ".web.js", ".ts", ".js", ".vue"],
     alias: {
       vue$: "vue/dist/vue.esm.js"
+    },
+    fallback: {
+      "stream": require.resolve("stream-browserify"),
+      "buffer": require.resolve("buffer/")
     }
   },
   plugins: plugins
