@@ -56,7 +56,7 @@ By default App runs DemoFlat project. To select another project use URL `p` para
 
 * Pictures as a background of a slide. It is obligatory element yet but it could be transparent PNG image.
 * Text objects. Based on this ThreeJs example https://threejs.org/examples/#webgl_geometry_text. Text lives inside paragraph, each paragraph has width and could be aligned `'center'`, `'left'`, `'right'`, `'width'`.
-* Video in MP4 format. Pay attention, now my big file 1.mp4 does not exist in this repo. You should use your file to run this examples or exclude appropriate `<video>` tag from _scenario.xml_. By the way, engine will not crash without video files but slides will appear just black.  
+* Video in MP4 format. Pay attention, now my big file 1.mp4 does not exist in this repo. You should use your file to run those examples or exclude appropriate `<video>` tag from _scenario.xml_. By the way, engine will not crash without video files but slides will appear just black.  
 
 ## Slide controls
 
