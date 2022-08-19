@@ -40,9 +40,9 @@
     "write-file-webpack-plugin": "latest"
   },
   "dependencies": {
-    "@mdi/font": "^4.8.95",
+    "@mdi/font": "^6.9",
     "@tweenjs/tween.js": "^16.7",
-    "buefy": "^0.8.9",
+    "buefy": "^0.9.21",
     "buffer": "^6.0.3",
     "controlkit": "latest",
     "dat.gui": "^0.7.6",
