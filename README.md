@@ -11,7 +11,7 @@ This browser JS application shows presentations, slide by slide, with an effect 
 - Configuration: stored in XML file yet.
 - PWA: enabled for production mode.
 - Written on Typescript
-- Webpack 4 for build
+- Webpack 5 for build
 
 ## Install
 
