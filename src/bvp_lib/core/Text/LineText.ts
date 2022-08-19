@@ -1,15 +1,13 @@
 import { Text } from './Text'
 import {
-  Font,
   Color,
   ShaderMaterial,
   AdditiveBlending,
   Line,
-  TextBufferGeometry,
-  Float32BufferAttribute,
-  TextGeometryParameters,
+  Float32BufferAttribute
 } from 'three'
-import { TextParams } from '../../types'
+import {TextGeometry, TextGeometryParameters } from "three/examples/jsm/geometries/TextGeometry.js";
+import {Font} from "three/examples/jsm/loaders/FontLoader";
 
 export class LineText extends Text {
   constructor(text: string, font: Font, params: TextGeometryParameters) {
@@ -27,7 +25,7 @@ export class LineText extends Text {
       depthTest: false,
       transparent: true,
     })
-    const geometry = <TextBufferGeometry>this.geometry
+    const geometry = <TextGeometry>this.geometry
     var count = geometry.attributes.position.count
     var displacement = new Float32BufferAttribute(count * 3, 3)
     geometry.setAttribute('displacement', displacement)

@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 // import { Vector3, Font } from 'three'
+import { Font } from 'three/examples/jsm/loaders/FontLoader.js'
+
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 export type ScenarioData = {
@@ -24,7 +26,7 @@ export type ScenarioData = {
 }
 
 export type TextParams = {
-  font?: THREE.Font
+  font?: Font
   size: number
   height: number
   curveSegments: number

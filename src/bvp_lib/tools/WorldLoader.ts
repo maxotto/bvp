@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { FontLoader, Font} from 'three/examples/jsm/loaders/FontLoader.js'
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader'
 import { XmlLoader } from './XmlLoader'
 import {
@@ -285,7 +286,7 @@ export class WorldLoader {
                               ? object.font
                               : scenarioData.defaultFont.font
                             return promisifyLoader(
-                              new THREE.FontLoader(manager),
+                              new FontLoader(manager),
                               onProgress
                             )
                               .load('fonts/' + fontFile)
@@ -303,7 +304,7 @@ export class WorldLoader {
                                     : defaultMaterial
 
                                 const params = {
-                                  font: <THREE.Font>font,
+                                  font: <Font>font,
                                   size: size,
                                   height: object.thickness
                                     ? (+object.thickness / 100) * size
@@ -339,7 +340,7 @@ export class WorldLoader {
                                   object.paragraphWidth,
                                   object.justify,
                                   object.text,
-                                  <THREE.Font>font,
+                                  <Font>font,
                                   params,
                                   material
                                 )

@@ -2,7 +2,8 @@ import * as THREE from 'three';
 import { TextParams } from '../../types'
 import { Text } from './Text'
 import { createSphere } from '../../tools/helpers'
-import { TextGeometryParameters } from 'three';
+import {TextGeometry, TextGeometryParameters} from "three/examples/jsm/geometries/TextGeometry.js";
+import {Font} from "three/examples/jsm/loaders/FontLoader";
 
 export class TextBox extends THREE.Object3D {
   private paragraphs: Paragraph[] = []
@@ -51,7 +52,7 @@ export class TextBox extends THREE.Object3D {
       .split(' ')
     w.unshift('.') // use W to calculate SPACE geometry
     w.forEach((word, i) => {
-      const geometry = new THREE.TextBufferGeometry(word, this.params)
+      const geometry = new TextGeometry(word, this.params)
       geometry.center()
       const width = geometry.boundingBox.max.x - geometry.boundingBox.min.x
       const height = geometry.boundingBox.max.y - geometry.boundingBox.min.y
@@ -86,8 +87,8 @@ export class TextBox extends THREE.Object3D {
 
   private calculateSpaceWidth() {
     const testStr = 'W W'
-    const allG = new THREE.TextBufferGeometry(testStr, this.params).center()
-    const wG = new THREE.TextBufferGeometry('W', this.params).center()
+    const allG = new TextGeometry(testStr, this.params).center()
+    const wG = new TextGeometry('W', this.params).center()
     return (
       allG.boundingBox.max.x -
       allG.boundingBox.min.x -
@@ -123,7 +124,7 @@ export class TextBox extends THREE.Object3D {
         if (this.justify != 'width') {
           lineMesh = new Text(
             aLine.join(' '),
-            <THREE.Font>this.font,
+            <Font>this.font,
             this.params,
             this.material
           )
@@ -150,13 +151,13 @@ export class TextBox extends THREE.Object3D {
               console.log(line)
               lineMesh = new Text(
                 line[0].text,
-                <THREE.Font>this.font,
+                <Font>this.font,
                 this.params,
                 this.material
               )
             } else {
               do {
-                const g = new THREE.TextBufferGeometry(
+                const g = new TextGeometry(
                   spacedLine.join(''),
                   this.params
                 ).center()
@@ -173,7 +174,7 @@ export class TextBox extends THREE.Object3D {
               spacedLine.forEach((w, j) => {
                 if (j % 2 != 0 && !stop) {
                   spacedLine[j] = spacedLine[j].substring(1)
-                  const g = new THREE.TextBufferGeometry(
+                  const g = new TextGeometry(
                     spacedLine.join(''),
                     this.params
                   ).center()
@@ -186,7 +187,7 @@ export class TextBox extends THREE.Object3D {
 
               lineMesh = new Text(
                 spacedLine.join(''),
-                <THREE.Font>this.font,
+                <Font>this.font,
                 this.params,
                 this.material
               )
@@ -200,7 +201,7 @@ export class TextBox extends THREE.Object3D {
             // we will position it to the left edge later
             lineMesh = new Text(
               spacedLine.join(''),
-              <THREE.Font>this.font,
+              <Font>this.font,
               this.params,
               this.material
             )

@@ -118,7 +118,7 @@ export default Vue.extend({
 }
 #leftsidebar {
   display: flex;
-  align-items: top;
+  align-items: flex-start;
   justify-content: center;
   background: rgba(1, 1, 1, 0.04);
   position: absolute;
