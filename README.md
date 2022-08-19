@@ -4,40 +4,30 @@
 
 This browser JS application shows presentations, slide by slide, with an effect of flying over a plane or inside a 3D panorama.
 
-* Inspired by Prezi (https://prezi.com/)
-* Vue.js application
-* Buefy.js as UI
-* Uses THREE JS lib (https://threejs.org/) under the hood.
-* Configuration: stored in XML file yet.
-* PWA: enabled for production mode.
-* Written on Typescript 
-* Webpack 4 for build
+- Inspired by Prezi (`https://prezi.com/`)
+- Vue.js application
+- Buefy.js as UI
+- Uses THREE JS lib (`https://threejs.org/`) under the hood.
+- Configuration: stored in XML file yet.
+- PWA: enabled for production mode.
+- Written on Typescript
+- Webpack 4 for build
 
 ## Install
 
-`
-git clone https://github.com/maxotto/bvp.git
-`
+`git clone https://github.com/maxotto/bvp.git`
 
-`
-cd bvp
-`
+`cd bvp`
 
-`
-yarn
-`
+`yarn`
 
 ## Run for development
 
-`
-npm run start
-`
+`npm run start`
 
 ## Build for production
 
-`
-npm run build
-`
+`npm run build`
 
 Other available commands you can find in _package.json_ file, in the _scripts_ section.
 
@@ -45,8 +35,9 @@ Other available commands you can find in _package.json_ file, in the _scripts_ s
 
 Projects are stored in _./assets_ folder. Now there are two demo projects:
 
-* DemoFlat
-* DemoPano 
+- DemoFlat
+
+- DemoPano
 
 By default App runs DemoFlat project. To select another project use URL `p` parameter by example:
 
@@ -54,19 +45,19 @@ By default App runs DemoFlat project. To select another project use URL `p` para
 
 ## Objects supported
 
-* Pictures as a background of a slide. It is obligatory element yet but it could be transparent PNG image.
-* Text objects. Based on this ThreeJs example https://threejs.org/examples/#webgl_geometry_text. Text lives inside paragraph, each paragraph has width and could be aligned `'center'`, `'left'`, `'right'`, `'width'`.
-* Video in MP4 format. Pay attention, now my big file 1.mp4 does not exist in this repo. You should use your file to run those examples or exclude appropriate `<video>` tag from _scenario.xml_. By the way, engine will not crash without video files but slides will appear just black.  
+- Pictures as a background of a slide. It is obligatory element yet but it could be transparent PNG image.
+- Text objects. Based on this ThreeJs example `https://threejs.org/examples/#webgl_geometry_text`. Text lives inside paragraph, each paragraph has width and could be aligned `'center'`, `'left'`, `'right'`, `'width'`.
+- Video in MP4 format. Pay attention, now my big file 1.mp4 does not exist in this repo. You should use your file to run this examples or exclude appropriate `<video>` tag from _scenario.xml_. By the way, engine will not crash without video files but slides will appear just black.
 
 ## Slide controls
 
-We have two thing to keep in mind. 
+We have two thing to keep in mind.
 
-* **Slides**. There could be many of them on screen, but not each of them will be shown during a slideshow. Some slides just exist on screen as decorations.
-* **Steps**. They form the order by which slides will be shown. Any slide can be shown on different steps, once, twice or more times according to desired scenario. So, we can return to some slide as many times as we want.
-  
+- **Slides**. There could be many of them on screen, but not each of them will be shown during a slideshow. Some slides just exist on screen as decorations.
+- **Steps**. They form the order by which slides will be shown. Any slide can be shown on different steps, once, twice or more times according to desired scenario. So, we can return to some slide as many times as we want.
 
 Steps are defined in **<**show**>** section of a scenarion XML:
+
 ```
 <show>
     <step slide="0"/>
@@ -80,23 +71,23 @@ Steps are defined in **<**show**>** section of a scenarion XML:
     <step slide="6"/>
     <step slide="0"/>
 </show>
+
 ```
- 
 
-#### You can use next keyboard shortcuts to navigate:
+### You can use next keyboard shortcuts to navigate:
 
-* **W** - step forward
-* **S** - step back
-* **Alt-H** - go to the first step
-* **ALT-M** - switch to Editor Mode and back
+- **W** - step forward
+- **S** - step back
+- **Alt-H** - go to the first step
+- **ALT-M** - switch to Editor Mode and back
 
 In Editor Mode you can use:
 
-* **Mouse click** to select slides and objects and transform them (see https://threejs.org/docs/#examples/en/controls/TransformControls). While object selected you can press Alt-S to change mode of transform tool. To unselect object press Esc.
-* **Mouse and arrow keyboard buttons** to use ThreeJs Orbit Control (see https://threejs.org/docs/#examples/en/controls/OrbitControls)
-* **Alt-R** to restore view on current slide  
+- **Mouse click** to select slides and objects and transform them (see `https://threejs.org/docs/#examples/en/controls/TransformControls`). While object selected you can press Alt-S to change mode of transform tool. To unselect object press Esc.
+- **Mouse and arrow keyboard buttons** to use ThreeJs Orbit Control (see `https://threejs.org/docs/#examples/en/controls/OrbitControls`)
+- **Alt-R** to restore view on current slide
 
-There are left and bottom navigation bars. 
+There are left and bottom navigation bars.
 
 The Bottom Navigation Bar allows you navigate simply to the first, previous, next and last steps of the slideshow.
 
@@ -104,18 +95,18 @@ The Left Navigation Bar is a list of steps with preview pictures. By clicking on
 
 ## Todo
 
-* Make `<slide>` definitionin XML more clear
-* Define more app's parameters in XML instead of hard coded
-* Compose whole XML scenario file after slides editing
-* Add SVG support
-* Add D3.js engine and scenarios to use it
-* AJAX requests to fetch data for D3 visualisation 
-* Add visual links on slides to navigate to other slides
-
+- Make `<slide>` definitionin XML more clear
+- Define more app's parameters in XML instead of hard coded
+- Compose whole XML scenario file after slides editing
+- Add SVG support
+- Add D3.js engine and scenarios to use it
+- AJAX requests to fetch data for D3 visualisation
+- Add visual links on slides to navigate to other slides
 
 ## Additional info
-https://threejsfundamentals.org/
 
-https://stemkoski.github.io/Three.js/
+`https://threejsfundamentals.org/`
 
-https://buefy.org/documentation/start
+`https://stemkoski.github.io/Three.js/`
+
+`https://buefy.org/documentation/start`

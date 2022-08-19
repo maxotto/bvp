@@ -7,9 +7,10 @@ import {
   Line,
   TextBufferGeometry,
   Float32BufferAttribute,
+  TextGeometryParameters,
 } from 'three'
 import { TextParams } from '../../types'
-import { TextGeometryParameters } from 'three'
+
 
 export class LineText extends Text {
   constructor(text: string, font: Font, params: TextGeometryParameters) {
