@@ -1,29 +1,27 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "baseUrl": ".",
+    "paths": {
+      "stream": [
+        "node_modules/stream-browserify"
+      ]
+    },
+    "target": "esnext",
     "importHelpers": true,
     "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "esnext",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "preserveConstEnums": true,
     "suppressImplicitAnyIndexErrors": true,
-    "outDir": "./lib/",
-    "paths": {
-      "three": [
-        "node_modules/three/src/Three"
-      ] // relative to "baseUrl"
-    }
   },
   "awesomeTypescriptLoaderOptions": {
     "useWebpackText": true,
     "forkChecker": true,
     "useCache": true
   },
-  "include": [
-    "./src/**/*.ts"
-  ],
-  "exclude": ["node_modules", "lib"],
+  "exclude": ["node_modules"],
   "compileOnSave": true,
   "buildOnSave": false,
   "atom": {

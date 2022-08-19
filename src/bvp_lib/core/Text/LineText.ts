@@ -11,7 +11,6 @@ import {
 } from 'three'
 import { TextParams } from '../../types'
 
-
 export class LineText extends Text {
   constructor(text: string, font: Font, params: TextGeometryParameters) {
     super(text, font, params)

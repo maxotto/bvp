@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader'
 import { XmlLoader } from './XmlLoader'
 import {
@@ -14,28 +15,6 @@ import { createMaterial, createSnapshot } from './three_helpers'
 import { ScenarioData, Slide, World, WorldCoordinatesType } from '../types'
 
 import { EditableGroup } from '../core/EditableGroup'
-
-import {
-  Mesh,
-  Vector3,
-  Color,
-  WireframeGeometry,
-  BoxGeometry,
-  LineSegments,
-  FontLoader,
-  Font,
-  VideoTexture,
-  PlaneBufferGeometry,
-  MeshLambertMaterial,
-  LoadingManager,
-  TextureLoader,
-  MeshBasicMaterial,
-  Texture,
-  Group,
-  ShapeBufferGeometry,
-  Shape,
-  DoubleSide,
-} from 'three'
 
 import { TextBox } from '../core/Text/TextBox'
 
@@ -55,7 +34,7 @@ export class WorldLoader {
   private _panoIniTheta: number
   private _panoIniPhi: number
   private _panoRadius: number
-  private _panoCenter: Vector3
+  private _panoCenter: THREE.Vector3
   private _cameraFov: number
   private _currentObjectName
   private _type: WorldCoordinatesType
@@ -65,7 +44,7 @@ export class WorldLoader {
   }
   public load(onLoad?: Function) {
     const scope = this
-    var manager = new LoadingManager()
+    var manager = new THREE.LoadingManager()
     var slideNumber = 0
 
     manager.onProgress = function (item, loaded, total) {
@@ -101,28 +80,28 @@ export class WorldLoader {
         this._mainSlideDuration = +scenarioData.mainDuration
         this._cameraFov = +scenarioData.cameraFov
         this._currentObjectName = scenarioData.mainBackgroundPic
-        this._panoCenter = new Vector3(this._panoX, this._panoY, this._panoZ)
+        this._panoCenter = new THREE.Vector3(this._panoX, this._panoY, this._panoZ)
         this._type = this.getWorldCoordinatesType()
-        return promisifyLoader(new TextureLoader(manager), onProgress)
+        return promisifyLoader(new THREE.TextureLoader(manager), onProgress)
           .load('assets/' + this._scenarioFolder + this._currentObjectName)
           .then((_texturePainting: THREE.Texture) => {
-            var materialPainting = new MeshBasicMaterial(<
+            var materialPainting = new THREE.MeshBasicMaterial(<
               THREE.MeshBasicMaterialParameters
               >{
                 color: 0xffffff,
                 map: _texturePainting,
-                side: DoubleSide,
+                side: THREE.DoubleSide,
               })
             let geometry
             if (this._type === WorldCoordinatesType.sphere) {
-              geometry = new PlaneBufferGeometry(0.001, 0.001)
+              geometry = new THREE.PlaneBufferGeometry(0.001, 0.001)
             } else {
-              geometry = new PlaneBufferGeometry(this._width, this._height)
+              geometry = new THREE.PlaneBufferGeometry(this._width, this._height)
             }
-            var mesh = new Mesh(geometry, materialPainting)
+            var mesh = new THREE.Mesh(geometry, materialPainting)
             mesh.name = 'slide0Bg'
             const cameraState = getCameraState(
-              new Vector3(0, 0, 0),
+              new THREE.Vector3(0, 0, 0),
               scenarioData.iniCameraZ ? scenarioData.iniCameraZ : 1000,
               0,
               this._cameraFov
@@ -134,14 +113,13 @@ export class WorldLoader {
               texture: _texturePainting,
               hotspot: null,
               picture: this._currentObjectName,
-              position: new Vector3(-this._width / 2, this._height / 2, 0),
+              position: new THREE.Vector3(-this._width / 2, this._height / 2, 0),
               objects: <any>scenarioData.objects,
               transitionDuration: +scenarioData.mainDuration,
               scale: 1,
               cameraPosition: cameraState.cameraPosition,
               distanceToCamera: cameraState.distance,
               cameraLookAt: cameraState.cameraLookAt,
-              snapshot: null,
             }
             newSlide.objects = []
             let p
@@ -187,11 +165,11 @@ export class WorldLoader {
               (slide, context) => {
                 ++slideNumber
                 this._currentObjectName = slide.picture
-                return promisifyLoader(new TextureLoader(manager), onProgress)
+                return promisifyLoader(new THREE.TextureLoader(manager), onProgress)
                   .load(
                     'assets/' + this._scenarioFolder + this._currentObjectName
                   )
-                  .then((_texturePainting: Texture) => {
+                  .then((_texturePainting: THREE.Texture) => {
                     const imgWidth = _texturePainting.image.width
                     const imgHeight = _texturePainting.image.height
                     //if (slide.ratioByBg && slide.ratioByBg == 'true') {
@@ -200,12 +178,12 @@ export class WorldLoader {
                       slide.height = imgHeight
                       slide
                     }
-                    var materialPainting = new MeshBasicMaterial(<
+                    var materialPainting = new THREE.MeshBasicMaterial(<
                       THREE.MeshBasicMaterialParameters
                       >{
                         color: 0xffffff,
                         map: _texturePainting,
-                        side: DoubleSide,
+                        side: THREE.DoubleSide,
                         transparent: true,
                       })
                     if (
@@ -217,7 +195,7 @@ export class WorldLoader {
                         slide.hotspot.phi &&
                         slide.hotspot.theta
                       ) {
-                        const panoCenter = new Vector3(
+                        const panoCenter = new THREE.Vector3(
                           this._panoX,
                           this._panoY,
                           this._panoZ
@@ -234,17 +212,17 @@ export class WorldLoader {
                       }
                     }
                     const scale = slide.width / slide.hotspot.size
-                    const geometry = new PlaneBufferGeometry(
+                    const geometry = new THREE.PlaneBufferGeometry(
                       slide.hotspot.size,
                       slide.height / scale
                     )
-                    const mesh = new Mesh(geometry, materialPainting)
+                    const mesh = new THREE.Mesh(geometry, materialPainting)
                     mesh.name = 'slide' + slideNumber + 'bg'
                     const topLeft = {
                       x: -context._width / 2 + +slide.hotspot.x,
                       y: context._height / 2 - +slide.hotspot.y,
                     }
-                    const center = new Vector3(
+                    const center = new THREE.Vector3(
                       topLeft.x + slide.width / 2 / scale,
                       topLeft.y - slide.height / 2 / scale,
                       +slide.hotspot.z
@@ -262,7 +240,7 @@ export class WorldLoader {
                       picture: this._currentObjectName,
                       hotspot: slide.hotspot,
                       objects: [],
-                      position: new Vector3(
+                      position: new THREE.Vector3(
                         topLeft.x,
                         topLeft.y,
                         +slide.hotspot.z
@@ -272,8 +250,6 @@ export class WorldLoader {
                       distanceToCamera: cameraState.distance,
                       cameraPosition: cameraState.cameraPosition,
                       cameraLookAt: cameraState.cameraLookAt,
-                      snapshot: null,
-                      texture: null,
                     }
                     newSlide.objects = []
                     let p
@@ -309,7 +285,7 @@ export class WorldLoader {
                               ? object.font
                               : scenarioData.defaultFont.font
                             return promisifyLoader(
-                              new FontLoader(manager),
+                              new THREE.FontLoader(manager),
                               onProgress
                             )
                               .load('fonts/' + fontFile)
@@ -327,7 +303,7 @@ export class WorldLoader {
                                     : defaultMaterial
 
                                 const params = {
-                                  font: <Font>font,
+                                  font: <THREE.Font>font,
                                   size: size,
                                   height: object.thickness
                                     ? (+object.thickness / 100) * size
@@ -363,12 +339,12 @@ export class WorldLoader {
                                   object.paragraphWidth,
                                   object.justify,
                                   object.text,
-                                  <Font>font,
+                                  <THREE.Font>font,
                                   params,
                                   material
                                 )
                                 mesh.position.copy(
-                                  new Vector3(+object.x, +object.y, +object.z)
+                                  new THREE.Vector3(+object.x, +object.y, +object.z)
                                 )
                                 newSlide.objects.push(mesh)
                               })
@@ -391,18 +367,18 @@ export class WorldLoader {
                             }
 
                             document.body.appendChild(video)
-                            const texture = new VideoTexture(video)
+                            const texture = new THREE.VideoTexture(video)
                             const parameters = {
                               color: 0xffffff,
                               map: texture,
-                              side: DoubleSide,
+                              side: THREE.DoubleSide,
                             }
-                            const geometry = new PlaneBufferGeometry(
+                            const geometry = new THREE.PlaneBufferGeometry(
                               slide.hotspot.size,
                               slide.height / scale
                             )
-                            const material = new MeshLambertMaterial(parameters)
-                            const mesh = new Mesh(geometry, material)
+                            const material = new THREE.MeshLambertMaterial(parameters)
+                            const mesh = new THREE.Mesh(geometry, material)
                             newSlide.objects.push(mesh)
                             newSlide.videoHtmlElement = video
                             video.currentTime = 0
@@ -449,7 +425,7 @@ export class WorldLoader {
     function loadSVG(data, x, y, z, scale, parentSlide = 0) {
       // TODO make this part alive againg
       var paths = data.paths
-      var group = new Group()
+      var group = new THREE.Group()
       group.position.x = 0
       group.position.y = 0
       group.position.z = 0
@@ -459,30 +435,30 @@ export class WorldLoader {
         var path = paths[i]
         var fillColor = path.userData.style.fill
         if (fillColor !== undefined && fillColor !== 'none') {
-          var material = new MeshBasicMaterial({
-            color: new Color().setStyle(fillColor),
+          var material = new THREE.MeshBasicMaterial({
+            color: new THREE.Color().setStyle(fillColor),
             opacity: path.userData.style.fillOpacity,
             transparent: path.userData.style.fillOpacity < 1,
-            side: DoubleSide,
+            side: THREE.DoubleSide,
             depthWrite: false,
             wireframe: false,
           })
           var shapes = path.toShapes(true)
           for (var j = 0; j < shapes.length; j++) {
             var shape = shapes[j]
-            var geometry = new ShapeBufferGeometry(shape)
-            var mesh = new Mesh(geometry, material)
+            var geometry = new THREE.ShapeBufferGeometry(shape)
+            var mesh = new THREE.Mesh(geometry, material)
             mesh.renderOrder = z
             group.add(mesh)
           }
         }
         var strokeColor = path.userData.style.stroke
         if (strokeColor !== undefined && strokeColor !== 'none') {
-          var material = new MeshBasicMaterial({
-            color: new Color().setStyle(strokeColor),
+          var material = new THREE.MeshBasicMaterial({
+            color: new THREE.Color().setStyle(strokeColor),
             opacity: path.userData.style.strokeOpacity,
             transparent: path.userData.style.strokeOpacity < 1,
-            side: DoubleSide,
+            side: THREE.DoubleSide,
             depthWrite: false,
             wireframe: false,
           })
@@ -495,7 +471,7 @@ export class WorldLoader {
               1
             )
             if (geometry) {
-              var mesh = new Mesh(geometry, material)
+              var mesh = new THREE.Mesh(geometry, material)
               mesh.renderOrder = z
               group.add(mesh)
             }
@@ -506,8 +482,8 @@ export class WorldLoader {
       // group.geometry.getCenter();
       let _groupGeometry = getGroupGeometry(group)
       let box = _groupGeometry.box
-      var wireframe = new WireframeGeometry(
-        new BoxGeometry(
+      let wireframe = new THREE.WireframeGeometry(
+        new THREE.BoxGeometry(
           box.max.x - box.min.x,
           box.max.y - box.min.y,
           box.max.z - box.min.z
@@ -515,7 +491,7 @@ export class WorldLoader {
       )
       console.log(group)
       wireframe.scale(1 / scale, 1 / scale, 1 / scale)
-      let _selectFrame = new LineSegments(wireframe)
+      let _selectFrame = new THREE.LineSegments(wireframe)
       _selectFrame.position.x = 0
       _selectFrame.position.y = 0
       _selectFrame.position.z = 50
@@ -525,7 +501,7 @@ export class WorldLoader {
       //group.position.x -= _groupGeometry.size.x / 2 + _groupGeometry.topLeftCorner.x;
       //group.position.y += _groupGeometry.size.y / 2 - _groupGeometry.topLeftCorner.y;
       //group.position.z += _groupGeometry.size.z / 2;
-      const s = createSphere(group.position, 20, new Color(0x990000), {
+      const s = createSphere(group.position, 20, new THREE.Color(0x990000), {
         type: 'centralPoint',
         point: 'center',
       })
@@ -554,7 +530,7 @@ export class WorldLoader {
       eg.position.y = y
       eg.position.z = z
       eg.position.add(
-        new Vector3(
+        new THREE.Vector3(
           -_groupGeometry.topLeftCorner.x * scale,
           _groupGeometry.topLeftCorner.y * scale,
           0
@@ -564,21 +540,21 @@ export class WorldLoader {
     }
 
     function createBackGround(x, y) {
-      var shape = new Shape()
+      var shape = new THREE.Shape()
       shape.moveTo(0, 0)
       shape.lineTo(x, 0)
       shape.lineTo(x, y)
       shape.lineTo(0, y)
       shape.lineTo(0, 0)
-      var geometry = new ShapeBufferGeometry(shape)
-      var material = new MeshBasicMaterial({
-        color: new Color(0xea177c),
+      var geometry = new THREE.ShapeBufferGeometry(shape)
+      var material = new THREE.MeshBasicMaterial({
+        color: new THREE.Color(0xea177c),
         opacity: 0.5,
         transparent: true,
         depthWrite: false,
         wireframe: false,
       })
-      const mesh = new Mesh(geometry, material)
+      const mesh = new THREE.Mesh(geometry, material)
       return mesh
     }
   }
@@ -608,7 +584,7 @@ export class WorldLoader {
     if (toCenter) {
       // do correction to center
       return pos.sub(
-        new Vector3(
+        new THREE.Vector3(
           slide.hotspot.size / 2,
           (slide.hotspot.size / 2 / slide.height) * slide.width,
           0
