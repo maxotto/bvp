@@ -35,14 +35,9 @@ Other available commands you can find in _package.json_ file, in the _scripts_ s
 
 Projects are stored in _./assets_ folder. Now there are two demo projects:
 
-<<<<<<< HEAD
 - DemoFlat
 
 - DemoPano
-=======
-* DemoFlat
-* DemoPano 
->>>>>>> 9c3bebb4eaa559df36d7e6f80eb39e6856c5f0aa
 
 By default App runs DemoFlat project. To select another project use URL `p` parameter by example:
 
@@ -50,21 +45,11 @@ By default App runs DemoFlat project. To select another project use URL `p` para
 
 ## Objects supported
 
-<<<<<<< HEAD
 - Pictures as a background of a slide. It is obligatory element yet but it could be transparent PNG image.
 - Text objects. Based on this ThreeJs example `https://threejs.org/examples/#webgl_geometry_text`. Text lives inside paragraph, each paragraph has width and could be aligned `'center'`, `'left'`, `'right'`, `'width'`.
 - Video in MP4 format. Pay attention, now my big file 1.mp4 does not exist in this repo. You should use your file to run this examples or exclude appropriate `<video>` tag from _scenario.xml_. By the way, engine will not crash without video files but slides will appear just black.
 
 ## Slide controls
-=======
-* Pictures as a background of a slide. It is obligatory element yet but it could be transparent PNG image.
-* Text objects. Based on this ThreeJs example https://threejs.org/examples/#webgl_geometry_text. Text lives inside paragraph, each paragraph has width and could be aligned `'center'`, `'left'`, `'right'`, `'width'`.
-* Video in MP4 format. Pay attention, now my big file 1.mp4 does not exist in this repo. You should use your file to run this examples or exclude appropriate `<video>` tag from _scenario.xml_. By the way, engine will not crash without video files but slides will appear just black.  
-
-## Slide controls
-
-We have two thing to keep in mind. 
->>>>>>> 9c3bebb4eaa559df36d7e6f80eb39e6856c5f0aa
 
 We have two thing to keep in mind.
 
@@ -109,8 +94,6 @@ The Bottom Navigation Bar allows you navigate simply to the first, previous, nex
 The Left Navigation Bar is a list of steps with preview pictures. By clicking on preview we can navigate directly to this step of the slideshow.
 
 ## Todo
-<<<<<<< HEAD
-=======
 
 * Make `<slide>` definitionin XML more clear
 * Define more app's parameters in XML instead of hard coded
@@ -119,15 +102,6 @@ The Left Navigation Bar is a list of steps with preview pictures. By clicking on
 * Add D3.js engine and scenarios to use it
 * AJAX requests to fetch data for D3 visualisation 
 * Add visual links on slides to navigate to other slides
->>>>>>> 9c3bebb4eaa559df36d7e6f80eb39e6856c5f0aa
-
-- Make `<slide>` definitionin XML more clear
-- Define more app's parameters in XML instead of hard coded
-- Compose whole XML scenario file after slides editing
-- Add SVG support
-- Add D3.js engine and scenarios to use it
-- AJAX requests to fetch data for D3 visualisation
-- Add visual links on slides to navigate to other slides
 
 ## Additional info
 
