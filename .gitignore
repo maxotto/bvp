@@ -49,4 +49,6 @@ yarn.lock
 projects_lib
 *.mp4
 deploy.conf.js
+.vs
+
 
